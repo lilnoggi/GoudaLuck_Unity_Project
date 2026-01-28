@@ -18,7 +18,7 @@
 ### Core Features
 * **Twin-Stick Action:** Precise movement and aiming designed specifically for Steam Deck controls.
 * **The Cheese Armory:** Unlock weapons like the **Cheddar-19**, **Mozza-MP5**, and **Magnum Gouda**.
-* **Smart Enemy AI:** Cats utilise a Finite State Machine (FSM) to Patrol, Chase, and Attack based on line-of-sight.
+* **Smart Enemy AI:** Cats utilise a Finite State Machine (FSM) to Chase and Attack.
 * **Progression System:** Collect 'Cheddar Points' to upgrade fire rate and damage between runs.
 
 ---
