@@ -925,7 +925,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::PlayerController
   _moveSpeed: 5
   _crosshair: {fileID: 357746022}
-  _aimRadius: 3
+  _maxAimRadius: 8
+  _crosshairSpeed: 25
 --- !u!54 &2103814884
 Rigidbody:
   m_ObjectHideFlags: 0
