@@ -139,7 +139,7 @@ public class PlayerController : MonoBehaviour
             // Create a mathmatical flat plane at the player's feet
             Plane groundPlane = new Plane(Vector3.up, transform.position);
 
-            // Shoow a ray from the camera through the mouse cursor on the screen
+            // Shoot a ray from the camera through the mouse cursor on the screen
             Ray ray = _mainCamera.ScreenPointToRay(_mousePosition);
 
             // If the ray hits the floor...
