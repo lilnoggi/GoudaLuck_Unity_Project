@@ -17,6 +17,7 @@ public class UIManager : MonoBehaviour
     [SerializeField] private TextMeshProUGUI _scoreText;
     [SerializeField] private TextMeshProUGUI _waveText;
     [SerializeField] private Slider _healthSlider;
+    [SerializeField] private Image _dashWheelImage;
 
     [Header("Shop Screen")]
     [SerializeField] private GameObject _shopPanel;
@@ -30,6 +31,20 @@ public class UIManager : MonoBehaviour
     {
         if (Instance == null) Instance = this;
         else Destroy(gameObject);
+    }
+
+    public void Update()
+    {
+        // Only update the wheel if it is actually assigned in the Inspector
+        if(_dashWheelImage != null)
+        {
+            PlayerController player = FindFirstObjectByType<PlayerController>();
+            if (player != null)
+            {
+                // Tie the fill amount directly to the player's maths calculation
+                _dashWheelImage.fillAmount = player.DashCooldownRatio;
+            }
+        }
     }
 
     public void UpdateScore(int newScore)

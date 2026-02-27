@@ -1,3 +1,4 @@
+using System.Collections;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -10,6 +11,30 @@ using UnityEngine.InputSystem;
 public class PlayerController : MonoBehaviour
 {
     [SerializeField] private float _moveSpeed = 5f;
+
+    [Header("Dash Settings")]
+    [SerializeField] private float _dashSpeed = 20f;
+    [SerializeField] private float _dashDuration = 0.2f;
+    [SerializeField] private float _dashCooldown = 1f;
+    [SerializeField] private TrailRenderer _dashTrail;
+
+    private bool _isDashing = false;
+    private float _nextDashTime = 0f;
+    private Vector3 _dashDirection;
+
+    // A public getter for the UI to read the dash cooldown percentage
+    // Returns 1 (full) if ready, or a fraction (0.0 to 0.99) if on cooldown
+    public float DashCooldownRatio
+    {
+        get
+        {
+            if (Time.time >= _nextDashTime) return 1f;  // Ready to dash
+
+            // Calculate the remaining time as a percentage
+            float timeRemaining = _nextDashTime - Time.time;
+            return 1f - (timeRemaining / _dashCooldown);
+        }
+    }
 
     [Header("Aiming Settings")]
     [SerializeField] private Transform _crosshair;         // Drag the crosshair GameObject here in Inspector !!
@@ -87,6 +112,9 @@ public class PlayerController : MonoBehaviour
         // Listen for the Fire button being pressed and released
         _controls.Player.Fire.performed += ctx => _isFiring = true;
         _controls.Player.Fire.canceled += ctx => _isFiring = false;
+
+        // --- DASH INPUT ---
+        _controls.Player.Dash.performed += ctx => PerformDash();
     }
 
     // -----------------------------------------------------------------------------------------------------------------
@@ -139,18 +167,28 @@ public class PlayerController : MonoBehaviour
 
     private void HandleMovement()
     {
-        // Convert the 2D input (X, Y) into 3D movement (X, 0, Z)
-        Vector3 movement = new Vector3(_inputVector.x, 0f, _inputVector.y);
+        if (_isDashing)
+        {
+            // --- DASH MOVEMENT ---
+            // Move very fast in the locked dash direction, ignoring the joystick temporarily
+            _rb.MovePosition(_rb.position + _dashDirection * _dashSpeed * Time.fixedDeltaTime);
+        }
+        else
+        {
+            // --- STANDARD MOVEMENT ---
+            // Convert the 2D input (X, Y) into 3D movement (X, 0, Z)
+            Vector3 movement = new Vector3(_inputVector.x, 0f, _inputVector.y);
 
-        // --- MOVING THE RIGIDBODY ---
-        /// <summary>
-        /// Time.fixedDeltaTime is used because it ensures the movement speed is entirely independent
-        /// of the frame rate.
-        /// Whether the Steam Deck is running at 30 FPS or 60 FPS, the player will cover
-        /// the exact same physical distance in the game world per second.
-        /// </summary>
+            // --- MOVING THE RIGIDBODY ---
+            /// <summary>
+            /// Time.fixedDeltaTime is used because it ensures the movement speed is entirely independent
+            /// of the frame rate.
+            /// Whether the Steam Deck is running at 30 FPS or 60 FPS, the player will cover
+            /// the exact same physical distance in the game world per second.
+            /// </summary>
 
-        _rb.MovePosition(_rb.position + movement *  _moveSpeed * Time.fixedDeltaTime);
+            _rb.MovePosition(_rb.position + movement * _moveSpeed * Time.fixedDeltaTime);
+        }
     }
 
     // -----------------------------------------------------------------------------------------------------------------
@@ -223,6 +261,43 @@ public class PlayerController : MonoBehaviour
                 _crosshair.gameObject.SetActive(false);
             }
         }
+    }
+
+    // === DASHING ===
+    private void PerformDash()
+    {
+        // Only dash if the cooldown is ready and not already dashing
+        if (Time.time >= _nextDashTime && !_isDashing)
+        {
+            // Find out which way the player is currently pushing the movement stick/keys
+            _dashDirection = new Vector3(_inputVector.x, 0f, _inputVector.y).normalized;
+
+            // If no movement, dash in the direction the capsule is facing
+            if (_dashDirection == Vector3.zero)
+            {
+                _dashDirection = transform.forward;
+            }
+
+            // Set the cooldown and start the dash
+            _nextDashTime = Time.time + _dashCooldown;
+            StartCoroutine(DashRoutine());
+        }
+    }
+
+    private IEnumerator DashRoutine()
+    {
+        _isDashing = true;  // Turn on dash mode
+
+        // Turn on the trail
+        if (_dashTrail != null) _dashTrail.emitting = true;
+
+        // Wait for a fraction of a second while the FixedUpdate handles the high-speed movement
+        yield return new WaitForSeconds(_dashDuration);
+
+        // Turn trail off
+        if (_dashTrail != null) _dashTrail.emitting = false;
+
+        _isDashing = false;  // Turn off dash mode and return to normal movement
     }
 
     // === DEBUGGING ===
