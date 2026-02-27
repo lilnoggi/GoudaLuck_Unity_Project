@@ -113,8 +113,19 @@ public class PlayerController : MonoBehaviour
         _controls.Player.Fire.performed += ctx => _isFiring = true;
         _controls.Player.Fire.canceled += ctx => _isFiring = false;
 
+        // --- RELOAD INPUT ---
+        _controls.Player.Reload.performed += ctx =>
+        {
+            if (_weaponSystem != null) _weaponSystem.Reload();
+        };
+
         // --- DASH INPUT ---
         _controls.Player.Dash.performed += ctx => PerformDash();
+    }
+
+    private void Reload_performed(InputAction.CallbackContext obj)
+    {
+        throw new System.NotImplementedException();
     }
 
     // -----------------------------------------------------------------------------------------------------------------

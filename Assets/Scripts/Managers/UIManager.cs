@@ -19,6 +19,10 @@ public class UIManager : MonoBehaviour
     [SerializeField] private Slider _healthSlider;
     [SerializeField] private Image _dashWheelImage;
 
+    [Header("Weapon UI")]
+    [SerializeField] private TextMeshProUGUI _ammoText;
+    [SerializeField] private Image _weaponIconDisplay;
+
     [Header("Shop Screen")]
     [SerializeField] private GameObject _shopPanel;
     [SerializeField] private GameObject _upgradeButton;  // For controller focus
@@ -44,6 +48,27 @@ public class UIManager : MonoBehaviour
                 // Tie the fill amount directly to the player's maths calculation
                 _dashWheelImage.fillAmount = player.DashCooldownRatio;
             }
+        }
+    }
+
+    public void UpdateAmmo(int currentAmmo, int maxAmmo)
+    {
+        if (_ammoText != null) _ammoText.text = currentAmmo + " / " + maxAmmo;
+    }
+
+    public void UpdateAmmoText(string message)
+    {
+        if (_ammoText != null) _ammoText.text = message;
+    }
+
+    public void UpdateWeaponUI(Sprite weaponSprite)
+    {
+        if (_weaponIconDisplay != null)
+        {
+            _weaponIconDisplay.sprite = weaponSprite;
+
+            // Ensure it has full opacity / is turned on
+            _weaponIconDisplay.color = Color.white;
         }
     }
 

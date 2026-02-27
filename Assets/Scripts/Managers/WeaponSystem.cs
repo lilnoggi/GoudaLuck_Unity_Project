@@ -1,3 +1,4 @@
+using System.Collections;
 using UnityEngine;
 
 /// <summary>
@@ -22,6 +23,10 @@ public class WeaponSystem : MonoBehaviour
     private int _currentUpgradeLevel = 0;
     private float _currentDamage;
     private float _currentFireRate;
+
+    // --- AMMO STATS ---
+    private int _currentAmmo;
+    private bool _isReloading = false;
 
     private void Start()
     {
@@ -56,7 +61,15 @@ public class WeaponSystem : MonoBehaviour
 
         Debug.Log(gameObject.name + " equipped the " + _currentWeapon.WeaponName + "!");
 
-        // Add logic here to swap the 3D model of the gun
+        _currentAmmo = _currentWeapon.MagSize;
+        _isReloading = false;
+
+        // If this weapon is on the Player, update the UI
+        if (gameObject.CompareTag("Player") && UIManager.Instance != null)
+        {
+            UIManager.Instance.UpdateWeaponUI(_currentWeapon.WeaponIcon);
+            UIManager.Instance.UpdateAmmo(_currentAmmo, _currentWeapon.MagSize);
+        }
     }
 
     // The Shop UI will call this method when you click the Upgrade button
@@ -84,13 +97,22 @@ public class WeaponSystem : MonoBehaviour
     // PlayerController or CatAI_Controller can call this method
     public void FireWeapon()
     {
-        // SAFETY NET: Don't try to shoot if player doesn't have a weapon equipped
-        if (_currentWeapon == null || _firePoint == null) return;
+        // SAFETY NET: Don't try to shoot if player doesn't have a weapon equipped OR currently reloading
+        if (_currentWeapon == null || _firePoint == null || _isReloading) return;
+
+        // AUTO-RELAOD: If click shoot but 0 ammo, trigger a reload instead
+        if (_currentAmmo <= 0)
+        {
+            Reload();
+            return;
+        }
 
         // COOLDOWN CHECK: Use _currentFireRate instead of the card's base FireRate
         if (Time.time >= _nextFireTime)
         {
             _nextFireTime = Time.time + _currentFireRate;
+
+            _currentAmmo--;  // Consume 1 bullet
 
             // Ask the ProjectilePool for a bullet!
             GameObject obj = ProjectilePool.Instance.GetProjectile(_currentWeapon.ProjectilePrefab, _firePoint.position, _firePoint.rotation);
@@ -103,7 +125,43 @@ public class WeaponSystem : MonoBehaviour
                 projectileScript.Setup(gameObject.tag, _currentDamage);
             }
 
+            // Update the UI after firing
+            if (gameObject.CompareTag("Player") && UIManager.Instance != null)
+            {
+                UIManager.Instance.UpdateAmmo(_currentAmmo, _currentWeapon.MagSize);
+            }
+
             // SFX can go here later
+        }
+    }
+
+    // === RELOAD WEAPON ===
+    public void Reload()
+    {
+        // Don't reload if already reloading, or if the mag is already full
+        if (_isReloading || _currentAmmo == _currentWeapon.MagSize) return;
+
+        StartCoroutine(ReloadRoutine());
+    }
+
+    private IEnumerator ReloadRoutine()
+    {
+        _isReloading = true;
+
+        if (gameObject.CompareTag("Player") && UIManager.Instance != null)
+        {
+            UIManager.Instance.UpdateAmmoText("RELOADING...");
+        }
+
+        // Wait for the duration specified in the data card
+        yield return new WaitForSeconds(_currentWeapon.ReloadTime);
+
+        _currentAmmo = _currentWeapon.MagSize;
+        _isReloading = false;
+
+        if (gameObject.CompareTag("Player") && UIManager.Instance != null)
+        {
+            UIManager.Instance.UpdateAmmo(_currentAmmo, _currentWeapon.MagSize);
         }
     }
 

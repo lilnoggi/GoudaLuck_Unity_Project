@@ -19,6 +19,9 @@ public class WeaponData : ScriptableObject
     [SerializeField] private float _fireRate;
     [SerializeField] private float _damage;
 
+    [SerializeField] private int _magSize;
+    [SerializeField] private float _reloadTime;
+
     [Header("Upgrade Stats")]
     [SerializeField] private int _maxUpgradeLevel = 3;
     [SerializeField] private int _upgradeCost = 50;
@@ -37,6 +40,8 @@ public class WeaponData : ScriptableObject
     public int CheddarCost => _cheddarCost;
     public float FireRate => _fireRate;
     public float Damage => _damage;
+    public int MagSize => _magSize;
+    public float ReloadTime => _reloadTime;
     public int MaxUpgradeLevel => _maxUpgradeLevel;
     public int UpgradeCost => _upgradeCost;
     public float DamageIncreasePerLevel => _damageIncreasePerLevel;

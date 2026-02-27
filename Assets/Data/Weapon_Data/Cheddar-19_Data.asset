@@ -17,6 +17,8 @@ MonoBehaviour:
   _cheddarCost: 0
   _fireRate: 1
   _damage: 10
+  _magSize: 10
+  _reloadTime: 1
   _maxUpgradeLevel: 3
   _upgradeCost: 50
   _damageIncreasePerLevel: 5
