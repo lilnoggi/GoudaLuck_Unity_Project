@@ -16,5 +16,9 @@ MonoBehaviour:
   _weaponIcon: {fileID: 0}
   _cheddarCost: 250
   _fireRate: 10
-  _damage: 7
+  _damage: 3
+  _maxUpgradeLevel: 3
+  _upgradeCost: 150
+  _damageIncreasePerLevel: 1.5
+  _fireRateDecreasePerLevel: 0.02
   _projectilePrefab: {fileID: 0}
