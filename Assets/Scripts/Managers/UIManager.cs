@@ -61,11 +61,21 @@ public class UIManager : MonoBehaviour
             _gameOverPanel.SetActive(true);
 
             // --- STEAM DECK / CONTROLLER INPUT ---
+            // Force the cursor to be visible in case they want to use the mouse to click
+            Cursor.visible = true;
+
             // Clear whatever the Event System might have been looking at
             EventSystem.current.SetSelectedGameObject(null);
 
-            // Force the controller to focus directly onto the Restart Button
-            EventSystem.current.SetSelectedGameObject(_restartButton);
+            // Find the Player in the scene and check what device they are using
+            PlayerController player = FindFirstObjectByType<PlayerController>();
+
+            // If we found the player, AND they are NOT using the mouse
+            if (player != null && !player.IsUsingMouse)
+            {
+                // Force the controller to focus directly onto the Restart Button
+                EventSystem.current.SetSelectedGameObject(_restartButton);
+            }
         }
     }
 
@@ -77,5 +87,12 @@ public class UIManager : MonoBehaviour
 
         // Reload the current scene
         SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
+    }
+
+    public void QuitGame()
+    {
+        Debug.Log("Quitting the game...");
+
+        Application.Quit();
     }
 }
