@@ -21,6 +21,20 @@ public class PlayerController : MonoBehaviour
     private float _nextDashTime = 0f;
     private Vector3 _dashDirection;
 
+    // A public getter for the UI to read the dash cooldown percentage
+    // Returns 1 (full) if ready, or a fraction (0.0 to 0.99) if on cooldown
+    public float DashCooldownRatio
+    {
+        get
+        {
+            if (Time.time >= _nextDashTime) return 1f;  // Ready to dash
+
+            // Calculate the remaining time as a percentage
+            float timeRemaining = _nextDashTime - Time.time;
+            return 1f - (timeRemaining / _dashCooldown);
+        }
+    }
+
     [Header("Aiming Settings")]
     [SerializeField] private Transform _crosshair;         // Drag the crosshair GameObject here in Inspector !!
     [SerializeField] private float _maxAimRadius = 8f;     // Maximum distance the gamepad crosshair can go.
