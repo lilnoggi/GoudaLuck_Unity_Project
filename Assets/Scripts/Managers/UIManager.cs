@@ -18,6 +18,10 @@ public class UIManager : MonoBehaviour
     [SerializeField] private TextMeshProUGUI _waveText;
     [SerializeField] private Slider _healthSlider;
 
+    [Header("Shop Screen")]
+    [SerializeField] private GameObject _shopPanel;
+    [SerializeField] private GameObject _upgradeButton;  // For controller focus
+
     [Header("Game Over Screen")]
     [SerializeField] private GameObject _gameOverPanel;
     [SerializeField] private GameObject _restartButton;
@@ -52,6 +56,44 @@ public class UIManager : MonoBehaviour
             _healthSlider.value = currentHealth;
         }
     }
+
+    // === SHOP LOGIC ===
+    public void ShowShop()
+    {
+        if (_shopPanel != null)
+        {
+            _shopPanel.SetActive(true);
+            Time.timeScale = 0f;  // Pause the game
+
+            // Controller support
+            Cursor.visible = true;
+            EventSystem.current.SetSelectedGameObject(null);
+
+            PlayerController player = FindFirstObjectByType<PlayerController>();
+            if (player != null && !player.IsUsingMouse)
+            {
+                EventSystem.current.SetSelectedGameObject(_upgradeButton);
+            }
+        }
+    }
+
+    public void HideShop()
+    {
+        if (_shopPanel != null)
+        {
+            _shopPanel.SetActive(false);
+            Time.timeScale = 1f;  // Unpause the game
+
+            // Hide the cursor if using a gamepad
+            PlayerController player = FindFirstObjectByType<PlayerController>();
+            if (player != null && !player.IsUsingMouse)
+            {
+                Cursor.visible = true;
+            }
+        }
+    }
+
+    // === GAME OVER ===
 
     // Turns on the Game Over screen
     public void ShowGameOver()
