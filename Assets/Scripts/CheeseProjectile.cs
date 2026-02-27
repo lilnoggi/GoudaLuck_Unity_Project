@@ -2,7 +2,7 @@ using UnityEngine;
 
 /// <summary>
 /// Handles the movement and collision logic for the projectiles.
-/// Currently uses Destroy() for prototyping, but will be upgrading to Object Pooling!
+/// Fully upgraded to use Object Pooling
 /// </summary>
 
 public class CheeseProjectile : MonoBehaviour
@@ -11,16 +11,34 @@ public class CheeseProjectile : MonoBehaviour
     [SerializeField] private float _lifeTime = 2f;
     [SerializeField] private float _damage = 10f;  // Pass this to the enemy later
 
-    void Start()
+    private void OnEnable()
     {
-        // SAFETY NET: Destroy the bullet after a few seconds so it doesn't fly into infinity
-        Destroy(gameObject, _lifeTime);
+        // Use OnEnable instead of Start() because the pool will turn this object on and off multiple times
+        Invoke("Deactivate", _lifeTime);  // SAFETY NET: recycle after a few seconds
     }
 
-    void Update()
+    private void OnDisable()
+    {
+        CancelInvoke("Deactivate");  // Clean up the timer if it hits a wall early
+    }
+
+    private void Update()
     {
         // Move the bullet straight forward along its local Z-axis
         transform.Translate(Vector3.forward * _speed * Time.deltaTime);
+    }
+
+    private void Deactivate()
+    {
+        // Send it back to the pool instead of destroying it
+        if (ProjectilePool.Instance != null)
+        {
+            ProjectilePool.Instance.ReturnProjectile(gameObject);
+        }
+        else
+        {
+            Destroy(gameObject);  // Fallback just in case
+        }
     }
 
     private void OnTriggerEnter(Collider other)
@@ -34,8 +52,7 @@ public class CheeseProjectile : MonoBehaviour
             Debug.Log("Hit an Enemy!");
         }
 
-        // Destroy the bullet when it hits anything else (like a wall or enemy)
-        // Change to gameObject.SetActive(false) when the Object Pool is built
-        Destroy(gameObject);
+        // Recycle the bullet when it hits anything else
+        Deactivate();
     }
 }

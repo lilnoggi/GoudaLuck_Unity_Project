@@ -27,9 +27,8 @@ public class WeaponSystem : MonoBehaviour
 
             if (_projectilePrefab != null && _firePoint != null)
             {
-                // NOTE: Instantiate for prototyping
-                // - Will upgrade this to Object Pooling later as planned.
-                Instantiate(_projectilePrefab, _firePoint.position, _firePoint.rotation);
+                // Ask the ProjectilePool for a bullet!
+                ProjectilePool.Instance.GetProjectile(_firePoint.position, _firePoint.rotation);
 
                 // SFX can go here later
             }
