@@ -37,13 +37,19 @@ public class HealthSystem : MonoBehaviour
 
         if (gameObject.CompareTag("Player"))
         {
-            // Trigger the Game Over screen here
-            Debug.Log("GAME OVER! The cats win.");
+            // Tell the GameManager the player is dead
+            if (GameManager.Instance != null)
+            {
+                GameManager.Instance.TriggerGameOver();
+            }
         }
         else if (gameObject.CompareTag("Enemy"))
         {
             // Add Cheddar Points to the GameManager here
-            // GameManager.Instance.AddScore(10);
+            if (GameManager.Instance != null)
+            {
+                GameManager.Instance.AddScore(10);
+            }
 
             // Remove the dead cat
             Destroy(gameObject);
