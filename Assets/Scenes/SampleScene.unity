@@ -5226,8 +5226,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c0f9cd04b2822d942bb1ff62b96514f6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ProjectilePool
-  _projectilePrefab: {fileID: 3228192065733822330, guid: 65a050fd7e4b8e74e9d5c4c1e8031fe7, type: 3}
-  _poolSize: 50
+  _projectilePrefab: {fileID: 0}
+  _poolSize: 75
 --- !u!114 &2070055244
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5241,7 +5241,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::EnemyPool
   _enemyPrefab: {fileID: 9049435338180138717, guid: e8d3a5a0deb6481479c4325a3ec54d89, type: 3}
-  _poolSize: 25
+  _poolSize: 30
 --- !u!1 &2103814882
 GameObject:
   m_ObjectHideFlags: 0

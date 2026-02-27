@@ -328,7 +328,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e8671e1b0ea15c8459231a75312da9ad, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::WeaponSystem
-  _currentWeapon: {fileID: 11400000, guid: e5f5bfcb64a963a45a2e99a6c9bb6144, type: 2}
+  _currentWeapon: {fileID: 11400000, guid: eef7a0a119fbc2d4e9bf8c7f0f946375, type: 2}
   _firePoint: {fileID: 8401937537289022613}
 --- !u!114 &3904580937786435689
 MonoBehaviour:
