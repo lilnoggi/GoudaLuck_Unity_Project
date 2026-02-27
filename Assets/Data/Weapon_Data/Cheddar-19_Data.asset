@@ -17,4 +17,8 @@ MonoBehaviour:
   _cheddarCost: 0
   _fireRate: 1
   _damage: 10
+  _maxUpgradeLevel: 3
+  _upgradeCost: 50
+  _damageIncreasePerLevel: 5
+  _fireRateDecreasePerLevel: 0.1
   _projectilePrefab: {fileID: 3228192065733822330, guid: 65a050fd7e4b8e74e9d5c4c1e8031fe7, type: 3}

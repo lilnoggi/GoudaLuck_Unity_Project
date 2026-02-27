@@ -15,7 +15,7 @@ MonoBehaviour:
   _weaponName: Mozza-MP5
   _weaponIcon: {fileID: 0}
   _cheddarCost: 250
-  _fireRate: 10
+  _fireRate: 0.5
   _damage: 3
   _maxUpgradeLevel: 3
   _upgradeCost: 150
