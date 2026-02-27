@@ -25,6 +25,9 @@ public class WeaponData : ScriptableObject
     [SerializeField] private float _damageIncreasePerLevel = 5f;
     [SerializeField] private float _fireRateDecreasePerLevel = 0.05f;  // Subtract from fire rate to shoot faster
 
+    [Header("Visuals")]
+    [SerializeField] private GameObject _weaponModelPrefab;  // The 3D gun model
+
     [Header("References")]
     [SerializeField] private GameObject _projectilePrefab;
 
@@ -39,4 +42,5 @@ public class WeaponData : ScriptableObject
     public float DamageIncreasePerLevel => _damageIncreasePerLevel;
     public float FireRateDecreasePerLevel => _fireRateDecreasePerLevel;
     public GameObject ProjectilePrefab => _projectilePrefab;
+    public GameObject WeaponModelPrefab => _weaponModelPrefab;
 }

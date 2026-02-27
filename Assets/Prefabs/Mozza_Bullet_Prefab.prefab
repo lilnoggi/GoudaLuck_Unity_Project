@@ -155,5 +155,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 27bce0ee15160f8418812fb0279a6c98, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::CheeseProjectile
-  _speed: 20
+  _speed: 40
   _lifeTime: 2

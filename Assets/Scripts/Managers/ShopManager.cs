@@ -6,6 +6,9 @@ using UnityEngine;
 
 public class ShopManager : MonoBehaviour
 {
+    [Header("New Weapons")]
+    [SerializeField] private WeaponData _mozzaData;  // Drop the Mozza-MP5 card here
+
     // The Upgrade Button calls this
     public void OnUpgradeClicked()
     {
@@ -34,6 +37,30 @@ public class ShopManager : MonoBehaviour
         else
         {
             Debug.Log("Not enough cheddar points!");
+        }
+    }
+
+    // The "Buy Mozza-MP5" Button calls this
+    public void OnBuyMozzaClicked()
+    {
+        PlayerController player = FindFirstObjectByType<PlayerController>();
+        if (player == null) return;
+
+        WeaponSystem weapon = player.GetComponent<WeaponSystem>();
+        if (weapon == null) return;
+
+        // Try to spend the cost listed right on the data card
+        if (GameManager.Instance != null && GameManager.Instance.SpendPoints(_mozzaData.CheddarCost))
+        {
+            // Equip the new gun
+            weapon.EquipWeapon(_mozzaData);
+            Debug.Log("Successfully purchased the Mozza-MP5!");
+
+            // NOTE: Hide the buy button here so they don't buy it again.
+        }
+        else
+        {
+            Debug.Log("Not enough Cheddar Points!");
         }
     }
 

@@ -12,6 +12,10 @@ public class WeaponSystem : MonoBehaviour
     [SerializeField] private WeaponData _currentWeapon;  // Drag Cheddar-19_Data here
     [SerializeField] private Transform _firePoint;
 
+    [Header("Model Swapping")]
+    [SerializeField] private Transform _weaponHolder;  // Where the gun physically sits on the player
+    private GameObject _spawnedGunModel;               // Remembers which 3D model the player is currently holding
+
     private float _nextFireTime = 0f;
 
     // --- RUNTIME STATS ---
@@ -35,6 +39,20 @@ public class WeaponSystem : MonoBehaviour
         _currentUpgradeLevel = 0;
         _currentDamage = _currentWeapon.Damage;
         _currentFireRate = _currentWeapon.FireRate;
+
+        // --- SWAP THE 3D MODEL ---
+        // Destroy the old gun if holding one
+        if (_spawnedGunModel != null)
+        {
+            Destroy(_spawnedGunModel);
+        }
+
+        // Spawn the new gun
+        if (_currentWeapon.WeaponModelPrefab != null && _weaponHolder != null)
+        {
+            // Tell Unity to put the gun in the holder, zero it's position, BUT keep its original prefab rotation and scale
+            _spawnedGunModel =  Instantiate(_currentWeapon.WeaponModelPrefab, _weaponHolder, false);
+        }
 
         Debug.Log(gameObject.name + " equipped the " + _currentWeapon.WeaponName + "!");
 

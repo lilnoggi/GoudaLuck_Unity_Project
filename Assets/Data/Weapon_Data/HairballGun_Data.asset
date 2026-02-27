@@ -21,4 +21,5 @@ MonoBehaviour:
   _upgradeCost: 0
   _damageIncreasePerLevel: 0
   _fireRateDecreasePerLevel: 0
+  _weaponModelPrefab: {fileID: 5300054491914667041, guid: f77f1fa729b06204c866f70217fcb83e, type: 3}
   _projectilePrefab: {fileID: 5810538595226611754, guid: dc115cdf12e22c84ca06a9455d8e08b3, type: 3}
