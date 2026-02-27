@@ -5050,6 +5050,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PlayerController
   _moveSpeed: 5
+  _dashSpeed: 20
+  _dashDuration: 0.2
+  _dashCooldown: 1
   _crosshair: {fileID: 357746022}
   _maxAimRadius: 8
   _crosshairSpeed: 25
