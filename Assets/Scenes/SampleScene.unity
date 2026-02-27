@@ -2996,6 +2996,7 @@ MonoBehaviour:
   _waveText: {fileID: 742181180}
   _healthSlider: {fileID: 830798460}
   _gameOverPanel: {fileID: 1992989780}
+  _restartButton: {fileID: 411639804}
 --- !u!1 &1785688636
 GameObject:
   m_ObjectHideFlags: 0

@@ -1,6 +1,7 @@
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
+using UnityEngine.EventSystems;  // Required for Controller UI Navigation
 using TMPro;
 
 /// <summary>
@@ -19,6 +20,7 @@ public class UIManager : MonoBehaviour
 
     [Header("Game Over Screen")]
     [SerializeField] private GameObject _gameOverPanel;
+    [SerializeField] private GameObject _restartButton;
 
     private void Awake()
     {
@@ -57,6 +59,13 @@ public class UIManager : MonoBehaviour
         if (_gameOverPanel != null)
         {
             _gameOverPanel.SetActive(true);
+
+            // --- STEAM DECK / CONTROLLER INPUT ---
+            // Clear whatever the Event System might have been looking at
+            EventSystem.current.SetSelectedGameObject(null);
+
+            // Force the controller to focus directly onto the Restart Button
+            EventSystem.current.SetSelectedGameObject(_restartButton);
         }
     }
 
