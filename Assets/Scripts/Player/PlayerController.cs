@@ -16,6 +16,7 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private float _dashSpeed = 20f;
     [SerializeField] private float _dashDuration = 0.2f;
     [SerializeField] private float _dashCooldown = 1f;
+    [SerializeField] private TrailRenderer _dashTrail;
 
     private bool _isDashing = false;
     private float _nextDashTime = 0f;
@@ -287,8 +288,14 @@ public class PlayerController : MonoBehaviour
     {
         _isDashing = true;  // Turn on dash mode
 
+        // Turn on the trail
+        if (_dashTrail != null) _dashTrail.emitting = true;
+
         // Wait for a fraction of a second while the FixedUpdate handles the high-speed movement
         yield return new WaitForSeconds(_dashDuration);
+
+        // Turn trail off
+        if (_dashTrail != null) _dashTrail.emitting = false;
 
         _isDashing = false;  // Turn off dash mode and return to normal movement
     }
