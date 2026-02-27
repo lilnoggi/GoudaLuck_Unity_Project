@@ -11,6 +11,8 @@ public class CheeseProjectile : MonoBehaviour
     [SerializeField] private float _lifeTime = 2f;
     [SerializeField] private float _damage = 10f;  // Pass this to the enemy later
 
+    private string _shooterTag;  // Remember who fired this bullet
+
     private void OnEnable()
     {
         // Use OnEnable instead of Start() because the pool will turn this object on and off multiple times
@@ -28,6 +30,12 @@ public class CheeseProjectile : MonoBehaviour
         transform.Translate(Vector3.forward * _speed * Time.deltaTime);
     }
 
+    // The WeaponSystem calls this the exact moment the bullet is spawned
+    public void Setup(string tagOfShooter)
+    {
+        _shooterTag = tagOfShooter;
+    }
+
     private void Deactivate()
     {
         // Send it back to the pool instead of destroying it
@@ -43,13 +51,19 @@ public class CheeseProjectile : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        // Ignore collision with the player who fired it
-        if (other.CompareTag("Player")) return;
+        // Ignore collision of whoever fired it (Player ignores Player, Enemy ignores Enemy)
+        if (other.CompareTag(_shooterTag)) return;
 
         // If it hits an enemy, eventually call their TakeDamage() method
-        if (other.CompareTag("Enemy"))
+        if (other.CompareTag("Enemy") && _shooterTag == "Player")
         {
-            Debug.Log("Hit an Enemy!");
+            Debug.Log("Player hit an Enemy!");
+        }
+
+        // Hit the Player
+        if (other.CompareTag("Player") && _shooterTag == "Enemy")
+        {
+            Debug.Log("Enemy hit the Player!");
         }
 
         // Recycle the bullet when it hits anything else

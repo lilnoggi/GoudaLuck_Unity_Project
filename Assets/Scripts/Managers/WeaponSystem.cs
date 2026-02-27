@@ -28,7 +28,15 @@ public class WeaponSystem : MonoBehaviour
             if (_projectilePrefab != null && _firePoint != null)
             {
                 // Ask the ProjectilePool for a bullet!
-                ProjectilePool.Instance.GetProjectile(_firePoint.position, _firePoint.rotation);
+                GameObject obj = ProjectilePool.Instance.GetProjectile(_firePoint.position, _firePoint.rotation);
+
+                // Tell the bullet who fired it
+                CheeseProjectile projectileScript = obj.GetComponent<CheeseProjectile>();
+                if (projectileScript != null)
+                {
+                    // Pass the tag of the GameObject holding this WeaponSystem (Player or Enemy)
+                    projectileScript.Setup(gameObject.tag);
+                }
 
                 // SFX can go here later
             }
