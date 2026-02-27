@@ -54,16 +54,17 @@ public class CheeseProjectile : MonoBehaviour
         // Ignore collision of whoever fired it (Player ignores Player, Enemy ignores Enemy)
         if (other.CompareTag(_shooterTag)) return;
 
-        // If it hits an enemy, eventually call their TakeDamage() method
-        if (other.CompareTag("Enemy") && _shooterTag == "Player")
+        // If it hits an enemy OR hits the player
+        if (other.CompareTag("Enemy") && _shooterTag == "Player" || other.CompareTag("Player") && _shooterTag == "Enemy")
         {
-            Debug.Log("Player hit an Enemy!");
-        }
+            // Grab the HealthSystem off the bean just hit
+            HealthSystem targetHealth = other.GetComponent<HealthSystem>();
 
-        // Hit the Player
-        if (other.CompareTag("Player") && _shooterTag == "Enemy")
-        {
-            Debug.Log("Enemy hit the Player!");
+            if (targetHealth != null)
+            {
+                // Take damage
+                targetHealth.TakeDamage(_damage);
+            }
         }
 
         // Recycle the bullet when it hits anything else
