@@ -12,7 +12,9 @@ public class GameManager : MonoBehaviour
 
     [Header("Game State")]
     [SerializeField] private int _score = 0;
-    // [SerializeField] private int _currentWave = 1;
+
+    // A public getter so the shop can check the score
+    public int Score => _score;
 
     private void Awake()
     {
@@ -38,6 +40,23 @@ public class GameManager : MonoBehaviour
         {
             UIManager.Instance.UpdateScore(_score);
         }
+    }
+
+    // The shop will call this when you click "Upgrade"
+    public bool SpendPoints(int amount)
+    {
+        if (_score >= amount)
+        {
+            _score -= amount;
+
+            // Update the UI
+            if (UIManager.Instance != null)
+            {
+                UIManager.Instance.UpdateScore(_score);
+                return true;  // Purchase successful
+            }
+        }
+        return false;  // Not enough points
     }
 
     // Called by the HealthSystem when the player dies

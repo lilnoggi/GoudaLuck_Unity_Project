@@ -30,6 +30,30 @@ public class WaveManager : MonoBehaviour
         StartCoroutine(SpawnWave());
     }
 
+    // The HealthSystem will call this method every time a cat is defeated
+    public void EnemyDefeated()
+    {
+        _enemiesAlive--;
+
+        // If all enemies in this wave are dead, open the shop.
+        if (_enemiesAlive <= 0)
+        {
+            if (UIManager.Instance != null)
+            {
+                UIManager.Instance.ShowShop();
+            }
+        }
+    }
+
+    // The "Next Wave" button in the shop will call this
+    public void StartNextWave()
+    {
+        _currentWave++;
+        _enemiesPerWave += 2;  // Increase difficulty
+
+        StartCoroutine(SpawnWave());
+    }
+
     private IEnumerator SpawnWave()
     {
         Debug.Log("--- WAVE " + _currentWave + " STARTING! ---");
@@ -60,20 +84,5 @@ public class WaveManager : MonoBehaviour
             // Wait a moment before spawning the next one
             yield return new WaitForSeconds(_timeBetweenSpawns);
         }
-    }
-
-    // The HealthSystem will call this method every time a cat is defeated
-    public void EnemyDefeated()
-    {
-        _enemiesAlive--;
-
-        // If all enemies in this wave are dead, start the next one.
-        if (_enemiesAlive <= 0)
-        {
-            _currentWave++;
-            _enemiesPerWave += 2; // Increase the difficulty by adding 2 more cats
-
-            StartCoroutine(SpawnWave());
-        } 
     }
 }
