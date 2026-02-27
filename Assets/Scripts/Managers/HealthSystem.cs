@@ -51,6 +51,12 @@ public class HealthSystem : MonoBehaviour
             {
                 GameManager.Instance.AddScore(10);
 
+                // Tell WaveManager when a cat died
+                if (WaveManager.Instance != null)
+                {
+                    WaveManager.Instance.EnemyDefeated();
+                }
+
                 // Return to pool instead of destroying
                 if (EnemyPool.Instance != null)
                 {

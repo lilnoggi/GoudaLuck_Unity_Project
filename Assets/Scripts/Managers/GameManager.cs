@@ -12,7 +12,7 @@ public class GameManager : MonoBehaviour
 
     [Header("Game State")]
     [SerializeField] private int _score = 0;
-    [SerializeField] private int _currentWave = 1;
+    // [SerializeField] private int _currentWave = 1;
 
     private void Awake()
     {
