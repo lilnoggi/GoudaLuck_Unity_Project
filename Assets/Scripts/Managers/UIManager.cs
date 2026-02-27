@@ -26,6 +26,7 @@ public class UIManager : MonoBehaviour
     [Header("Shop Screen")]
     [SerializeField] private GameObject _shopPanel;
     [SerializeField] private GameObject _upgradeButton;  // For controller focus
+    [SerializeField] private TextMeshProUGUI _shopScoreText;
 
     [Header("Game Over Screen")]
     [SerializeField] private GameObject _gameOverPanel;
@@ -77,6 +78,11 @@ public class UIManager : MonoBehaviour
         if (_scoreText != null)
         {
             _scoreText.text = newScore.ToString();
+        }
+
+        if (_shopScoreText != null)
+        {
+            _shopScoreText.text = newScore.ToString();
         }
     }
 
