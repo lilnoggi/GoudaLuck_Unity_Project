@@ -32,6 +32,12 @@ public class GameManager : MonoBehaviour
     {
         _score += amount;
         Debug.Log("Cat defeated! Cheddar Points: " + _score);
+
+        // Tell the UI manager score has changed
+        if (UIManager.Instance != null)
+        {
+            UIManager.Instance.UpdateScore(_score);
+        }
     }
 
     // Called by the HealthSystem when the player dies

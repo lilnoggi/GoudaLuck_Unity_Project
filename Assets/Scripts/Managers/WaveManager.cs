@@ -34,6 +34,12 @@ public class WaveManager : MonoBehaviour
     {
         Debug.Log("--- WAVE " + _currentWave + " STARTING! ---");
 
+        // Tell UIManager Wave has changed
+        if (UIManager.Instance != null)
+        {
+            UIManager.Instance.UpdateWave(_currentWave);
+        }
+
         // Wait a few seconds before spawning so the player can breath
         yield return new WaitForSeconds(2f);
 

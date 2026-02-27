@@ -15,16 +15,27 @@ public class HealthSystem : MonoBehaviour
     {
         // Everyone starts with full health
         _currentHealth = _maxHealth;
+
+        // Tell UIManager to set the health bar at the start
+        if (gameObject.CompareTag("Player") && UIManager.Instance != null)
+        {
+            UIManager.Instance.UpdateHealth(_currentHealth, _maxHealth);
+        }
     }
 
     // The CheeseProjectile will call this method when it hits
     public void TakeDamage(float damageAmount)
     {
         _currentHealth -= damageAmount;
-        Debug.Log(gameObject.name + " took " + damageAmount + " damage! Health remaining: " + _currentHealth);
 
         // Clamp health so it doesn't go into negative numbers
         _currentHealth = Mathf.Clamp(_currentHealth, 0, _maxHealth);
+
+        // Tell UIManager to update the health slider
+        if (gameObject.CompareTag("Player") && UIManager.Instance != null)
+        {
+            UIManager.Instance.UpdateHealth(_currentHealth, _maxHealth);
+        } 
 
         if (_currentHealth <= 0)
         {
@@ -34,8 +45,6 @@ public class HealthSystem : MonoBehaviour
 
     private void Die()
     {
-        Debug.Log(gameObject.name + " has been defeated!");
-
         if (gameObject.CompareTag("Player"))
         {
             // Tell the GameManager the player is dead
