@@ -193,9 +193,6 @@ public class PlayerController : MonoBehaviour
                 // Multiply the max radius by the joystick's magnitude
                 float currentRadius = _maxAimRadius * _aimVector.magnitude;
 
-                // Position = Player Position + Direction * Radius + slight lift so it doesn't clip into the floor
-                _crosshair.position = transform.position + (aimDirection * currentRadius) + (Vector3.up * 0.1f);
-
                 // Calculate exactly where the crosshair wants to be
                 Vector3 targetCrosshairPos = transform.position + (aimDirection * currentRadius) + (Vector3.up * 0.1f);
 
