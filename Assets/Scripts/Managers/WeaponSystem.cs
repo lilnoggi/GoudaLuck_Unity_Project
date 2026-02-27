@@ -75,7 +75,7 @@ public class WeaponSystem : MonoBehaviour
             _nextFireTime = Time.time + _currentFireRate;
 
             // Ask the ProjectilePool for a bullet!
-            GameObject obj = ProjectilePool.Instance.GetProjectile(_firePoint.position, _firePoint.rotation);
+            GameObject obj = ProjectilePool.Instance.GetProjectile(_currentWeapon.ProjectilePrefab, _firePoint.position, _firePoint.rotation);
 
             // Tell the bullet who fired it
             CheeseProjectile projectileScript = obj.GetComponent<CheeseProjectile>();
