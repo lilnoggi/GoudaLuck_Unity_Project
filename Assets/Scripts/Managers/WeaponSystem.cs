@@ -29,6 +29,10 @@ public class WeaponSystem : MonoBehaviour
     private int _currentAmmo;
     private bool _isReloading = false;
 
+    // --- ARMOURY MEMORY ---
+    // This tracks the upgrade level of every gun the player owns
+    private Dictionary<string, int> _weaponUpgradeLevels = new Dictionary<string, int>();
+
     private void Start()
     {
         if (_currentWeapon != null)
@@ -41,10 +45,20 @@ public class WeaponSystem : MonoBehaviour
     {
         _currentWeapon = newWeapon;
 
-        // Reset the runtime stats back to the base stats on the card
-        _currentUpgradeLevel = 0;
-        _currentDamage = _currentWeapon.Damage;
-        _currentFireRate = _currentWeapon.FireRate;
+        // --- MEMORY CHECK ---
+        if (!_weaponUpgradeLevels.ContainsKey(_currentWeapon.WeaponName))
+        {
+            _weaponUpgradeLevels[_currentWeapon.WeaponName] = 0;
+        }
+
+        // Pull the saved upgrade level from the dictionary
+        _currentUpgradeLevel = _weaponUpgradeLevels[_currentWeapon.WeaponName];
+
+        // Re-calculate the damage and fire rate based on saved level
+        _currentDamage = _currentWeapon.Damage + (_currentUpgradeLevel * _currentWeapon.DamageIncreasePerLevel);
+
+        _currentFireRate = _currentWeapon.FireRate - (_currentUpgradeLevel * _currentWeapon.FireRateDecreasePerLevel);
+        _currentFireRate = Mathf.Max(_currentFireRate, 0.05f);  // Keep the clamp
 
         // --- SWAP THE 3D MODEL ---
         // Destroy the old gun if holding one
@@ -80,11 +94,12 @@ public class WeaponSystem : MonoBehaviour
         {
             _currentUpgradeLevel++;
 
+            // Save the new level back into the dictionary
+            _weaponUpgradeLevels[_currentWeapon.WeaponName] = _currentUpgradeLevel;
+
             // Apply the maths
             _currentDamage += _currentWeapon.DamageIncreasePerLevel;
             _currentFireRate -= _currentWeapon.FireRateDecreasePerLevel;
-
-            // Clamp fire rate so it never hits 0 or goes negative (WOULD BREAK THE GAME)
             _currentFireRate = Mathf.Max(_currentFireRate, 0.05f);
 
             Debug.Log($"Weapon Upgraded to Level {_currentUpgradeLevel}! Damage: {_currentDamage}, FireRate: {_currentFireRate}");
