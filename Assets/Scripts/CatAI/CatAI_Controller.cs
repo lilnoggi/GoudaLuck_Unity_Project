@@ -26,6 +26,18 @@ public class CatAI_Controller : MonoBehaviour
         _weaponSystem = GetComponent<WeaponSystem>();
     }
 
+    private void OnEnable()
+    {
+        // Reset the brain to Chase mode when pulled from the pool
+        _currentState = State.Chase;
+
+        // If the agent is active, make sure it recalculates its path
+        if (_agent != null && _agent.isOnNavMesh)
+        {
+            _agent.isStopped = false;
+        }
+    }
+
     private void Start()
     {
         // Find the player automatically

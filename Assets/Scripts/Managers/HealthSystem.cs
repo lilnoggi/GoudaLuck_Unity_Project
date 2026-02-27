@@ -10,7 +10,8 @@ public class HealthSystem : MonoBehaviour
     [SerializeField] private float _maxHealth = 100f;
     private float _currentHealth;
 
-    void Start()
+    // Instead of Start() use OnEnable() to reset health every time it spawns from the pool
+    private void OnEnable()
     {
         // Everyone starts with full health
         _currentHealth = _maxHealth;
@@ -49,10 +50,18 @@ public class HealthSystem : MonoBehaviour
             if (GameManager.Instance != null)
             {
                 GameManager.Instance.AddScore(10);
-            }
 
-            // Remove the dead cat
-            Destroy(gameObject);
+                // Return to pool instead of destroying
+                if (EnemyPool.Instance != null)
+                {
+                    EnemyPool.Instance.ReturnEnemy(gameObject);
+                }
+                else
+                {
+                    // FALLBACK :Remove the dead cat
+                    Destroy(gameObject);
+                }
+            }
         }
     }
 }
