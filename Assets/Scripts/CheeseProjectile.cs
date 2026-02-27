@@ -9,7 +9,8 @@ public class CheeseProjectile : MonoBehaviour
 {
     [SerializeField] private float _speed = 20f;
     [SerializeField] private float _lifeTime = 2f;
-    [SerializeField] private float _damage = 10f;  // Pass this to the enemy later
+    
+    private float _currentDamage;
 
     private string _shooterTag;  // Remember who fired this bullet
 
@@ -31,9 +32,10 @@ public class CheeseProjectile : MonoBehaviour
     }
 
     // The WeaponSystem calls this the exact moment the bullet is spawned
-    public void Setup(string tagOfShooter)
+    public void Setup(string tagOfShooter, float damageAmount)
     {
         _shooterTag = tagOfShooter;
+        _currentDamage = damageAmount;  // Store the weapon's damage
     }
 
     private void Deactivate()
@@ -63,7 +65,7 @@ public class CheeseProjectile : MonoBehaviour
             if (targetHealth != null)
             {
                 // Take damage
-                targetHealth.TakeDamage(_damage);
+                targetHealth.TakeDamage(_currentDamage);
             }
         }
 

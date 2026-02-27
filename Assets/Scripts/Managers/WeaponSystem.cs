@@ -42,15 +42,10 @@ public class WeaponSystem : MonoBehaviour
             if (projectileScript != null)
             {
                 // Pass the tag of the GameObject holding this WeaponSystem (Player or Enemy)
-                projectileScript.Setup(gameObject.tag);
+                projectileScript.Setup(gameObject.tag, _currentWeapon.Damage);
             }
 
             // SFX can go here later
-        }
-        else
-        {
-            Debug.LogWarning("Weapon System is missing a projectile Prefab or Fire Point!");
-
         }
     }
 }
