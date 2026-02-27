@@ -45,6 +45,11 @@ public class GameManager : MonoBehaviour
     {
         Debug.Log("=== GAME OVER === The felines have taken over.");
 
+        if (UIManager.Instance != null)
+        {
+            UIManager.Instance.ShowGameOver();
+        }
+
         // Pause the game physics so nothing else can move or shoot
         Time.timeScale = 0f;
 

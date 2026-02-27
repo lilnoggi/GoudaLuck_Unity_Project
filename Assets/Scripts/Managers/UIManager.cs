@@ -1,5 +1,6 @@
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.SceneManagement;
 using TMPro;
 
 /// <summary>
@@ -15,6 +16,9 @@ public class UIManager : MonoBehaviour
     [SerializeField] private TextMeshProUGUI _scoreText;
     [SerializeField] private TextMeshProUGUI _waveText;
     [SerializeField] private Slider _healthSlider;
+
+    [Header("Game Over Screen")]
+    [SerializeField] private GameObject _gameOverPanel;
 
     private void Awake()
     {
@@ -45,5 +49,24 @@ public class UIManager : MonoBehaviour
             _healthSlider.maxValue = maxHealth;
             _healthSlider.value = currentHealth;
         }
+    }
+
+    // Turns on the Game Over screen
+    public void ShowGameOver()
+    {
+        if (_gameOverPanel != null)
+        {
+            _gameOverPanel.SetActive(true);
+        }
+    }
+
+    // The Restart Button will call this method
+    public void RestartGame()
+    {
+        // Unfreeze the game first
+        Time.timeScale = 1f;
+
+        // Reload the current scene
+        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
     }
 }
