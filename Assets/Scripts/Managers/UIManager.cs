@@ -32,7 +32,7 @@ public class UIManager : MonoBehaviour
     {
         if (_scoreText != null)
         {
-            _scoreText.text = "Cheddar Points: " + newScore;
+            _scoreText.text = newScore.ToString();
         }
     }
 
