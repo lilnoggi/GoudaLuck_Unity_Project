@@ -183,4 +183,14 @@ public class WeaponSystem : MonoBehaviour
 
     // Getter for the UI to check the level
     public int GetUpgradeLevel() => _currentUpgradeLevel;
+
+    // Allows the Shop to check a weapon's level without equipping it first
+    public int GetSpecificWeaponLevel(string weaponName)
+    {
+        if (_weaponUpgradeLevels.ContainsKey(weaponName))
+        {
+            return _weaponUpgradeLevels[weaponName];
+        }
+        return 0;  // If not in the dictionary, it is Level 0
+    }
 }
