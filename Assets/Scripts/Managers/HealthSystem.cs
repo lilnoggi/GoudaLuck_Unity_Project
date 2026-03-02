@@ -14,6 +14,9 @@ public class HealthSystem : MonoBehaviour
     [Header("Local UI (Enemy)")]
     [SerializeField] private Slider _localHealthSlider;  // Drag the enemy's world space slider here
 
+    // --- DASHING I-FRAME TRACKING ---
+    private bool _isInvincible;
+
     // Instead of Start() use OnEnable() to reset health every time it spawns from the pool
     private void OnEnable()
     {
@@ -23,9 +26,18 @@ public class HealthSystem : MonoBehaviour
         UpdateHealthUI();  // Update UI immediately when spawned
     }
 
+    // Method to turn invincibility on / off
+    public void SetInvincible(bool state)
+    {
+        _isInvincible = state;
+    }
+
     // The CheeseProjectile will call this method when it hits
     public void TakeDamage(float damageAmount)
     {
+        // If invisible, ignore the rest of the method
+        if (_isInvincible) return;
+
         _currentHealth -= damageAmount;
 
         // Clamp health so it doesn't go into negative numbers
