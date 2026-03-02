@@ -3,6 +3,7 @@ using UnityEngine;
 
 /// <summary>
 /// Pre-allocates a pool of projectiles to prevent Garbage Collection spikes.
+/// Upgraded to a Dictionary Pool to support multiple ammo types dynamically.
 /// </summary>
 
 public class ProjectilePool : MonoBehaviour
@@ -12,25 +13,11 @@ public class ProjectilePool : MonoBehaviour
     // A dictionary allows for multiple pools
     private Dictionary<string, Queue<GameObject>> _poolDictionary = new Dictionary<string, Queue<GameObject>>();
 
-    [SerializeField] private GameObject _projectilePrefab;
-    [SerializeField] private int _poolSize = 30;  // How many bullets to spawn at the start
-
-    // A Queue is a FIFO data structure (First-In, First-Out) - perfect for pooling
-    private Queue<GameObject> _pool = new Queue<GameObject>();
-
     private void Awake()
     {
         // Set up Singleton
         if (Instance == null) Instance = this;
         else Destroy(gameObject);
-
-        // "Pre-warm" the pool by spawning inactive cheese wedges
-        for (int i = 0; i < _poolSize; i++)
-        {
-            GameObject obj = Instantiate(_projectilePrefab);
-            obj.SetActive(false);  // Turn it off immediately
-            _pool.Enqueue(obj);    // Add it to the queue
-        }
     }
 
     // WeaponSystem will call this to grab a bullet
@@ -54,7 +41,7 @@ public class ProjectilePool : MonoBehaviour
         else
         {
             // Otherwise, make a new one and name it exactly like they key
-            obj = Instantiate(prefab);
+            obj = Instantiate(prefab, transform);  // By adding 'transform' here, the bullet becomes a child of the Pool
             obj.name = key;
         }
 

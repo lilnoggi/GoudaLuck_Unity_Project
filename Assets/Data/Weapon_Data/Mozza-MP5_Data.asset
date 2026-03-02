@@ -15,10 +15,13 @@ MonoBehaviour:
   _weaponName: Mozza-MP5
   _weaponIcon: {fileID: 21300000, guid: 28818304ab092824abd7292ba6027760, type: 3}
   _cheddarCost: 250
-  _fireRate: 0.5
+  _fireRate: 0.05
   _damage: 3
+  _magSize: 30
+  _reloadTime: 1.5
   _maxUpgradeLevel: 3
   _upgradeCost: 150
   _damageIncreasePerLevel: 1.5
   _fireRateDecreasePerLevel: 0.02
-  _projectilePrefab: {fileID: 0}
+  _weaponModelPrefab: {fileID: 3773216888525253012, guid: 4fcd319ad948ead4d9833b5f769b4e73, type: 3}
+  _projectilePrefab: {fileID: 7109690031690337730, guid: 26d67e840611dd442805095ded2148fa, type: 3}

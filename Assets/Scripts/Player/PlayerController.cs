@@ -57,12 +57,39 @@ public class PlayerController : MonoBehaviour
 
     private void Awake()
     {
+        InitialiseComponents();
+        SubscribeToInputs();
+    }
+
+    // -----------------------------------------------------------------------------------------------------------------
+    // --- SETUP METHODS ---
+
+    /// <sumary>
+    /// Gathers all the required components so Awake() stays clean and readable.
+    /// </sumary> 
+
+    private void InitialiseComponents()
+    {
         _rb = GetComponent<Rigidbody>();
         _mainCamera = Camera.main;
+        _weaponSystem = GetComponent<WeaponSystem>();
 
         // Instantiate this as a new object because it is a generated C# class, not a MonoBehaviour component.
         _controls = new PlayerControls();
+    }
 
+    /// <summary>
+    /// Acts as a switchboard to connect all the input events
+    /// </summary>
+    private void SubscribeToInputs()
+    {
+        SetupMovementInput();
+        SetupAimingInput();
+        SetupActionInput();
+    }
+
+    private void SetupMovementInput()
+    {
         // --- MOVEMENT INPUT ---
         /// <summary>
         /// This is the Event-Driven architecture in action!
@@ -76,14 +103,15 @@ public class PlayerController : MonoBehaviour
         /// </summary>
         _controls.Player.Move.performed += ctx => _inputVector = ctx.ReadValue<Vector2>();
         _controls.Player.Move.canceled += ctx => _inputVector = Vector2.zero;
+    }
 
-        // -----------------------------------------------------------------------------------------------
-
+    private void SetupAimingInput()
+    {
         // --- GAMEPAD AIMING INPUT ---
         _controls.Player.Aim.performed += ctx =>
         {
             _aimVector = ctx.ReadValue<Vector2>();
-            
+
             // If the joystick is touched, switch to Gamepad mode AND hide the mouse
             if (_isUsingMouse)
             {
@@ -95,9 +123,9 @@ public class PlayerController : MonoBehaviour
 
         // --- PC MOUSE AIMING ---
         _controls.Player.MousePosition.performed += ctx =>
-        { 
+        {
             _mousePosition = ctx.ReadValue<Vector2>();
-            
+
             // If the mouse is moved, switch to PC Mouse mode
             if (!_isUsingMouse)
             {
@@ -105,15 +133,23 @@ public class PlayerController : MonoBehaviour
                 Cursor.visible = true;
             }
         };
+    }
 
-        // --- FIRING INPUT ---
-        _weaponSystem = GetComponent<WeaponSystem>();
+    private void SetupActionInput()
+    {
+        // --- FIRING ---
 
         // Listen for the Fire button being pressed and released
         _controls.Player.Fire.performed += ctx => _isFiring = true;
         _controls.Player.Fire.canceled += ctx => _isFiring = false;
 
-        // --- DASH INPUT ---
+        // --- RELOADING ---
+        _controls.Player.Reload.performed += ctx =>
+        {
+            if (_weaponSystem != null) _weaponSystem.Reload();
+        };
+
+        // --- DASHING ---
         _controls.Player.Dash.performed += ctx => PerformDash();
     }
 
@@ -200,66 +236,76 @@ public class PlayerController : MonoBehaviour
 
         if (_isUsingMouse)
         {
-            // --- PC MOUSE AIMING ---
-            _crosshair.gameObject.SetActive(true);  // Mouse crosshair is always on
-
-            // Create a mathmatical flat plane at the player's feet
-            Plane groundPlane = new Plane(Vector3.up, transform.position);
-
-            // Shoot a ray from the camera through the mouse cursor on the screen
-            Ray ray = _mainCamera.ScreenPointToRay(_mousePosition);
-
-            // If the ray hits the floor...
-            if (groundPlane.Raycast(ray, out float hitDistance))
-            {
-                // Find the exact 3D point it hit
-                Vector3 targetPoint = ray.GetPoint(hitDistance);
-
-                // Smoothly glide the crosshair to the mouse cursor position (helps if frame rates fluctuate)
-                Vector3 desiredCrosshairPos = new Vector3(targetPoint.x, transform.position.y + 0.1f, targetPoint.z);
-                _crosshair.position = Vector3.Lerp(_crosshair.position, desiredCrosshairPos, Time.deltaTime * _crosshairSpeed);
-
-                // Rotate the player to face the crosshair
-                Vector3 aimDirection = (targetPoint - transform.position).normalized;
-                aimDirection.y = 0f;  // Keep the mouse from looking up/down
-
-                if (aimDirection.sqrMagnitude > 0.01f)
-                {
-                    Quaternion targetRotation = Quaternion.LookRotation(aimDirection);
-                    _rb.MoveRotation(Quaternion.Slerp(_rb.rotation, targetRotation, Time.deltaTime * 15f));
-                }
-            }
+            HandleMouseAiming();
         }
         else
         {
-            /// --- GAMEPAD AIMING ---
-            // DEADZONE CHECK: Only calculate aim if the player is actually pushing the right stick
-            if (_aimVector.sqrMagnitude > 0.01f)
+            HandleGamepadAiming();
+        }
+    }
+
+    // --- PC MOUSE AIMING ---
+    private void HandleMouseAiming()
+    {
+        _crosshair.gameObject.SetActive(true);  // Mouse crosshair is always on
+
+        // Create a mathmatical flat plane at the player's feet
+        Plane groundPlane = new Plane(Vector3.up, transform.position);
+
+        // Shoot a ray from the camera through the mouse cursor on the screen
+        Ray ray = _mainCamera.ScreenPointToRay(_mousePosition);
+
+        // If the ray hits the floor...
+        if (groundPlane.Raycast(ray, out float hitDistance))
+        {
+            // Find the exact 3D point it hit
+            Vector3 targetPoint = ray.GetPoint(hitDistance);
+
+            // Smoothly glide the crosshair to the mouse cursor position (helps if frame rates fluctuate)
+            Vector3 desiredCrosshairPos = new Vector3(targetPoint.x, transform.position.y + 0.1f, targetPoint.z);
+            _crosshair.position = Vector3.Lerp(_crosshair.position, desiredCrosshairPos, Time.deltaTime * _crosshairSpeed);
+
+            // Rotate the player to face the crosshair
+            Vector3 aimDirection = (targetPoint - transform.position).normalized;
+            aimDirection.y = 0f;  // Keep the mouse from looking up/down
+
+            if (aimDirection.sqrMagnitude > 0.01f)
             {
-                _crosshair.gameObject.SetActive(true);
-
-                // Convert the 2D joystick input into a 3D direction
-                Vector3 aimDirection = new Vector3(_aimVector.x, 0f, _aimVector.y).normalized;
-
-                // Let the crosshair move freely
-                // Multiply the max radius by the joystick's magnitude
-                float currentRadius = _maxAimRadius * _aimVector.magnitude;
-
-                // Calculate exactly where the crosshair wants to be
-                Vector3 targetCrosshairPos = transform.position + (aimDirection * currentRadius) + (Vector3.up * 0.1f);
-
-                // Smoothly LERP the crosshair to that target position to eliminate hardware jitter/snapping
-                _crosshair.position = Vector3.Lerp(_crosshair.position, targetCrosshairPos, Time.deltaTime * _crosshairSpeed);
-
-                // Rotate the player to face the crosshair
                 Quaternion targetRotation = Quaternion.LookRotation(aimDirection);
                 _rb.MoveRotation(Quaternion.Slerp(_rb.rotation, targetRotation, Time.deltaTime * 15f));
             }
-            else if (_crosshair != null)
-            {
-                // Hide the crosshair if they let go of the right stick
-                _crosshair.gameObject.SetActive(false);
-            }
+        }
+    }
+
+    private void HandleGamepadAiming()
+    {
+        /// --- GAMEPAD AIMING ---
+        // DEADZONE CHECK: Only calculate aim if the player is actually pushing the right stick
+        if (_aimVector.sqrMagnitude > 0.01f)
+        {
+            _crosshair.gameObject.SetActive(true);
+
+            // Convert the 2D joystick input into a 3D direction
+            Vector3 aimDirection = new Vector3(_aimVector.x, 0f, _aimVector.y).normalized;
+
+            // Let the crosshair move freely
+            // Multiply the max radius by the joystick's magnitude
+            float currentRadius = _maxAimRadius * _aimVector.magnitude;
+
+            // Calculate exactly where the crosshair wants to be
+            Vector3 targetCrosshairPos = transform.position + (aimDirection * currentRadius) + (Vector3.up * 0.1f);
+
+            // Smoothly LERP the crosshair to that target position to eliminate hardware jitter/snapping
+            _crosshair.position = Vector3.Lerp(_crosshair.position, targetCrosshairPos, Time.deltaTime * _crosshairSpeed);
+
+            // Rotate the player to face the crosshair
+            Quaternion targetRotation = Quaternion.LookRotation(aimDirection);
+            _rb.MoveRotation(Quaternion.Slerp(_rb.rotation, targetRotation, Time.deltaTime * 15f));
+        }
+        else if (_crosshair != null)
+        {
+            // Hide the crosshair if they let go of the right stick
+            _crosshair.gameObject.SetActive(false);
         }
     }
 
