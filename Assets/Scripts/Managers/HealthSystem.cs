@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.UI;
 
 /// <summary>
 /// A modular health component that can be attatched to the Player,
@@ -10,17 +11,16 @@ public class HealthSystem : MonoBehaviour
     [SerializeField] private float _maxHealth = 100f;
     private float _currentHealth;
 
+    [Header("Local UI (Enemy)")]
+    [SerializeField] private Slider _localHealthSlider;  // Drag the enemy's world space slider here
+
     // Instead of Start() use OnEnable() to reset health every time it spawns from the pool
     private void OnEnable()
     {
         // Everyone starts with full health
         _currentHealth = _maxHealth;
 
-        // Tell UIManager to set the health bar at the start
-        if (gameObject.CompareTag("Player") && UIManager.Instance != null)
-        {
-            UIManager.Instance.UpdateHealth(_currentHealth, _maxHealth);
-        }
+        UpdateHealthUI();  // Update UI immediately when spawned
     }
 
     // The CheeseProjectile will call this method when it hits
@@ -32,14 +32,28 @@ public class HealthSystem : MonoBehaviour
         _currentHealth = Mathf.Clamp(_currentHealth, 0, _maxHealth);
 
         // Tell UIManager to update the health slider
-        if (gameObject.CompareTag("Player") && UIManager.Instance != null)
-        {
-            UIManager.Instance.UpdateHealth(_currentHealth, _maxHealth);
-        } 
+        UpdateHealthUI();
 
         if (_currentHealth <= 0)
         {
             Die();
+        }
+    }
+
+    // --- HELPER METHOD ---
+    private void UpdateHealthUI()
+    {
+        // Update the Global screen UI if this is the player
+        if (gameObject.CompareTag("Player") && UIManager.Instance != null)
+        {
+            UIManager.Instance.UpdateHealth(_currentHealth, _maxHealth);
+        }
+
+        // Update the local floating UI if this object has one (the enemies)
+        if (_localHealthSlider != null)
+        {
+            _localHealthSlider.maxValue = _maxHealth;
+            _localHealthSlider.value = _currentHealth;
         }
     }
 
