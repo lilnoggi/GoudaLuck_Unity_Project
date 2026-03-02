@@ -1,4 +1,5 @@
 using UnityEngine;
+using Unity.Cinemachine;
 
 /// <summary>
 /// This script...
@@ -11,6 +12,13 @@ public class BigCheese : MonoBehaviour
     [SerializeField] private float _blastRadius = 5f;  // How big the crush zone is
 
     private bool _hasLanded = false;
+    private CinemachineImpulseSource _impulseSource;
+
+    private void Awake()
+    {
+        // Grab the Impulse Source component when the cheese spawns
+        _impulseSource = GetComponent<CinemachineImpulseSource>();
+    }
 
     private void OnCollisionEnter(Collision collision)
     {
@@ -36,6 +44,13 @@ public class BigCheese : MonoBehaviour
         }
 
         Debug.Log("The Big Cheese has landed!");
+
+        // Fire the cinemachine impulse
+        if (_impulseSource != null)
+        {
+            // This sends a shockwave to the Listener on the camera
+            _impulseSource.GenerateImpulse();
+        }
 
         // Destroy the cheese wheel shortly after it hits the ground
         Destroy(gameObject, 0.5f);

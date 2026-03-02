@@ -3589,6 +3589,7 @@ GameObject:
   - component: {fileID: 836993440}
   - component: {fileID: 836993439}
   - component: {fileID: 836993441}
+  - component: {fileID: 836993442}
   m_Layer: 0
   m_Name: 'CinemachineCamera '
   m_TagString: Untagged
@@ -3685,6 +3686,30 @@ MonoBehaviour:
     Time: 0
     Smoothing: 0
     IgnoreY: 0
+--- !u!114 &836993442
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 836993438}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 00b2d199b96b516448144ab30fb26aed, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Unity.Cinemachine::Unity.Cinemachine.CinemachineImpulseListener
+  ApplyAfter: 2
+  ChannelMask: 1
+  Gain: 1
+  Use2DDistance: 0
+  UseCameraSpace: 1
+  SignalCombinationMode: 0
+  ReactionSettings:
+    m_SecondaryNoise: {fileID: 0}
+    AmplitudeGain: 1
+    FrequencyGain: 1
+    Duration: 1
+    m_NoiseOffsets: {x: 0, y: 0, z: 0}
 --- !u!1 &837594810
 GameObject:
   m_ObjectHideFlags: 0
@@ -7618,11 +7643,11 @@ SceneRoots:
   m_ObjectHideFlags: 0
   m_Roots:
   - {fileID: 330585546}
+  - {fileID: 836993440}
   - {fileID: 410087041}
   - {fileID: 832575519}
   - {fileID: 1117015359}
   - {fileID: 2103814888}
-  - {fileID: 836993440}
   - {fileID: 357746022}
   - {fileID: 1785688640}
   - {fileID: 173004741}
