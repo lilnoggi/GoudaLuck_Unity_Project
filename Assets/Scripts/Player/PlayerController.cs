@@ -40,6 +40,16 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private Transform _crosshair;         // Drag the crosshair GameObject here in Inspector !!
     [SerializeField] private float _maxAimRadius = 8f;     // Maximum distance the gamepad crosshair can go.
     [SerializeField] private float _crosshairSpeed = 25f;  // How fast the crosshair glides to the JOYSTICK target
+
+    [Header("Ultimate Settings")]
+    [SerializeField] private GameObject _bigCheesePrefab;
+    [SerializeField] private float _maxUltCharge = 100f;
+    [SerializeField] private float _passiveChargeRate = 5f;  // Charges 5 points per second
+
+    private float _currentUltCharge = 0f;
+
+    // Public getter for the UI to read the ultimate charge percentage
+    public float UltChargeRatio => _currentUltCharge / _maxUltCharge;
     
     // Stores the raw 2D input (X and Y) from the joystick or WASD keys.
     private Vector2 _inputVector;
@@ -151,6 +161,9 @@ public class PlayerController : MonoBehaviour
 
         // --- DASHING ---
         _controls.Player.Dash.performed += ctx => PerformDash();
+
+        // --- ULTIMATE ---
+        _controls.Player.Ultimate.performed += ctx => PerformUltimate();
     }
 
     // -----------------------------------------------------------------------------------------------------------------
@@ -198,6 +211,13 @@ public class PlayerController : MonoBehaviour
         if (_isFiring && _weaponSystem != null)
         {
             _weaponSystem.FireWeapon();
+        }
+
+        // Passively charge the ultimate up to 100
+        if (_currentUltCharge < _maxUltCharge)
+        {
+            _currentUltCharge += Time.deltaTime * _passiveChargeRate;
+            _currentUltCharge = Mathf.Min(_currentUltCharge, _maxUltCharge);  // Clamp this so it doesn't exceed 100
         }
     }
 
@@ -344,6 +364,25 @@ public class PlayerController : MonoBehaviour
         if (_dashTrail != null) _dashTrail.emitting = false;
 
         _isDashing = false;  // Turn off dash mode and return to normal movement
+    }
+
+    // --- ULTIMATE ABILITY ---
+    private void PerformUltimate()
+    {
+        // Only fire if the meter is full
+        if (_currentUltCharge >= _maxUltCharge && _bigCheesePrefab != null && _crosshair != null)
+        {
+            // Calculate a spot 20 units straight up into the air above the crosshair
+            Vector3 dropPosition = new Vector3(_crosshair.position.x, 20f, _crosshair.position.z);
+
+            // Spawn the cheese
+            Instantiate(_bigCheesePrefab, dropPosition, Quaternion.identity);
+
+            // Reset the meter
+            _currentUltCharge = 0f;
+
+            Debug.Log("ULTIMATE USED!");
+        }
     }
 
     // === DEBUGGING ===
