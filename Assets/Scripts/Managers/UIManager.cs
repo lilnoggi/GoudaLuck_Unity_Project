@@ -18,6 +18,7 @@ public class UIManager : MonoBehaviour
     [SerializeField] private TextMeshProUGUI _waveText;
     [SerializeField] private Slider _healthSlider;
     [SerializeField] private Image _dashWheelImage;
+    [SerializeField] private Slider _ultSlider;
 
     [Header("Weapon UI")]
     [SerializeField] private TextMeshProUGUI _ammoText;
@@ -40,14 +41,28 @@ public class UIManager : MonoBehaviour
 
     public void Update()
     {
+        // Find the player once to save performance
+        PlayerController player = null;
+
         // Only update the wheel if it is actually assigned in the Inspector
-        if(_dashWheelImage != null)
+        if(_dashWheelImage != null || _ultSlider != null)
         {
-            PlayerController player = FindFirstObjectByType<PlayerController>();
-            if (player != null)
+            player = FindFirstObjectByType<PlayerController>();
+        }
+
+        if (player != null)
+        {
+            // Update Dash Wheel
+            if (_dashWheelImage != null)
             {
-                // Tie the fill amount directly to the player's maths calculation
                 _dashWheelImage.fillAmount = player.DashCooldownRatio;
+            }
+
+            // Update Ultimate Slider
+            if (_ultSlider != null)
+            {
+                // The slider goes from 0 to 1
+                _ultSlider.value = player.UltChargeRatio;
             }
         }
     }
