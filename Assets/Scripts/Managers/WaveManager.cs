@@ -17,6 +17,8 @@ public class WaveManager : MonoBehaviour
     private int _currentWave = 1;
     private int _enemiesAlive = 0;
 
+    private bool _isSpawning = false;  // Tracks if the coroutine is currently busy
+
     private void Awake()
     {
         // Set up the Singleton
@@ -35,8 +37,8 @@ public class WaveManager : MonoBehaviour
     {
         _enemiesAlive--;
 
-        // If all enemies in this wave are dead, open the shop.
-        if (_enemiesAlive <= 0)
+        // Only open the shop if done spawning
+        if (_enemiesAlive <= 0 && !_isSpawning)
         {
             if (UIManager.Instance != null)
             {
@@ -57,6 +59,9 @@ public class WaveManager : MonoBehaviour
     private IEnumerator SpawnWave()
     {
         Debug.Log("--- WAVE " + _currentWave + " STARTING! ---");
+
+        // Lock the shop from opening
+        _isSpawning = true;
 
         // Tell UIManager Wave has changed
         if (UIManager.Instance != null)
@@ -83,6 +88,19 @@ public class WaveManager : MonoBehaviour
 
             // Wait a moment before spawning the next one
             yield return new WaitForSeconds(_timeBetweenSpawns);
+        }
+
+        // Unlock the shop now that all enemies have been spawned
+        _isSpawning = false;
+
+        // --- SAFETY CHECK ---
+        // Just in case the player killed the absolute last enemy the exact millisecond it spawned
+        if (_enemiesAlive <= 0)
+        {
+            if (UIManager.Instance != null)
+            {
+                UIManager.Instance.ShowShop();
+            }
         }
     }
 }
