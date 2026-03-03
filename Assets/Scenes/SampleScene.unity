@@ -7638,6 +7638,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::HealthSystem
   _maxHealth: 100
   _localHealthSlider: {fileID: 0}
+  _powerupPrefabs: []
+  _dropChance: 0.1
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0

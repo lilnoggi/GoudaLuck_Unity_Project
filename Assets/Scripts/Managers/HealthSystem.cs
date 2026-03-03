@@ -17,6 +17,10 @@ public class HealthSystem : MonoBehaviour
     // --- DASHING I-FRAME TRACKING ---
     private bool _isInvincible;
 
+    [Header("Loot Drops (Enemy Only)")]
+    [SerializeField] private GameObject[] _powerupPrefabs;  // Array of possible drops
+    [SerializeField] private float _dropChance = 0.1f;      // 10% chance to drop
+
     // Instead of Start() use OnEnable() to reset health every time it spawns from the pool
     private void OnEnable()
     {
@@ -69,6 +73,14 @@ public class HealthSystem : MonoBehaviour
         }
     }
 
+    // Called in PowerupPickup.cs
+    public void Heal(float healAmount)
+    {
+        _currentHealth += healAmount;
+        _currentHealth = Mathf.Clamp(_currentHealth, 0, _maxHealth);
+        UpdateHealthUI();
+    }
+
     private void Die()
     {
         if (gameObject.CompareTag("Player"))
@@ -90,6 +102,21 @@ public class HealthSystem : MonoBehaviour
                 if (WaveManager.Instance != null)
                 {
                     WaveManager.Instance.EnemyDefeated();
+                }
+
+                // --- LOOT DROP LOGIC ---
+                if (_powerupPrefabs != null && _powerupPrefabs.Length > 0)
+                {
+                    // Roll and random number between 0.0 and 1.0
+                    if (Random.value <= _dropChance)
+                    {
+                        // Pick a random powerup from the array
+                        GameObject drop = _powerupPrefabs[Random.Range(0, _powerupPrefabs.Length)];
+
+                        // Spawn it slightly above the ground so it doesn't clip
+                        Vector3 dropPos = transform.position + new Vector3(0f, 0.5f, 0f);
+                        Instantiate(drop, dropPos, Quaternion.identity);
+                    }
                 }
 
                 // Return to pool instead of destroying
