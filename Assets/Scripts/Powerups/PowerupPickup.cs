@@ -15,6 +15,7 @@ public class PowerupPickup : MonoBehaviour
 
     [Header("Specific Settings")]
     [SerializeField] private float _healthAmount = 25f;  // Only used if type is Health
+    [SerializeField] private float _buffDuration = 5f;   // How long timed buffs last
 
     private void OnTriggerEnter(Collider other)
     {
@@ -35,21 +36,33 @@ public class PowerupPickup : MonoBehaviour
         switch (_type)
         {
             case PowerupType.Health:
+                
                 HealthSystem health = player.GetComponent<HealthSystem>();
+                
                 if (health != null)
                 {
                     health.Heal(_healthAmount);
                 }
+                
                 break;
 
             case PowerupType.UnlimitedAmmo:
-                // Build later
+               
+                WeaponSystem weapon = player.GetComponent<WeaponSystem>();
+                
+                if (weapon != null)
+                {
+                    weapon.ActivateUnlimitedAmmo(_buffDuration);
+                }
+                
                 break;
 
             case PowerupType.MassiveDamage:
+                // Build later
                 break;
 
             case PowerupType.GoldenGun:
+                // Build later
                 break;
         }
     }

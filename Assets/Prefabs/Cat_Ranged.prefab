@@ -784,4 +784,5 @@ MonoBehaviour:
   _localHealthSlider: {fileID: 1298296964476530934}
   _powerupPrefabs:
   - {fileID: 6028533566618311584, guid: 7a6eeec51d6361242a80c570576c1799, type: 3}
+  - {fileID: 6028533566618311584, guid: e887ae9d6cbfc0a4eb40b54f439f940b, type: 3}
   _dropChance: 0.1
