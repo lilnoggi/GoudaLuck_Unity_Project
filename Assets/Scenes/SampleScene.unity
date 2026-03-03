@@ -7453,6 +7453,7 @@ GameObject:
   - component: {fileID: 2103814883}
   - component: {fileID: 2103814889}
   - component: {fileID: 2103814890}
+  - component: {fileID: 2103814891}
   m_Layer: 0
   m_Name: Player
   m_TagString: Player
@@ -7638,8 +7639,18 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::HealthSystem
   _maxHealth: 100
   _localHealthSlider: {fileID: 0}
-  _powerupPrefabs: []
-  _dropChance: 0.1
+--- !u!114 &2103814891
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2103814882}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1843f5a42fc01a24484af943f086d22f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::PlayerDeathHandler
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0
