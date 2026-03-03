@@ -18,8 +18,8 @@ public class HealthSystem : MonoBehaviour
     private bool _isInvincible;
 
     [Header("Loot Drops (Enemy Only)")]
-    [SerializeField] private GameObject[] _powerupPrefabs;  // Array of possible drops
-    [SerializeField] private float _dropChance = 0.1f;      // 10% chance to drop
+    [SerializeField] private LootDrop[] _lootTable;  // Array of possible drops
+    [SerializeField] private float _masterDropChance = 0.1f;      // 10% chance to drop
 
     // Instead of Start() use OnEnable() to reset health every time it spawns from the pool
     private void OnEnable()
@@ -104,18 +104,40 @@ public class HealthSystem : MonoBehaviour
                     WaveManager.Instance.EnemyDefeated();
                 }
 
-                // --- LOOT DROP LOGIC ---
-                if (_powerupPrefabs != null && _powerupPrefabs.Length > 0)
+                // --- LOOT DROP LOGIC (Weighted Random Selection) ---
+                if (_lootTable != null && _lootTable.Length > 0)
                 {
-                    // Roll and random number between 0.0 and 1.0
-                    if (Random.value <= _dropChance)
+                    // Roll a random number to determine if a drop occurs based on the master chance
+                    if (Random.value <= _masterDropChance)
                     {
-                        // Pick a random powerup from the array
-                        GameObject drop = _powerupPrefabs[Random.Range(0, _powerupPrefabs.Length)];
+                        // Calculate the total combined drop chance (weight) of all items in the table
+                        float totalWeight = 0f;
+                        foreach (LootDrop drop in _lootTable)
+                        {
+                            totalWeight += drop.DropChance;
+                        }
 
-                        // Spawn it slightly above the ground so it doesn't clip
-                        Vector3 dropPos = transform.position + new Vector3(0f, 0.5f, 0f);
-                        Instantiate(drop, dropPos, Quaternion.identity);
+                        // Generate a random threshold value between 0 and the total weight
+                        float randomRoll = Random.Range(0f, totalWeight);
+                        float cumulativeWeight = 0f;
+
+                        // Iterate through the items to find which one encompasses the random threshold
+                        foreach (LootDrop drop in _lootTable)
+                        {
+                            // Accumulate the weights step-by-step
+                            cumulativeWeight += drop.DropChance;
+
+                            // If the threshold falls within this item's accumulated range, select it
+                            if (randomRoll <= cumulativeWeight)
+                            {
+                                // Spawn it slightly above the ground so it doesn't clip
+                                Vector3 dropPos = transform.position + new Vector3(0f, 0.5f, 0f);
+                                Instantiate(drop.Prefab, dropPos, Quaternion.identity);
+
+                                // Break the loop so it doesn't spawn multiple items
+                                break;
+                            }
+                        }
                     }
                 }
 
@@ -132,4 +154,18 @@ public class HealthSystem : MonoBehaviour
             }
         }
     }
+}
+
+/// <summary>
+/// A custom data structure to hold a powerup prefab and its spawn chance.
+/// </summary>
+
+[System.Serializable]
+public struct LootDrop
+{
+    public GameObject Prefab;
+
+    // This creates a slider in the Inspector from 0 - 100
+    [Range(0f, 100f)]
+    public float DropChance;
 }
