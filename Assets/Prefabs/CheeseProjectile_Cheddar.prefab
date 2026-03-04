@@ -15,7 +15,7 @@ GameObject:
   - component: {fileID: -4562912086496798127}
   - component: {fileID: 6528368128584964135}
   m_Layer: 0
-  m_Name: Cheese2
+  m_Name: CheeseProjectile_Cheddar
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
