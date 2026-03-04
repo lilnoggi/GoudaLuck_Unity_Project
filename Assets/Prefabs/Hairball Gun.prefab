@@ -68,6 +68,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Hairball Gun
       objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 97493a1ac01c640429d35d49ecf8dd28, type: 3}
+      propertyPath: m_TagString
+      value: Enemy
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
