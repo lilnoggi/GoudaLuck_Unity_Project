@@ -1,3 +1,4 @@
+using System;  // Required for Actions
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -16,6 +17,10 @@ public class HealthSystem : MonoBehaviour
 
     // --- DASHING I-FRAME TRACKING ---
     private bool _isInvincible;
+
+    // --- ACTIONS ---
+    // Any other scripts can "listen" to this event
+    public event Action OnDeath;
 
     // Instead of Start() use OnEnable() to reset health every time it spawns from the pool
     private void OnEnable()
@@ -48,8 +53,20 @@ public class HealthSystem : MonoBehaviour
 
         if (_currentHealth <= 0)
         {
-            Die();
+            // "Shout" to other script that an event is happening
+            // The ? means "Only shout if something is listening"
+            OnDeath?.Invoke();
         }
+    }
+
+
+
+    // Called in PowerupPickup.cs
+    public void Heal(float healAmount)
+    {
+        _currentHealth += healAmount;
+        _currentHealth = Mathf.Clamp(_currentHealth, 0, _maxHealth);
+        UpdateHealthUI();
     }
 
     // --- HELPER METHOD ---
@@ -68,41 +85,18 @@ public class HealthSystem : MonoBehaviour
             _localHealthSlider.value = _currentHealth;
         }
     }
+}
 
-    private void Die()
-    {
-        if (gameObject.CompareTag("Player"))
-        {
-            // Tell the GameManager the player is dead
-            if (GameManager.Instance != null)
-            {
-                GameManager.Instance.TriggerGameOver();
-            }
-        }
-        else if (gameObject.CompareTag("Enemy"))
-        {
-            // Add Cheddar Points to the GameManager here
-            if (GameManager.Instance != null)
-            {
-                GameManager.Instance.AddScore(10);
+/// <summary>
+/// A custom data structure to hold a powerup prefab and its spawn chance.
+/// </summary>
 
-                // Tell WaveManager when a cat died
-                if (WaveManager.Instance != null)
-                {
-                    WaveManager.Instance.EnemyDefeated();
-                }
+[System.Serializable]
+public struct LootDrop
+{
+    public GameObject Prefab;
 
-                // Return to pool instead of destroying
-                if (EnemyPool.Instance != null)
-                {
-                    EnemyPool.Instance.ReturnEnemy(gameObject);
-                }
-                else
-                {
-                    // FALLBACK :Remove the dead cat
-                    Destroy(gameObject);
-                }
-            }
-        }
-    }
+    // This creates a slider in the Inspector from 0 - 100
+    [Range(0f, 100f)]
+    public float DropChance;
 }

@@ -28,6 +28,7 @@ public class WeaponSystem : MonoBehaviour
     // --- AMMO STATS ---
     private int _currentAmmo;
     private bool _isReloading = false;
+    private bool _hasUnlimitedAmmo = false;  // Unlimited Ammo Powerup
 
     // --- ARMOURY MEMORY ---
     // This tracks the upgrade level of every gun the player owns
@@ -117,7 +118,7 @@ public class WeaponSystem : MonoBehaviour
         if (_currentWeapon == null || _firePoint == null || _isReloading) return;
 
         // AUTO-RELAOD: If click shoot but 0 ammo, trigger a reload instead
-        if (_currentAmmo <= 0)
+        if (_currentAmmo <= 0 && !_hasUnlimitedAmmo)
         {
             Reload();
             return;
@@ -128,8 +129,12 @@ public class WeaponSystem : MonoBehaviour
         {
             _nextFireTime = Time.time + _currentFireRate;
 
-            _currentAmmo--;  // Consume 1 bullet
-
+            // Only consume a bullet IF has limited ammo
+            if (!_hasUnlimitedAmmo)
+            {
+                _currentAmmo--;  // Consume 1 bullet
+            }
+            
             // Ask the ProjectilePool for a bullet!
             GameObject obj = ProjectilePool.Instance.GetProjectile(_currentWeapon.ProjectilePrefab, _firePoint.position, _firePoint.rotation);
 
@@ -141,13 +146,14 @@ public class WeaponSystem : MonoBehaviour
                 projectileScript.Setup(gameObject.tag, _currentDamage);
             }
 
-            // Update the UI after firing
-            if (gameObject.CompareTag("Player") && UIManager.Instance != null)
+            // Update the UI after firing BUT only if INFINITE is not being displayed
+            if (gameObject.CompareTag("Player") && UIManager.Instance != null && !_hasUnlimitedAmmo)
             {
                 UIManager.Instance.UpdateAmmo(_currentAmmo, _currentWeapon.MagSize);
             }
 
             // SFX can go here later
+
         }
     }
 
@@ -192,5 +198,33 @@ public class WeaponSystem : MonoBehaviour
             return _weaponUpgradeLevels[weaponName];
         }
         return 0;  // If not in the dictionary, it is Level 0
+    }
+
+    // --- POWERUP LOGIC ---
+    public void ActivateUnlimitedAmmo(float duration)
+    {
+        StartCoroutine(UnlimitedAmmoRoutine(duration));
+    }
+
+    private IEnumerator UnlimitedAmmoRoutine(float duration)
+    {
+        _hasUnlimitedAmmo = true;
+
+        // Update the UI
+        if (gameObject.CompareTag("Player") && UIManager.Instance != null)
+        {
+            UIManager.Instance.UpdateAmmoText("INFINITE");
+        }
+
+        // Wait for the powerup to expire
+        yield return new WaitForSeconds(duration);
+
+        _hasUnlimitedAmmo = false;
+
+        // Reset the UI back to normal numbers
+        if (gameObject.CompareTag("Player") && UIManager.Instance != null)
+        {
+            UIManager.Instance.UpdateAmmo(_currentAmmo, _currentWeapon.MagSize);
+        }
     }
 }
