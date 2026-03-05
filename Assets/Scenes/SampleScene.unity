@@ -5869,6 +5869,9 @@ MonoBehaviour:
   - {fileID: 216156786}
   _timeBetweenSpawns: 1.5
   _enemiesPerWave: 5
+  _basicCatPrefab: {fileID: 9049435338180138717, guid: e8d3a5a0deb6481479c4325a3ec54d89, type: 3}
+  _tankCatPrefab: {fileID: 9049435338180138717, guid: 49587ada5f284e248ae5c547c7e642a4, type: 3}
+  _waveToSpawnTanks: 3
 --- !u!114 &1630632935
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -7022,8 +7025,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e565b2fb04cacff4a8855d75c558fe69, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::EnemyPool
-  _enemyPrefab: {fileID: 9049435338180138717, guid: e8d3a5a0deb6481479c4325a3ec54d89, type: 3}
-  _poolSize: 30
+  _enemiesToPool:
+  - EnemyPrefab: {fileID: 9049435338180138717, guid: e8d3a5a0deb6481479c4325a3ec54d89, type: 3}
+    PoolSize: 50
+  - EnemyPrefab: {fileID: 9049435338180138717, guid: 49587ada5f284e248ae5c547c7e642a4, type: 3}
+    PoolSize: 20
 --- !u!4 &2103814888 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 3567219839074336355, guid: 9f23a7b19ce483b4f89162f5927fc7fb, type: 3}

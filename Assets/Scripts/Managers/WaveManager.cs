@@ -14,6 +14,11 @@ public class WaveManager : MonoBehaviour
     [SerializeField] private float _timeBetweenSpawns = 1.5f;
     [SerializeField] private int _enemiesPerWave = 5;
 
+    [Header("Enemy Types")]
+    [SerializeField] private GameObject _basicCatPrefab;
+    [SerializeField] private GameObject _tankCatPrefab;
+    [SerializeField] private int _waveToSpawnTanks = 3;  // Tanks won't appear until wave 3
+
     private int _currentWave = 1;
     private int _enemiesAlive = 0;
 
@@ -77,8 +82,20 @@ public class WaveManager : MonoBehaviour
             // Pick a random spawn point from the array
             Transform randomSpawnPoint = _spawnPoints[Random.Range(0, _spawnPoints.Length)];
 
-            // Ask the pool for a cat
-            GameObject spawnedCat = EnemyPool.Instance.GetEnemy(randomSpawnPoint.position, randomSpawnPoint.rotation);
+            // Decide WHICH cat to spawn
+            GameObject enemyToSpawn = _basicCatPrefab;  // Default
+
+            // If reached the harder waves, give a 20% chance to spawn a Tank
+            if (_currentWave >= _waveToSpawnTanks)
+            {
+                if (Random.value <= 0.2f)
+                {
+                    enemyToSpawn = _tankCatPrefab;
+                }
+            }
+
+            // Ask the pool for the specific cat
+            GameObject spawnedCat = EnemyPool.Instance.GetEnemy(enemyToSpawn, randomSpawnPoint.position, randomSpawnPoint.rotation);
 
             // SAFETY CHECK: Only count the enemy if the pool wasn't empty
             if (spawnedCat != null)
