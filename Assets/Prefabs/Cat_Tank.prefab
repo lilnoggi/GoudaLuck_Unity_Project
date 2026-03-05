@@ -211,7 +211,7 @@ Transform:
   m_GameObject: {fileID: 2320903253456405089}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0.473, y: 0.17400002, z: 0.907}
+  m_LocalPosition: {x: 0.66, y: -0.012, z: 1.157}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -242,7 +242,7 @@ Transform:
   m_GameObject: {fileID: 2601491190164458469}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0.5, y: 0, z: 0.5}
+  m_LocalPosition: {x: 0.539, y: 0, z: -0.446}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -751,7 +751,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e8671e1b0ea15c8459231a75312da9ad, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::WeaponSystem
-  _currentWeapon: {fileID: 11400000, guid: eef7a0a119fbc2d4e9bf8c7f0f946375, type: 2}
+  _currentWeapon: {fileID: 11400000, guid: 152cadd312c792b47aa2e769135632d5, type: 2}
   _firePoint: {fileID: 8401937537289022613}
   _weaponHolder: {fileID: 6766468221808971081}
 --- !u!114 &3904580937786435689
