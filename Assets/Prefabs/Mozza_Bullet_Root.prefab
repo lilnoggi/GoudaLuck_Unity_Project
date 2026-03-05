@@ -49,6 +49,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::CheeseProjectile
   _speed: 40
   _lifeTime: 2
+  _imapctParticles: {fileID: 8943537993926819291, guid: 15576e3c43e54dc4198ba5b625891f5a, type: 3}
 --- !u!65 &781632433559913527
 BoxCollider:
   m_ObjectHideFlags: 0

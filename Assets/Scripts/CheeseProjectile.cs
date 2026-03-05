@@ -9,6 +9,9 @@ public class CheeseProjectile : MonoBehaviour
 {
     [SerializeField] private float _speed = 20f;
     [SerializeField] private float _lifeTime = 2f;
+
+    [Header("VFX")]
+    [SerializeField] private GameObject _imapctParticles;  // VFX Particle System
     
     private float _currentDamage;
 
@@ -67,6 +70,12 @@ public class CheeseProjectile : MonoBehaviour
                 // Take damage
                 targetHealth.TakeDamage(_currentDamage);
             }
+        }
+
+        // Cheese Particles!
+        if (_imapctParticles != null)
+        {
+            Instantiate(_imapctParticles, transform.position, Quaternion.identity);
         }
 
         // Recycle the bullet when it hits anything else
