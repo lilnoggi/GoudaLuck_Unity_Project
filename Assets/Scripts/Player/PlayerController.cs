@@ -5,7 +5,7 @@ using UnityEngine.InputSystem;
 /// <summary>
 /// This script handles the physics-based movement for the player character.
 /// It utilises the event-driven Unity Input System to read twin-stick/WASD inputs
-/// and applied them to a Rigidbody without relying on inefficient per-frame polling.
+/// and applies them to a Rigidbody without relying on inefficient per-frame polling.
 /// </summary>
 
 public class PlayerController : MonoBehaviour
@@ -104,7 +104,7 @@ public class PlayerController : MonoBehaviour
     {
         // --- MOVEMENT INPUT ---
         /// <summary>
-        /// This is the Event-Driven architecture in action!
+        /// This is the Event-Driven architecture.
         /// '+=' is used to "subscribe" to the Input System's events.
         /// When the Joystick is moved (performed), the system fires an event.
         /// 
