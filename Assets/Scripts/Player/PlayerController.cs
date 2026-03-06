@@ -166,6 +166,34 @@ public class PlayerController : MonoBehaviour
 
         // --- ULTIMATE ---
         _controls.Player.Ultimate.performed += ctx => PerformUltimate();
+
+        // --- WEAPON SWAP ---
+        // Cycle Forward (R1 / E)
+        _controls.Player.NextWeapon.performed += ctx =>
+        {
+            if (_weaponSystem != null)
+            {
+                _weaponSystem.CycleWeaponForward();
+            }
+        };
+
+        // Cycle Backward (L1 / Q)
+        _controls.Player.PreviousWeapon.performed += ctx =>
+        {
+            if (_weaponSystem != null)
+            {
+                _weaponSystem.CycleWeaponBackward();
+            }
+        };
+
+        // --- PAUSE ---
+        _controls.Player.Pause.performed += ctx =>
+        {
+            if (UIManager.Instance != null)
+            {
+                UIManager.Instance.TogglePause();
+            }
+        };
     }
 
     // -----------------------------------------------------------------------------------------------------------------
