@@ -22,7 +22,7 @@ MonoBehaviour:
   _projectilesPerShot: 5
   _spreadAngle: 45
   _maxUpgradeLevel: 3
-  _upgradeCost: 50
+  _upgradeCost: 250
   _damageIncreasePerLevel: 5
   _fireRateDecreasePerLevel: 0.05
   _weaponModelPrefab: {fileID: 6282895387552568273, guid: 23aa8689d5f6a5347abeded55f8f189a, type: 3}

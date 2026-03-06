@@ -12,20 +12,25 @@ public class ShopManager : MonoBehaviour
     [Header("Weapon Data")]
     [SerializeField] private WeaponData _cheddarData;  // To swap back to starter gun
     [SerializeField] private WeaponData _mozzaData;    // Drop the Mozza-MP5 card here
+    [SerializeField] private WeaponData _shotgunData;  // Drop the Shotgun data card here
 
     [Header("UI References")]
     [SerializeField] private TextMeshProUGUI _mozzaUnlockText;  // The amount the mozza-mp5 costs
     [SerializeField] private GameObject _mozzaLockOverlay;      // Reference to the dark overlay panel
+    [SerializeField] private TextMeshProUGUI _shotgunUnlockText;
+    [SerializeField] private GameObject _shotgunLockOverlay;
 
     [Header("Upgrade Dots")]
     [SerializeField] private Image[] _cheddarDots;
     [SerializeField] private Image[] _mozzaDots;
+    [SerializeField] private Image[] _shotgunDots;
     [SerializeField] private Color _filledColour = Color.yellow;
     [SerializeField] private Color _emptyColour = Color.black;
 
     // --- STATE TRACKING ---
     // The player always starts with the Cheddar-19, so they don't need to buy it
     private bool _ownsMozza = false;
+    private bool _ownsShotgun = false;
 
     // ========================================================================
 
@@ -41,6 +46,7 @@ public class ShopManager : MonoBehaviour
         // Peek at the filing cabinet and colour the dots
         UpdateDotsUI(_cheddarDots, weapon.GetSpecificWeaponLevel(_cheddarData.WeaponName));
         UpdateDotsUI(_mozzaDots, weapon.GetSpecificWeaponLevel(_mozzaData.WeaponName));
+        UpdateDotsUI(_shotgunDots, weapon.GetSpecificWeaponLevel(_shotgunData.WeaponName));
     }
 
     private void UpdateDotsUI(Image[] dotsArray, int currentLevel)
@@ -157,6 +163,56 @@ public class ShopManager : MonoBehaviour
         {
             weapon.BuyUpgrade();
             UpdateDotsUI(_mozzaDots, weapon.GetUpgradeLevel());
+        }
+    }
+
+    // ========================================================================
+
+    // --- SHOTGUN LOGIC ---
+
+    public void OnBuyShotgunClicked()
+    {
+        PlayerController player = FindFirstObjectByType<PlayerController>();
+        if (player == null) return;
+        WeaponSystem weapon = player.GetComponent<WeaponSystem>();
+
+        if (_ownsShotgun)
+        {
+            weapon.EquipWeapon(_shotgunData);
+        }
+        else
+        {
+            if (GameManager.Instance != null && GameManager.Instance.SpendPoints(_shotgunData.CheddarCost))
+            {
+                _ownsShotgun = true;
+                weapon.EquipWeapon(_shotgunData);
+                if (_shotgunUnlockText != null)
+                {
+                    _shotgunUnlockText.text = "Equip";
+                }
+
+                if (_shotgunLockOverlay != null)
+                {
+                    _shotgunLockOverlay.SetActive(false);
+                }
+            }
+        }
+    }
+
+    public void OnUpgradeShotgunClicked()
+    {
+        if (!_ownsShotgun) return;
+
+        OnBuyShotgunClicked();  // Force equip
+
+        WeaponSystem weapon = FindFirstObjectByType<PlayerController>().GetComponent<WeaponSystem>();
+
+        if (weapon.GetUpgradeLevel() >= _shotgunData.MaxUpgradeLevel) return;
+
+        if (GameManager.Instance != null && GameManager.Instance.SpendPoints(_shotgunData.UpgradeCost))
+        {
+            weapon.BuyUpgrade();
+            UpdateDotsUI(_shotgunDots, weapon.GetUpgradeLevel());
         }
     }
 
