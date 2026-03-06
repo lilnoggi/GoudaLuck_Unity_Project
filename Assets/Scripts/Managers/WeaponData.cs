@@ -18,9 +18,13 @@ public class WeaponData : ScriptableObject
     [Header("Base Combat Stats")]
     [SerializeField] private float _fireRate;
     [SerializeField] private float _damage;
-
     [SerializeField] private int _magSize;
     [SerializeField] private float _reloadTime;
+
+    // --- SHOTGUN SPREAD SETTINGS ---
+    [Header("Shotgun Settings")]
+    [SerializeField] private int _projectilesPerShot = 1;  // Default to 1 bullet
+    [SerializeField] private float _spreadAngle = 0f;      // Default to straight ahead
 
     [Header("Upgrade Stats")]
     [SerializeField] private int _maxUpgradeLevel = 3;
@@ -42,6 +46,8 @@ public class WeaponData : ScriptableObject
     public float Damage => _damage;
     public int MagSize => _magSize;
     public float ReloadTime => _reloadTime;
+    public int ProjectilesPerShot => _projectilesPerShot;
+    public float SpreadAngle => _spreadAngle;
     public int MaxUpgradeLevel => _maxUpgradeLevel;
     public int UpgradeCost => _upgradeCost;
     public float DamageIncreasePerLevel => _damageIncreasePerLevel;

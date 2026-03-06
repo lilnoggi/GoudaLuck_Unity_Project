@@ -19,9 +19,11 @@ MonoBehaviour:
   _damage: 10
   _magSize: 10
   _reloadTime: 1
+  _projectilesPerShot: 1
+  _spreadAngle: 0
   _maxUpgradeLevel: 3
   _upgradeCost: 50
   _damageIncreasePerLevel: 5
   _fireRateDecreasePerLevel: 0.1
-  _weaponModelPrefab: {fileID: 7081631896116130232, guid: dc99909fe604a7942b1141f0eba04739, type: 3}
+  _weaponModelPrefab: {fileID: 295241371497920122, guid: e66fb25bb9cd9f1429127b2d455530d8, type: 3}
   _projectilePrefab: {fileID: 1833410270517520538, guid: 6b617d23ddbab9845b9600c01b596d5c, type: 3}
