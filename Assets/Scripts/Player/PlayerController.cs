@@ -166,6 +166,24 @@ public class PlayerController : MonoBehaviour
 
         // --- ULTIMATE ---
         _controls.Player.Ultimate.performed += ctx => PerformUltimate();
+
+        // --- WEAPON SWAP ---
+        _controls.Player.CycleWeapon.performed += ctx =>
+        {
+            if (_weaponSystem != null)
+            {
+                _weaponSystem.CycleWeapon();
+            }
+        };
+
+        // --- PAUSE ---
+        _controls.Player.Pause.performed += ctx =>
+        {
+            if (UIManager.Instance != null)
+            {
+                UIManager.Instance.TogglePause();
+            }
+        };
     }
 
     // -----------------------------------------------------------------------------------------------------------------

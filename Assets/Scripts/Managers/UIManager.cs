@@ -29,6 +29,11 @@ public class UIManager : MonoBehaviour
     [SerializeField] private GameObject _upgradeButton;  // For controller focus
     [SerializeField] private TextMeshProUGUI _shopScoreText;
 
+    [Header("Pause Screen")]
+    [SerializeField] private GameObject _pausePanel;
+    [SerializeField] private GameObject _resumeButton;  // For controller focus
+    private bool _isPaused = false;
+
     [Header("Game Over Screen")]
     [SerializeField] private GameObject _gameOverPanel;
     [SerializeField] private GameObject _restartButton;
@@ -64,6 +69,53 @@ public class UIManager : MonoBehaviour
                 // The slider goes from 0 to 1
                 _ultSlider.value = player.UltChargeRatio;
             }
+        }
+    }
+
+    public void TogglePause()
+    {
+        // SAFETY: Don't pause if the Shop or Game Over screens are currently open
+        if ((_shopPanel != null && _shopPanel.activeSelf) || (_gameOverPanel != null && _gameOverPanel.activeSelf)) return;
+
+        _isPaused = !_isPaused;  // Flip the true/false switch
+
+        if (_pausePanel != null)
+        {
+            _pausePanel.SetActive(_isPaused);
+        }
+
+        if (_isPaused)
+        {
+            Time.timeScale = 0;  // Freeze the game
+
+            // Controller Support
+            Cursor.visible = true;
+            EventSystem.current.SetSelectedGameObject(null);
+
+            PlayerController player = FindFirstObjectByType<PlayerController>();
+            if (player != null && !player.IsUsingMouse)
+            {
+                EventSystem.current.SetSelectedGameObject(_resumeButton);
+            } 
+        }
+        else
+        {
+            Time.timeScale = 1f;  // Unfreeze game
+
+            PlayerController player = FindFirstObjectByType<PlayerController>();
+            if (player != null && !player.IsUsingMouse)
+            {
+                Cursor.visible = false;
+            }
+        }
+    }
+
+    // Called by the resume button
+    public void Resume()
+    {
+        if (_isPaused)
+        {
+            TogglePause();
         }
     }
 

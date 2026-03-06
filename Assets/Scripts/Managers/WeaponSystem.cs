@@ -34,6 +34,11 @@ public class WeaponSystem : MonoBehaviour
     // This tracks the upgrade level of every gun the player owns
     private Dictionary<string, int> _weaponUpgradeLevels = new Dictionary<string, int>();
 
+    // --- WEAPON INVENTORY ---
+    // This tracks the owned weapons to cycle through during the game
+    private List<WeaponData> _unlockedWeapons = new List<WeaponData>();
+    private int _currentWeaponIndex = 0;
+
     private void Start()
     {
         if (_currentWeapon != null)
@@ -51,6 +56,15 @@ public class WeaponSystem : MonoBehaviour
         {
             _weaponUpgradeLevels[_currentWeapon.WeaponName] = 0;
         }
+
+        // --- INVENTORY CHECK ---
+        if (!_unlockedWeapons.Contains(newWeapon))
+        {
+            _unlockedWeapons.Add(newWeapon);
+        }
+
+        // Update the index to keep track of where we are in the list
+        _currentWeaponIndex = _unlockedWeapons.IndexOf(newWeapon);
 
         // Pull the saved upgrade level from the dictionary
         _currentUpgradeLevel = _weaponUpgradeLevels[_currentWeapon.WeaponName];
@@ -226,5 +240,22 @@ public class WeaponSystem : MonoBehaviour
         {
             UIManager.Instance.UpdateAmmo(_currentAmmo, _currentWeapon.MagSize);
         }
+    }
+
+    // --- CYCLE WEAPONS ---
+    public void CycleWeapon()
+    {
+        // Don't try to swap if player only has 1 gun
+        if (_unlockedWeapons.Count <= 1 || _isReloading) return;
+
+        _currentWeaponIndex++;
+
+        // If we go past the end of the list, loop back to the first gun (0)
+        if(_currentWeaponIndex >= _unlockedWeapons.Count)
+        {
+            _currentWeaponIndex = 0;
+        }
+
+        EquipWeapon(_unlockedWeapons[_currentWeaponIndex]);
     }
 }
