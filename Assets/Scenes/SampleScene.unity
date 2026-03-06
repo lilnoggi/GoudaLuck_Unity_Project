@@ -2898,6 +2898,11 @@ RectTransform:
   m_AnchoredPosition: {x: 2.5, y: 0}
   m_SizeDelta: {x: -5, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
+--- !u!4 &647686022 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 4948462400901917439, guid: 9f23a7b19ce483b4f89162f5927fc7fb, type: 3}
+  m_PrefabInstance: {fileID: 795402898343913648}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &705152227
 GameObject:
   m_ObjectHideFlags: 0
@@ -7710,7 +7715,11 @@ PrefabInstance:
     - target: {fileID: 5630034146692905366, guid: 9f23a7b19ce483b4f89162f5927fc7fb, type: 3}
       propertyPath: _currentWeapon
       value: 
-      objectReference: {fileID: 11400000, guid: e5f5bfcb64a963a45a2e99a6c9bb6144, type: 2}
+      objectReference: {fileID: 11400000, guid: 7a79b63b653bc014c85babb3511e31d3, type: 2}
+    - target: {fileID: 5630034146692905366, guid: 9f23a7b19ce483b4f89162f5927fc7fb, type: 3}
+      propertyPath: _defaultFirePoint
+      value: 
+      objectReference: {fileID: 647686022}
     - target: {fileID: 8215339677962157953, guid: 9f23a7b19ce483b4f89162f5927fc7fb, type: 3}
       propertyPath: _crosshair
       value: 

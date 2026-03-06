@@ -10,20 +10,20 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 170566948b921a04d90e1cb4c3d73157, type: 3}
-  m_Name: Cheddar-19_Data
+  m_Name: Shotgun_Swiss_Data
   m_EditorClassIdentifier: Assembly-CSharp::WeaponData
-  _weaponName: Cheddar-19
-  _weaponIcon: {fileID: 21300000, guid: 01f6f8c4a14177547b58572368be4cab, type: 3}
-  _cheddarCost: 0
-  _fireRate: 0.7
+  _weaponName: Shotgun Swiss
+  _weaponIcon: {fileID: 21300000, guid: 893e73c55e8d94b4fabfc37e6402d0cd, type: 3}
+  _cheddarCost: 250
+  _fireRate: 1.2
   _damage: 10
-  _magSize: 10
-  _reloadTime: 1
-  _projectilesPerShot: 1
-  _spreadAngle: 0
+  _magSize: 6
+  _reloadTime: 2
+  _projectilesPerShot: 5
+  _spreadAngle: 45
   _maxUpgradeLevel: 3
   _upgradeCost: 50
   _damageIncreasePerLevel: 5
-  _fireRateDecreasePerLevel: 0.1
-  _weaponModelPrefab: {fileID: 295241371497920122, guid: e66fb25bb9cd9f1429127b2d455530d8, type: 3}
-  _projectilePrefab: {fileID: 1833410270517520538, guid: 6b617d23ddbab9845b9600c01b596d5c, type: 3}
+  _fireRateDecreasePerLevel: 0.05
+  _weaponModelPrefab: {fileID: 6282895387552568273, guid: 23aa8689d5f6a5347abeded55f8f189a, type: 3}
+  _projectilePrefab: {fileID: 2595347800028195070, guid: 19cc3720837421d41914089f950f4909, type: 3}

@@ -12,7 +12,9 @@ public class WeaponSystem : MonoBehaviour
 {
     [Header("Current Weapon")]
     [SerializeField] private WeaponData _currentWeapon;  // Drag Cheddar-19_Data here
-    [SerializeField] private Transform _firePoint;
+    [Tooltip("The fallback fire point (for enemies without gun models)")]
+    [SerializeField] private Transform _defaultFirePoint;
+    private Transform _activeFirePoint;  // The actual point the bullet comes from
 
     [Header("Model Swapping")]
     [SerializeField] private Transform _weaponHolder;  // Where the gun physically sits on the player
@@ -41,6 +43,9 @@ public class WeaponSystem : MonoBehaviour
 
     private void Start()
     {
+        // Ensure the fire point is ready when the game starts
+        _activeFirePoint = _defaultFirePoint;
+
         if (_currentWeapon != null)
         {
             EquipWeapon(_currentWeapon);
@@ -82,11 +87,22 @@ public class WeaponSystem : MonoBehaviour
             Destroy(_spawnedGunModel);
         }
 
-        // Spawn the new gun
+        // Spawn the new gun & assume the default fire point is being used
+        _activeFirePoint = _defaultFirePoint;
+
         if (_currentWeapon.WeaponModelPrefab != null && _weaponHolder != null)
         {
             // Tell Unity to put the gun in the holder, zero it's position, BUT keep its original prefab rotation and scale
             _spawnedGunModel =  Instantiate(_currentWeapon.WeaponModelPrefab, _weaponHolder, false);
+
+            // Look for the barrel
+            // Ask the spawned gun if it has a specific child object named "Barrel"
+            Transform gunBarrel = _spawnedGunModel.transform.Find("Barrel");
+            if (gunBarrel != null)
+            {
+                // If it doesm use that instead
+                _activeFirePoint = gunBarrel;
+            }
         }
 
         Debug.Log(gameObject.name + " equipped the " + _currentWeapon.WeaponName + "!");
@@ -129,7 +145,7 @@ public class WeaponSystem : MonoBehaviour
     public void FireWeapon()
     {
         // SAFETY NET: Don't try to shoot if player doesn't have a weapon equipped OR currently reloading
-        if (_currentWeapon == null || _firePoint == null || _isReloading) return;
+        if (_currentWeapon == null || _activeFirePoint == null || _isReloading) return;
 
         // AUTO-RELAOD: If click shoot but 0 ammo, trigger a reload instead
         if (_currentAmmo <= 0 && !_hasUnlimitedAmmo)
@@ -144,20 +160,37 @@ public class WeaponSystem : MonoBehaviour
             _nextFireTime = Time.time + _currentFireRate;
 
             // Only consume a bullet IF has limited ammo
+            // NOTE: A shotgun uses 1 "ammo" per pull of the trigger, even if it first 5 pellets
             if (!_hasUnlimitedAmmo)
             {
                 _currentAmmo--;  // Consume 1 bullet
             }
-            
-            // Ask the ProjectilePool for a bullet!
-            GameObject obj = ProjectilePool.Instance.GetProjectile(_currentWeapon.ProjectilePrefab, _firePoint.position, _firePoint.rotation);
 
-            // Tell the bullet who fired it
-            CheeseProjectile projectileScript = obj.GetComponent<CheeseProjectile>();
-            if (projectileScript != null)
+            // --- SHOTGUN SPREAD LOGIC ---
+            for (int i = 0; i < _currentWeapon.ProjectilesPerShot; i++)
             {
-                // Pass the tag of the GameObject holding this WeaponSystem (Player or Enemy)
-                projectileScript.Setup(gameObject.tag, _currentDamage);
+                // Calculate the maths for an even spread
+                float spread = 0f;
+                if (_currentWeapon.ProjectilesPerShot > 1)
+                {
+                    // This calculation spaces the bullets out evenly across the Spread Angle
+                    float fraction = (float)i / (_currentWeapon.ProjectilesPerShot - 1);
+                    spread = Mathf.Lerp(-_currentWeapon.SpreadAngle / 2f, _currentWeapon.SpreadAngle / 2f, fraction);
+                }
+
+                // Apply the new spread rotation to the fire point's standard rotation
+                Quaternion bulletRotation = _activeFirePoint.rotation * Quaternion.Euler(0f, spread, 0f);
+
+                // Ask the ProjectilePool for a bullet, using the new bulletRotation
+                GameObject obj = ProjectilePool.Instance.GetProjectile(_currentWeapon.ProjectilePrefab, _activeFirePoint.position, bulletRotation);
+
+                // Tell the bullet WHO fired it
+                CheeseProjectile projectileScript = obj.GetComponent<CheeseProjectile>();
+                if (projectileScript != null)
+                {
+                    // Pass the tag of the GameObject holding this WeaponSystem (Player or Enemy)
+                    projectileScript.Setup(gameObject.tag, _currentDamage);
+                }
             }
 
             // Update the UI after firing BUT only if INFINITE is not being displayed
