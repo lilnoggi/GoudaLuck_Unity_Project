@@ -70,9 +70,18 @@
                     "initialStateCheck": false
                 },
                 {
-                    "name": "CycleWeapon",
+                    "name": "NextWeapon",
                     "type": "Button",
                     "id": "8b1567db-ce0b-4c98-8279-9314f01c3c95",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "PreviousWeapon",
+                    "type": "Button",
+                    "id": "8b2ef4a8-8af0-4cce-bf74-8bb373dfc360",
                     "expectedControlType": "",
                     "processors": "",
                     "interactions": "",
@@ -301,7 +310,7 @@
                 {
                     "name": "",
                     "id": "a984d804-4789-4861-917d-ca46dad83a5b",
-                    "path": "<Keyboard>/q",
+                    "path": "<Keyboard>/leftCtrl",
                     "interactions": "",
                     "processors": "",
                     "groups": "",
@@ -327,7 +336,7 @@
                     "interactions": "",
                     "processors": "",
                     "groups": "",
-                    "action": "CycleWeapon",
+                    "action": "NextWeapon",
                     "isComposite": false,
                     "isPartOfComposite": false
                 },
@@ -338,7 +347,7 @@
                     "interactions": "",
                     "processors": "",
                     "groups": "",
-                    "action": "CycleWeapon",
+                    "action": "NextWeapon",
                     "isComposite": false,
                     "isPartOfComposite": false
                 },
@@ -361,6 +370,28 @@
                     "processors": "",
                     "groups": "",
                     "action": "Pause",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "e23ff39d-ef5f-4ff0-88a8-f88a6d12f333",
+                    "path": "<Keyboard>/q",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "PreviousWeapon",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "169257bf-b1e7-4e1e-be58-1d0951f8bc75",
+                    "path": "<Gamepad>/leftShoulder",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "PreviousWeapon",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }

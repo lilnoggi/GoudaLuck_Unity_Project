@@ -243,7 +243,7 @@ public class WeaponSystem : MonoBehaviour
     }
 
     // --- CYCLE WEAPONS ---
-    public void CycleWeapon()
+    public void CycleWeaponForward()
     {
         // Don't try to swap if player only has 1 gun
         if (_unlockedWeapons.Count <= 1 || _isReloading) return;
@@ -254,6 +254,22 @@ public class WeaponSystem : MonoBehaviour
         if(_currentWeaponIndex >= _unlockedWeapons.Count)
         {
             _currentWeaponIndex = 0;
+        }
+
+        EquipWeapon(_unlockedWeapons[_currentWeaponIndex]);
+    }
+
+    public void CycleWeaponBackward()
+    {
+        // Don't try to swap if player only has 1 gun
+        if (_unlockedWeapons.Count <= 1 || _isReloading) return;
+
+        _currentWeaponIndex--;
+
+        // If we go below 0, loop back to the very last gun in the list
+        if (_currentWeaponIndex < 0)
+        {
+            _currentWeaponIndex = _unlockedWeapons.Count - 1;
         }
 
         EquipWeapon(_unlockedWeapons[_currentWeaponIndex]);
