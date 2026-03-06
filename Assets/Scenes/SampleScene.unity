@@ -7499,7 +7499,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ff44689e3fae5b64180c2e4f601c8804, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::GameManager
-  _score: 1000
+  _score: 3000
 --- !u!114 &1630632934
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -8818,7 +8818,7 @@ PrefabInstance:
     - target: {fileID: 5630034146692905366, guid: 9f23a7b19ce483b4f89162f5927fc7fb, type: 3}
       propertyPath: _currentWeapon
       value: 
-      objectReference: {fileID: 11400000, guid: 7a79b63b653bc014c85babb3511e31d3, type: 2}
+      objectReference: {fileID: 11400000, guid: e5f5bfcb64a963a45a2e99a6c9bb6144, type: 2}
     - target: {fileID: 5630034146692905366, guid: 9f23a7b19ce483b4f89162f5927fc7fb, type: 3}
       propertyPath: _defaultFirePoint
       value: 
