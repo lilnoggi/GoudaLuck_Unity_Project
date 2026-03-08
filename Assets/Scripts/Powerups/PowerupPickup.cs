@@ -17,6 +17,18 @@ public class PowerupPickup : MonoBehaviour
     [SerializeField] private float _healthAmount = 25f;  // Only used if type is Health
     [SerializeField] private float _buffDuration = 5f;   // How long timed buffs last
 
+    private void OnEnable()
+    {
+        // Powerups disappear if left alone
+        Invoke("Despawn", 15f);
+    }
+
+    private void OnDisable()
+    {
+        // Cancel invokes when disabled to prevent memory leaks
+        CancelInvoke("Despawn");
+    }
+
     private void OnTriggerEnter(Collider other)
     {
         // Only the player can pick this up
@@ -26,7 +38,7 @@ public class PowerupPickup : MonoBehaviour
 
             // Play a sound and spawn particle effect here
 
-            Destroy(gameObject);
+            Despawn();
         }
     }
 
@@ -64,6 +76,18 @@ public class PowerupPickup : MonoBehaviour
             case PowerupType.GoldenGun:
                 // Build later
                 break;
+        }
+    }
+
+    private void Despawn()
+    {
+        if (PowerupPool.Instance != null)
+        {
+            PowerupPool.Instance.ReturnPowerup(gameObject);
+        }
+        else
+        {
+            Destroy(gameObject);  // Fallback
         }
     }
 }

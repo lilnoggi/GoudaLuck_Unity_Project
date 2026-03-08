@@ -76,7 +76,16 @@ public class EnemyDeathHandler : MonoBehaviour
                     {
                         // Spawn it slightly above the ground so it doesn't clip
                         Vector3 dropPos = transform.position + new Vector3(0f, 0.5f, 0f);
-                        Instantiate(drop.Prefab, dropPos, Quaternion.identity);
+                        
+                        // Ask the pool for the powerup
+                        if (PowerupPool.Instance != null)
+                        {
+                            PowerupPool.Instance.GetPowerup(drop.Prefab, dropPos);
+                        }
+                        else
+                        {
+                            Instantiate(drop.Prefab, dropPos, Quaternion.identity);  // Fallback
+                        }
 
                         // Break the loop so it doesn't spawn multiple items
                         break;

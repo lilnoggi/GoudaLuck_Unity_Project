@@ -8707,6 +8707,7 @@ GameObject:
   - component: {fileID: 2070055242}
   - component: {fileID: 2070055243}
   - component: {fileID: 2070055244}
+  - component: {fileID: 2070055245}
   m_Layer: 0
   m_Name: PoolManager
   m_TagString: Untagged
@@ -8758,6 +8759,23 @@ MonoBehaviour:
     PoolSize: 50
   - EnemyPrefab: {fileID: 9049435338180138717, guid: 49587ada5f284e248ae5c547c7e642a4, type: 3}
     PoolSize: 20
+--- !u!114 &2070055245
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2070055241}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 632012004c689b24e9073741d1168235, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::PowerupPool
+  _powerupsToPool:
+  - powerupPrefab: {fileID: 6028533566618311584, guid: 7a6eeec51d6361242a80c570576c1799, type: 3}
+    PoolSize: 10
+  - powerupPrefab: {fileID: 6028533566618311584, guid: e887ae9d6cbfc0a4eb40b54f439f940b, type: 3}
+    PoolSize: 10
 --- !u!4 &2103814888 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 3567219839074336355, guid: 9f23a7b19ce483b4f89162f5927fc7fb, type: 3}

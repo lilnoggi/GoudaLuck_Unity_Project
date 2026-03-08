@@ -45,7 +45,7 @@ public class PowerupPool : MonoBehaviour
     {
         string key = prefab.name;
 
-        if (_poolDictionary.Contains(key) && _poolDictionary[key].Count > 0)
+        if (_poolDictionary.ContainsKey(key) && _poolDictionary[key].Count > 0)
         {
             GameObject obj = _poolDictionary[key].Dequeue();
             obj.transform.position = position;
