@@ -797,7 +797,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::EnemyDeathHandler
   _lootTable:
   - Prefab: {fileID: 6028533566618311584, guid: 7a6eeec51d6361242a80c570576c1799, type: 3}
-    DropChance: 80
+    DropChance: 65
   - Prefab: {fileID: 6028533566618311584, guid: e887ae9d6cbfc0a4eb40b54f439f940b, type: 3}
-    DropChance: 20
-  _masterDropChance: 0.1
+    DropChance: 35
+  _masterDropChance: 0.25

@@ -767,7 +767,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::CatAI_Controller
   _currentState: 0
-  _attackRange: 4
+  _attackRange: 10
   _chaseRange: 20
 --- !u!114 &5548836498356062606
 MonoBehaviour:
@@ -781,7 +781,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f565763526d89a24c896d6ddd8186d0c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::HealthSystem
-  _maxHealth: 100
+  _maxHealth: 250
   _localHealthSlider: {fileID: 1298296964476530934}
 --- !u!114 &4348741442836119678
 MonoBehaviour:
