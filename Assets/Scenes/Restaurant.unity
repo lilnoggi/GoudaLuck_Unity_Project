@@ -964,6 +964,17 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: ebab831eec02a3748a0d6d2363ad31b7, type: 3}
+--- !u!114 &343606029 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 5097788625459268747, guid: 6195754c450f14a4892deee2a0f01ff6, type: 3}
+  m_PrefabInstance: {fileID: 1338396308}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Image
 --- !u!1001 &347446684
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -2713,10 +2724,6 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 1338396310}
     - target: {fileID: 2601150066529384691, guid: ba4d2e42dd7aec5439811118dbd30536, type: 3}
-      propertyPath: _ultSlider
-      value: 
-      objectReference: {fileID: 1338396315}
-    - target: {fileID: 2601150066529384691, guid: ba4d2e42dd7aec5439811118dbd30536, type: 3}
       propertyPath: _pausePanel
       value: 
       objectReference: {fileID: 1338396312}
@@ -2728,6 +2735,10 @@ PrefabInstance:
       propertyPath: _resumeButton
       value: 
       objectReference: {fileID: 1338396311}
+    - target: {fileID: 2601150066529384691, guid: ba4d2e42dd7aec5439811118dbd30536, type: 3}
+      propertyPath: _ultFillImage
+      value: 
+      objectReference: {fileID: 343606029}
     - target: {fileID: 2601150066529384691, guid: ba4d2e42dd7aec5439811118dbd30536, type: 3}
       propertyPath: _gameOverPanel
       value: 
@@ -4295,10 +4306,6 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 5392787063199545667, guid: 6195754c450f14a4892deee2a0f01ff6, type: 3}
-      propertyPath: m_AnchorMax.y
-      value: 0
-      objectReference: {fileID: 0}
     - target: {fileID: 7183781986602708832, guid: 6195754c450f14a4892deee2a0f01ff6, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
@@ -4352,17 +4359,6 @@ GameObject:
   m_CorrespondingSourceObject: {fileID: 382823312372722357, guid: 6195754c450f14a4892deee2a0f01ff6, type: 3}
   m_PrefabInstance: {fileID: 1338396308}
   m_PrefabAsset: {fileID: 0}
---- !u!114 &1338396315 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 8064707662738711303, guid: 6195754c450f14a4892deee2a0f01ff6, type: 3}
-  m_PrefabInstance: {fileID: 1338396308}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 67db9e8f0e2ae9c40bc1e2b64352a6b4, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Slider
 --- !u!114 &1338396316 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 1844922071872993307, guid: 6195754c450f14a4892deee2a0f01ff6, type: 3}

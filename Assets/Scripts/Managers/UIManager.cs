@@ -18,7 +18,7 @@ public class UIManager : MonoBehaviour
     [SerializeField] private TextMeshProUGUI _waveText;
     [SerializeField] private Slider _healthSlider;
     [SerializeField] private Image _dashWheelImage;
-    [SerializeField] private Slider _ultSlider;
+    [SerializeField] private Image _ultFillImage;
 
     [Header("Smooth UI Fill")]
     [SerializeField] private float _fillSpeed = 5f;  // How fast the bar catches up
@@ -54,7 +54,7 @@ public class UIManager : MonoBehaviour
         PlayerController player = null;
 
         // Only update the wheel if it is actually assigned in the Inspector
-        if(_dashWheelImage != null || _ultSlider != null)
+        if(_dashWheelImage != null || _ultFillImage != null)
         {
             player = FindFirstObjectByType<PlayerController>();
         }
@@ -68,10 +68,10 @@ public class UIManager : MonoBehaviour
             }
 
             // Update Ultimate Slider
-            if (_ultSlider != null)
+            if (_ultFillImage != null)
             {
                 // The slider goes from 0 to 1
-                _ultSlider.value = player.UltChargeRatio;
+                _ultFillImage.fillAmount = Mathf.Lerp(_ultFillImage.fillAmount, player.UltChargeRatio, Time.deltaTime * _fillSpeed);
             }
         }
 

@@ -195,7 +195,8 @@ MonoBehaviour:
   _waveText: {fileID: 0}
   _healthSlider: {fileID: 0}
   _dashWheelImage: {fileID: 0}
-  _ultSlider: {fileID: 0}
+  _ultFillImage: {fileID: 0}
+  _fillSpeed: 5
   _ammoText: {fileID: 0}
   _weaponIconDisplay: {fileID: 0}
   _shopPanel: {fileID: 0}
