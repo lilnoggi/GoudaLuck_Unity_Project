@@ -2400,10 +2400,6 @@ PrefabInstance:
     m_TransformParent: {fileID: 0}
     m_Modifications:
     - target: {fileID: 2067977345018152831, guid: 093d5491ad17549409961649bd0dc732, type: 3}
-      propertyPath: Lens.OrthographicSize
-      value: 8
-      objectReference: {fileID: 0}
-    - target: {fileID: 2067977345018152831, guid: 093d5491ad17549409961649bd0dc732, type: 3}
       propertyPath: Target.TrackingTarget
       value: 
       objectReference: {fileID: 2005290923}
@@ -2807,26 +2803,6 @@ PrefabInstance:
       propertyPath: '_spawnPoints.Array.data[0]'
       value: 
       objectReference: {fileID: 1444287711}
-    - target: {fileID: 4574045216291994233, guid: ba4d2e42dd7aec5439811118dbd30536, type: 3}
-      propertyPath: _hoverButton
-      value: 
-      objectReference: {fileID: 8300000, guid: 72aaf627d023b164dbd62d2f66d78082, type: 3}
-    - target: {fileID: 4574045216291994233, guid: ba4d2e42dd7aec5439811118dbd30536, type: 3}
-      propertyPath: _purchaseGun
-      value: 
-      objectReference: {fileID: 8300000, guid: 039e8a5a3d0296b4185f99137c19d0e2, type: 3}
-    - target: {fileID: 4574045216291994233, guid: ba4d2e42dd7aec5439811118dbd30536, type: 3}
-      propertyPath: _selectButton
-      value: 
-      objectReference: {fileID: 8300000, guid: 4e84e2a80b370894da72a294d26b1233, type: 3}
-    - target: {fileID: 4574045216291994233, guid: ba4d2e42dd7aec5439811118dbd30536, type: 3}
-      propertyPath: _upgradeWeapon
-      value: 
-      objectReference: {fileID: 8300000, guid: 639345486031b774f8fa708ecd283f02, type: 3}
-    - target: {fileID: 4574045216291994233, guid: ba4d2e42dd7aec5439811118dbd30536, type: 3}
-      propertyPath: _purchaseFailed
-      value: 
-      objectReference: {fileID: 8300000, guid: 313fef43be58a504eae4d2730293dbed, type: 3}
     - target: {fileID: 5749633664389840452, guid: ba4d2e42dd7aec5439811118dbd30536, type: 3}
       propertyPath: m_LocalPosition.x
       value: -1.2369
@@ -2871,26 +2847,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: MANAGERS
       objectReference: {fileID: 0}
-    - target: {fileID: 8103599515958057148, guid: ba4d2e42dd7aec5439811118dbd30536, type: 3}
-      propertyPath: _score
-      value: 0
-      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: ba4d2e42dd7aec5439811118dbd30536, type: 3}
---- !u!114 &939595267 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 4574045216291994233, guid: ba4d2e42dd7aec5439811118dbd30536, type: 3}
-  m_PrefabInstance: {fileID: 939595266}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 0043392a9099c014487631586696ea11, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::AudioManager
 --- !u!1001 &944073650
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -4378,34 +4339,6 @@ PrefabInstance:
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
       objectReference: {fileID: 1371810906}
-    - target: {fileID: 3688363214072160748, guid: 6195754c450f14a4892deee2a0f01ff6, type: 3}
-      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.size
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 3688363214072160748, guid: 6195754c450f14a4892deee2a0f01ff6, type: 3}
-      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[1].m_Mode
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 3688363214072160748, guid: 6195754c450f14a4892deee2a0f01ff6, type: 3}
-      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[1].m_Target
-      value: 
-      objectReference: {fileID: 939595267}
-    - target: {fileID: 3688363214072160748, guid: 6195754c450f14a4892deee2a0f01ff6, type: 3}
-      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[1].m_CallState
-      value: 2
-      objectReference: {fileID: 0}
-    - target: {fileID: 3688363214072160748, guid: 6195754c450f14a4892deee2a0f01ff6, type: 3}
-      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[1].m_MethodName
-      value: PlayUpgradeWeaponSound
-      objectReference: {fileID: 0}
-    - target: {fileID: 3688363214072160748, guid: 6195754c450f14a4892deee2a0f01ff6, type: 3}
-      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[1].m_TargetAssemblyTypeName
-      value: AudioManager, Assembly-CSharp
-      objectReference: {fileID: 0}
-    - target: {fileID: 3688363214072160748, guid: 6195754c450f14a4892deee2a0f01ff6, type: 3}
-      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[1].m_Arguments.m_ObjectArgumentAssemblyTypeName
-      value: UnityEngine.Object, UnityEngine
-      objectReference: {fileID: 0}
     - target: {fileID: 4248093552323344536, guid: 6195754c450f14a4892deee2a0f01ff6, type: 3}
       propertyPath: m_Pivot.x
       value: 0
@@ -4484,14 +4417,6 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4248093552323344536, guid: 6195754c450f14a4892deee2a0f01ff6, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 5247989216471111346, guid: 6195754c450f14a4892deee2a0f01ff6, type: 3}
-      propertyPath: m_AnchoredPosition.x
-      value: -1.9702148
-      objectReference: {fileID: 0}
-    - target: {fileID: 6215103116126205162, guid: 6195754c450f14a4892deee2a0f01ff6, type: 3}
-      propertyPath: m_IsActive
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 7183781986602708832, guid: 6195754c450f14a4892deee2a0f01ff6, type: 3}
@@ -5695,10 +5620,6 @@ PrefabInstance:
     - target: {fileID: 1116396418112005389, guid: 63daa4d518d89a448af915a6b966af0f, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 3369874874542763888, guid: 63daa4d518d89a448af915a6b966af0f, type: 3}
-      propertyPath: orthographic size
-      value: 8
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
