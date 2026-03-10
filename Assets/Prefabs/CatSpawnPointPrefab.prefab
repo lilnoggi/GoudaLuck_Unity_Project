@@ -25,7 +25,7 @@ Transform:
   m_GameObject: {fileID: 415547134323489831}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -218.66667, y: -314.75, z: 79.66662}
+  m_LocalPosition: {x: 0, y: 0, z: 1.624}
   m_LocalScale: {x: 333.33334, y: 333.33334, z: 333.33334}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -73,15 +73,15 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: -8679921383154817045, guid: 7f82fa7dad177f2469ffe218888a4ba4, type: 3}
       propertyPath: m_LocalScale.x
-      value: 0.003
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 7f82fa7dad177f2469ffe218888a4ba4, type: 3}
       propertyPath: m_LocalScale.y
-      value: 0.003
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 7f82fa7dad177f2469ffe218888a4ba4, type: 3}
       propertyPath: m_LocalScale.z
-      value: 0.003
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 7f82fa7dad177f2469ffe218888a4ba4, type: 3}
       propertyPath: m_LocalPosition.x
@@ -123,6 +123,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: -7511558181221131132, guid: 7f82fa7dad177f2469ffe218888a4ba4, type: 3}
+      propertyPath: 'm_Materials.Array.data[0]'
+      value: 
+      objectReference: {fileID: 2100000, guid: 39f59a27e59db5644af8940bc6ede639, type: 2}
     - target: {fileID: 919132149155446097, guid: 7f82fa7dad177f2469ffe218888a4ba4, type: 3}
       propertyPath: m_Name
       value: CodeCatCafe Cat Tower
@@ -136,7 +140,7 @@ PrefabInstance:
     m_AddedComponents:
     - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 7f82fa7dad177f2469ffe218888a4ba4, type: 3}
       insertIndex: -1
-      addedObject: {fileID: 1013824586062205041}
+      addedObject: {fileID: 7824303666180001893}
   m_SourcePrefab: {fileID: 100100000, guid: 7f82fa7dad177f2469ffe218888a4ba4, type: 3}
 --- !u!4 &5829633380147965364 stripped
 Transform:
@@ -148,7 +152,7 @@ GameObject:
   m_CorrespondingSourceObject: {fileID: 919132149155446097, guid: 7f82fa7dad177f2469ffe218888a4ba4, type: 3}
   m_PrefabInstance: {fileID: 6299900160529386079}
   m_PrefabAsset: {fileID: 0}
---- !u!65 &1013824586062205041
+--- !u!65 &7824303666180001893
 BoxCollider:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -167,5 +171,5 @@ BoxCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Size: {x: 614.802, y: 659.8684, z: 359.94278}
-  m_Center: {x: 0, y: 0, z: -85.64418}
+  m_Size: {x: 2.6251054, y: 3.299342, z: 1.9398215}
+  m_Center: {x: 0.22445226, y: 0, z: -0.3581649}
