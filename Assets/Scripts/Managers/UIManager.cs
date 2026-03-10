@@ -20,6 +20,10 @@ public class UIManager : MonoBehaviour
     [SerializeField] private Image _dashWheelImage;
     [SerializeField] private Slider _ultSlider;
 
+    [Header("Smooth UI Fill")]
+    [SerializeField] private float _fillSpeed = 5f;  // How fast the bar catches up
+    private float _targetHealth;
+
     [Header("Weapon UI")]
     [SerializeField] private TextMeshProUGUI _ammoText;
     [SerializeField] private Image _weaponIconDisplay;
@@ -69,6 +73,13 @@ public class UIManager : MonoBehaviour
                 // The slider goes from 0 to 1
                 _ultSlider.value = player.UltChargeRatio;
             }
+        }
+
+        // --- SMOOTH HEALTH BAR ---
+        if (_healthSlider != null)
+        {
+            // Smoothly move the visual slider value towards the target health
+            _healthSlider.value = Mathf.Lerp(_healthSlider.value, _targetHealth, Time.deltaTime * _fillSpeed);
         }
     }
 
@@ -166,7 +177,7 @@ public class UIManager : MonoBehaviour
         if (_healthSlider != null)
         {
             _healthSlider.maxValue = maxHealth;
-            _healthSlider.value = currentHealth;
+            _targetHealth = currentHealth;  // Tell the UI what number to chase
         }
     }
 
