@@ -2400,6 +2400,10 @@ PrefabInstance:
     m_TransformParent: {fileID: 0}
     m_Modifications:
     - target: {fileID: 2067977345018152831, guid: 093d5491ad17549409961649bd0dc732, type: 3}
+      propertyPath: Lens.OrthographicSize
+      value: 8
+      objectReference: {fileID: 0}
+    - target: {fileID: 2067977345018152831, guid: 093d5491ad17549409961649bd0dc732, type: 3}
       propertyPath: Target.TrackingTarget
       value: 
       objectReference: {fileID: 2005290923}
@@ -5624,6 +5628,10 @@ PrefabInstance:
     - target: {fileID: 1116396418112005389, guid: 63daa4d518d89a448af915a6b966af0f, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3369874874542763888, guid: 63daa4d518d89a448af915a6b966af0f, type: 3}
+      propertyPath: orthographic size
+      value: 8
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
