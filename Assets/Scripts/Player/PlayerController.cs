@@ -393,6 +393,8 @@ public class PlayerController : MonoBehaviour
         // Turn on the trail
         if (_dashTrail != null) _dashTrail.emitting = true;
 
+        AudioManager.Instance.PlayDashSound();
+
         // Wait for a fraction of a second while the FixedUpdate handles the high-speed movement
         yield return new WaitForSeconds(_dashDuration);
 

@@ -53,6 +53,7 @@ MonoBehaviour:
   _shootSound: {fileID: 8300000, guid: 2e2d9fe9172fa4841a2d309dc19db917, type: 3}
   _catMeowSound: {fileID: 8300000, guid: c4f4b03c1a9efcc4aa64d5d116b911a2, type: 3}
   _powerupSound: {fileID: 8300000, guid: 1192d5b82734a6f439f5df5bc80bbf95, type: 3}
+  _dashSound: {fileID: 8300000, guid: fb08c910b0a1cca4a9f27d65499021eb, type: 3}
   _purchaseGun: {fileID: 8300000, guid: 039e8a5a3d0296b4185f99137c19d0e2, type: 3}
   _purchaseFailed: {fileID: 8300000, guid: 313fef43be58a504eae4d2730293dbed, type: 3}
   _hoverButton: {fileID: 8300000, guid: 72aaf627d023b164dbd62d2f66d78082, type: 3}

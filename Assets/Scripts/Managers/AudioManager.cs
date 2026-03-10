@@ -22,6 +22,7 @@ public class AudioManager : MonoBehaviour
     [SerializeField] private AudioClip _shootSound;
     [SerializeField] private AudioClip _catMeowSound;
     [SerializeField] private AudioClip _powerupSound;
+    [SerializeField] private AudioClip _dashSound;
 
     [Header("UI Sound Effects")]
     [SerializeField] private AudioClip _purchaseGun;
@@ -78,6 +79,7 @@ public class AudioManager : MonoBehaviour
     public void PlayMeowSound() => PlaySFX(_catMeowSound);
     public void PlayPlayerDamageSound() => PlaySFX(_playerDamageSound);
     public void PlayPowerupPickupSound() => PlaySFX(_powerupSound);
+    public void PlayDashSound() => PlaySFX(_dashSound);
     public void PlayPurchaseGunSound() => PlaySFX(_purchaseGun);
     public void PlayPurchaseFailedSound() => PlaySFX(_purchaseFailed);
     public void PlayHoverButtonSound() => PlaySFX(_hoverButton);

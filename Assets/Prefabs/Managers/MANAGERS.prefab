@@ -220,6 +220,10 @@ PrefabInstance:
     m_TransformParent: {fileID: 5749633664389840452}
     m_Modifications:
     - target: {fileID: 4564900982797389266, guid: cf5e0166640a7ec4f9c07a90492b2c06, type: 3}
+      propertyPath: _dashSound
+      value: 
+      objectReference: {fileID: 8300000, guid: fb08c910b0a1cca4a9f27d65499021eb, type: 3}
+    - target: {fileID: 4564900982797389266, guid: cf5e0166640a7ec4f9c07a90492b2c06, type: 3}
       propertyPath: _hoverButton
       value: 
       objectReference: {fileID: 8300000, guid: 72aaf627d023b164dbd62d2f66d78082, type: 3}
