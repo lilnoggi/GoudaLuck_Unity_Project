@@ -92,7 +92,7 @@ public class ShopManager : MonoBehaviour
         }
         else
         {
-            Debug.Log("Not enough cheddar points!");
+            // Debug.Log("Not enough cheddar points!");
         }
     }
 
@@ -125,7 +125,7 @@ public class ShopManager : MonoBehaviour
 
                 // Equip the new gun
                 weapon.EquipWeapon(_mozzaData);
-                Debug.Log("Successfully purchased the Mozza-MP5!");
+               // Debug.Log("Successfully purchased the Mozza-MP5!");
 
                 // Change the button text from "Buy (250) to "Equip"
                 if (_mozzaUnlockText != null)
@@ -139,11 +139,11 @@ public class ShopManager : MonoBehaviour
                     _mozzaLockOverlay.SetActive(false);
                 }
 
-                Debug.Log("Successfully purchased and equipped the Mozza-MP5");
+                // Debug.Log("Successfully purchased and equipped the Mozza-MP5");
             }
             else
             {
-                Debug.Log("Not enough Cheddar Points!");
+                // Debug.Log("Not enough Cheddar Points!");
             }
         }
     }

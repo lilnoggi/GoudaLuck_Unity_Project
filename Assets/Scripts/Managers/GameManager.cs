@@ -33,7 +33,7 @@ public class GameManager : MonoBehaviour
     public void AddScore(int amount)
     {
         _score += amount;
-        Debug.Log("Cat defeated! Cheddar Points: " + _score);
+        // Debug.Log("Cat defeated! Cheddar Points: " + _score);
 
         // Tell the UI manager score has changed
         if (UIManager.Instance != null)
@@ -62,7 +62,7 @@ public class GameManager : MonoBehaviour
     // Called by the HealthSystem when the player dies
     public void TriggerGameOver()
     {
-        Debug.Log("=== GAME OVER === The felines have taken over.");
+        // Debug.Log("=== GAME OVER === The felines have taken over.");
 
         if (UIManager.Instance != null)
         {

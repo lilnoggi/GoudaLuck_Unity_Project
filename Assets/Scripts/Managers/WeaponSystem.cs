@@ -105,7 +105,7 @@ public class WeaponSystem : MonoBehaviour
             }
         }
 
-        Debug.Log(gameObject.name + " equipped the " + _currentWeapon.WeaponName + "!");
+        // Debug.Log(gameObject.name + " equipped the " + _currentWeapon.WeaponName + "!");
 
         _currentAmmo = _currentWeapon.MagSize;
         _isReloading = false;
@@ -133,11 +133,11 @@ public class WeaponSystem : MonoBehaviour
             _currentFireRate -= _currentWeapon.FireRateDecreasePerLevel;
             _currentFireRate = Mathf.Max(_currentFireRate, 0.05f);
 
-            Debug.Log($"Weapon Upgraded to Level {_currentUpgradeLevel}! Damage: {_currentDamage}, FireRate: {_currentFireRate}");
+            // Debug.Log($"Weapon Upgraded to Level {_currentUpgradeLevel}! Damage: {_currentDamage}, FireRate: {_currentFireRate}");
         }
         else
         {
-            Debug.Log("Weapon is already at max level.");
+           // Debug.Log("Weapon is already at max level.");
         }
     }
 

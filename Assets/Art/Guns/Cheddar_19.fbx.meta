@@ -3,7 +3,42 @@ guid: 638dfc10101c56d4b9c3074570fa1a9e
 ModelImporter:
   serializedVersion: 24200
   internalIDToNameTable: []
-  externalObjects: {}
+  externalObjects:
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: GATILLO
+    second: {fileID: 2100000, guid: bea8dded259837945851d0136cf6343f, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: barrel
+    second: {fileID: 2100000, guid: fcf14d183aea60849b6defe106453b37, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: base
+    second: {fileID: 2100000, guid: df8e608604277c94397fea8c0392a2a3, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: detail
+    second: {fileID: 2100000, guid: 1723f4e0b6727864ea8aa6606d556584, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: gun_handle
+    second: {fileID: 2100000, guid: ad80a93aa56ff96478da1f8faa09aed5, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: gun_slider
+    second: {fileID: 2100000, guid: 7b82a90ca61c77b4d86af68631ea3907, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: magazine
+    second: {fileID: 2100000, guid: 81adfc58fe69ad04196ed7c01967abfc, type: 2}
   materials:
     materialImportMode: 2
     materialName: 0

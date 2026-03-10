@@ -65,7 +65,7 @@ public class WaveManager : MonoBehaviour
 
     private IEnumerator SpawnWave()
     {
-        Debug.Log("--- WAVE " + _currentWave + " STARTING! ---");
+       // Debug.Log("--- WAVE " + _currentWave + " STARTING! ---");
 
         // Lock the shop from opening
         _isSpawning = true;
