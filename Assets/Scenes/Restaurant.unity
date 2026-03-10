@@ -405,14 +405,6 @@ PrefabInstance:
       propertyPath: m_Name
       value: Player
       objectReference: {fileID: 0}
-    - target: {fileID: 4275760019522775978, guid: 9f23a7b19ce483b4f89162f5927fc7fb, type: 3}
-      propertyPath: m_IsActive
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 5630034146692905366, guid: 9f23a7b19ce483b4f89162f5927fc7fb, type: 3}
-      propertyPath: _defaultFirePoint
-      value: 
-      objectReference: {fileID: 483102531}
     - target: {fileID: 8215339677962157953, guid: 9f23a7b19ce483b4f89162f5927fc7fb, type: 3}
       propertyPath: _crosshair
       value: 
@@ -1285,10 +1277,6 @@ PrefabInstance:
       propertyPath: m_Name
       value: Crosshair
       objectReference: {fileID: 0}
-    - target: {fileID: 4731477777823971676, guid: f4c5b032e2bdcb746952e69bdefd7b4a, type: 3}
-      propertyPath: m_IsActive
-      value: 1
-      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -1576,11 +1564,6 @@ PrefabInstance:
       insertIndex: -1
       addedObject: {fileID: 1316730336}
   m_SourcePrefab: {fileID: 100100000, guid: 6e0072f2be89bf447a1136aafb68ebf6, type: 3}
---- !u!4 &483102531 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: 4948462400901917439, guid: 9f23a7b19ce483b4f89162f5927fc7fb, type: 3}
-  m_PrefabInstance: {fileID: 90326016}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1 &515526548 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 919132149155446097, guid: 7d8bd60a1fec58c439b394161ac2e2c6, type: 3}
@@ -2381,10 +2364,6 @@ PrefabInstance:
       propertyPath: m_Name
       value: 'CinemachineCamera '
       objectReference: {fileID: 0}
-    - target: {fileID: 2487176701559432604, guid: 093d5491ad17549409961649bd0dc732, type: 3}
-      propertyPath: m_IsActive
-      value: 1
-      objectReference: {fileID: 0}
     - target: {fileID: 4537447247249785838, guid: 093d5491ad17549409961649bd0dc732, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0
@@ -2773,10 +2752,6 @@ PrefabInstance:
       propertyPath: _weaponIconDisplay
       value: 
       objectReference: {fileID: 1338396321}
-    - target: {fileID: 3780240324745770233, guid: ba4d2e42dd7aec5439811118dbd30536, type: 3}
-      propertyPath: _spawnPoints.Array.size
-      value: 1
-      objectReference: {fileID: 0}
     - target: {fileID: 3780240324745770233, guid: ba4d2e42dd7aec5439811118dbd30536, type: 3}
       propertyPath: '_spawnPoints.Array.data[0]'
       value: 
@@ -4228,10 +4203,6 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
-    - target: {fileID: 382823312372722357, guid: 6195754c450f14a4892deee2a0f01ff6, type: 3}
-      propertyPath: m_IsActive
-      value: 0
-      objectReference: {fileID: 0}
     - target: {fileID: 602516609758367858, guid: 6195754c450f14a4892deee2a0f01ff6, type: 3}
       propertyPath: m_Name
       value: HUD_Canvas
@@ -4240,18 +4211,10 @@ PrefabInstance:
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
       objectReference: {fileID: 1371810906}
-    - target: {fileID: 2621124751526422726, guid: 6195754c450f14a4892deee2a0f01ff6, type: 3}
-      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
-      value: QuitGame
-      objectReference: {fileID: 0}
     - target: {fileID: 3524611428664079359, guid: 6195754c450f14a4892deee2a0f01ff6, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
       objectReference: {fileID: 1371810906}
-    - target: {fileID: 3524611428664079359, guid: 6195754c450f14a4892deee2a0f01ff6, type: 3}
-      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
-      value: QuitGame
-      objectReference: {fileID: 0}
     - target: {fileID: 4248093552323344536, guid: 6195754c450f14a4892deee2a0f01ff6, type: 3}
       propertyPath: m_Pivot.x
       value: 0
@@ -4332,30 +4295,14 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 5392787063199545667, guid: 6195754c450f14a4892deee2a0f01ff6, type: 3}
-      propertyPath: m_AnchorMax.y
-      value: 0
-      objectReference: {fileID: 0}
     - target: {fileID: 7183781986602708832, guid: 6195754c450f14a4892deee2a0f01ff6, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
       objectReference: {fileID: 1371810906}
-    - target: {fileID: 7183781986602708832, guid: 6195754c450f14a4892deee2a0f01ff6, type: 3}
-      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
-      value: Resume
-      objectReference: {fileID: 0}
-    - target: {fileID: 7285115625700334107, guid: 6195754c450f14a4892deee2a0f01ff6, type: 3}
-      propertyPath: m_AnchorMax.y
-      value: 0
-      objectReference: {fileID: 0}
     - target: {fileID: 8102754925374044796, guid: 6195754c450f14a4892deee2a0f01ff6, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
       objectReference: {fileID: 1371810906}
-    - target: {fileID: 8102754925374044796, guid: 6195754c450f14a4892deee2a0f01ff6, type: 3}
-      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
-      value: RestartGame
-      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -5504,10 +5451,6 @@ PrefabInstance:
     - target: {fileID: 155049245060582307, guid: 63daa4d518d89a448af915a6b966af0f, type: 3}
       propertyPath: m_Name
       value: Main Camera
-      objectReference: {fileID: 0}
-    - target: {fileID: 155049245060582307, guid: 63daa4d518d89a448af915a6b966af0f, type: 3}
-      propertyPath: m_IsActive
-      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 1116396418112005389, guid: 63daa4d518d89a448af915a6b966af0f, type: 3}
       propertyPath: m_LocalPosition.x

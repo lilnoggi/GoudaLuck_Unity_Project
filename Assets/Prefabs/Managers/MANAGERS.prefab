@@ -174,9 +174,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::WaveManager
   _spawnPoints:
   - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
   _timeBetweenSpawns: 1.5
   _enemiesPerWave: 5
   _basicCatPrefab: {fileID: 9049435338180138717, guid: e8d3a5a0deb6481479c4325a3ec54d89, type: 3}

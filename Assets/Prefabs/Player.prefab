@@ -309,7 +309,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::WeaponSystem
   _currentWeapon: {fileID: 11400000, guid: e5f5bfcb64a963a45a2e99a6c9bb6144, type: 2}
-  _defaultFirePoint: {fileID: 0}
+  _defaultFirePoint: {fileID: 4948462400901917439}
   _weaponHolder: {fileID: 2233155328304398025}
 --- !u!114 &5614078703695429597
 MonoBehaviour:
