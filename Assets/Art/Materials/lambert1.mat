@@ -154,8 +154,8 @@ Material:
     - _OcclusionStrength: 1
     - _OutlineFar: 1
     - _OutlineNear: 1
-    - _OutlineOffsetZ: -0.01
-    - _OutlineWidth: -0.12
+    - _OutlineOffsetZ: 0.001
+    - _OutlineWidth: 5
     - _Outline_BaseColorBlend: 0.5
     - _Outline_LightColorBlend: 0.5
     - _Parallax: 0.02
