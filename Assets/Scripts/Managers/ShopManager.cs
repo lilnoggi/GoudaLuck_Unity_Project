@@ -71,6 +71,8 @@ public class ShopManager : MonoBehaviour
         WeaponSystem weapon = player.GetComponent<WeaponSystem>();
         if (weapon == null) return;
 
+        AudioManager.Instance.PlaySelectButtonSound();
+
         // Always own the starter gun
         weapon.EquipWeapon(_cheddarData);
     }
@@ -87,11 +89,13 @@ public class ShopManager : MonoBehaviour
         // Try to spend points using the cost on the data card
         if (GameManager.Instance != null && GameManager.Instance.SpendPoints(_cheddarData.UpgradeCost))
         {
+            AudioManager.Instance.PlayUpgradeWeaponSound();
             weapon.BuyUpgrade();
             UpdateDotsUI(_cheddarDots, weapon.GetUpgradeLevel());
         }
         else
         {
+            AudioManager.Instance.PlayPurchaseFailedSound();
             // Debug.Log("Not enough cheddar points!");
         }
     }
@@ -112,6 +116,7 @@ public class ShopManager : MonoBehaviour
         // SCENARIO 1: Already owns it - equip it
         if (_ownsMozza)
         {
+            AudioManager.Instance.PlaySelectButtonSound();
             weapon.EquipWeapon(_mozzaData);
         }
         // SCENARIO 2: Doesn't own it yet
@@ -120,6 +125,7 @@ public class ShopManager : MonoBehaviour
             // Try to spend the cost listed right on the data card
             if (GameManager.Instance != null && GameManager.Instance.SpendPoints(_mozzaData.CheddarCost))
             {
+                AudioManager.Instance.PlayPurchaseGunSound();
                 // Mark it as owned
                 _ownsMozza = true;
 
@@ -143,6 +149,7 @@ public class ShopManager : MonoBehaviour
             }
             else
             {
+                AudioManager.Instance.PlayPurchaseFailedSound();
                 // Debug.Log("Not enough Cheddar Points!");
             }
         }
@@ -161,8 +168,13 @@ public class ShopManager : MonoBehaviour
 
         if (GameManager.Instance != null && GameManager.Instance.SpendPoints(_mozzaData.UpgradeCost))
         {
+            AudioManager.Instance.PlayUpgradeWeaponSound();
             weapon.BuyUpgrade();
             UpdateDotsUI(_mozzaDots, weapon.GetUpgradeLevel());
+        }
+        else
+        {
+            AudioManager.Instance.PlayPurchaseFailedSound();
         }
     }
 
@@ -178,12 +190,14 @@ public class ShopManager : MonoBehaviour
 
         if (_ownsShotgun)
         {
+            AudioManager.Instance.PlaySelectButtonSound();
             weapon.EquipWeapon(_shotgunData);
         }
         else
         {
             if (GameManager.Instance != null && GameManager.Instance.SpendPoints(_shotgunData.CheddarCost))
             {
+                AudioManager.Instance.PlayPurchaseGunSound();
                 _ownsShotgun = true;
                 weapon.EquipWeapon(_shotgunData);
                 if (_shotgunUnlockText != null)
@@ -195,6 +209,10 @@ public class ShopManager : MonoBehaviour
                 {
                     _shotgunLockOverlay.SetActive(false);
                 }
+            }
+            else
+            {
+                AudioManager.Instance.PlayPurchaseFailedSound();
             }
         }
     }
@@ -211,8 +229,13 @@ public class ShopManager : MonoBehaviour
 
         if (GameManager.Instance != null && GameManager.Instance.SpendPoints(_shotgunData.UpgradeCost))
         {
+            AudioManager.Instance.PlayUpgradeWeaponSound();
             weapon.BuyUpgrade();
             UpdateDotsUI(_shotgunDots, weapon.GetUpgradeLevel());
+        }
+        else
+        {
+            AudioManager.Instance.PlayPurchaseFailedSound();
         }
     }
 
@@ -223,6 +246,8 @@ public class ShopManager : MonoBehaviour
     // The Next Wave Button calls this
     public void OnNextWaveClicked()
     {
+        AudioManager.Instance.PlaySelectButtonSound();
+
         if (UIManager.Instance != null)
         {
             UIManager.Instance.HideShop();

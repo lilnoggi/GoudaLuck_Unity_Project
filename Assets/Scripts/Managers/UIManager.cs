@@ -126,6 +126,7 @@ public class UIManager : MonoBehaviour
     {
         if (_isPaused)
         {
+            AudioManager.Instance.PlaySelectButtonSound();
             TogglePause();
         }
     }
@@ -251,12 +252,15 @@ public class UIManager : MonoBehaviour
         // Unfreeze the game first
         Time.timeScale = 1f;
 
+        AudioManager.Instance.PlaySelectButtonSound();
+
         // Reload the current scene
         SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
     }
 
     public void QuitGame()
     {
+        AudioManager.Instance.PlaySelectButtonSound();
         Debug.Log("Quitting the game...");
 
         Application.Quit();

@@ -23,6 +23,13 @@ public class AudioManager : MonoBehaviour
     [SerializeField] private AudioClip _catMeowSound;
     [SerializeField] private AudioClip _powerupSound;
 
+    [Header("UI Sound Effects")]
+    [SerializeField] private AudioClip _purchaseGun;
+    [SerializeField] private AudioClip _purchaseFailed;
+    [SerializeField] private AudioClip _hoverButton;
+    [SerializeField] private AudioClip _selectButton;
+    [SerializeField] private AudioClip _upgradeWeapon;
+
     private void Awake()
     {
         // Singleton Pattern
@@ -71,4 +78,9 @@ public class AudioManager : MonoBehaviour
     public void PlayMeowSound() => PlaySFX(_catMeowSound);
     public void PlayPlayerDamageSound() => PlaySFX(_playerDamageSound);
     public void PlayPowerupPickupSound() => PlaySFX(_powerupSound);
+    public void PlayPurchaseGunSound() => PlaySFX(_purchaseGun);
+    public void PlayPurchaseFailedSound() => PlaySFX(_purchaseFailed);
+    public void PlayHoverButtonSound() => PlaySFX(_hoverButton);
+    public void PlaySelectButtonSound() => PlaySFX(_selectButton);
+    public void PlayUpgradeWeaponSound() => PlaySFX(_upgradeWeapon);
 }
