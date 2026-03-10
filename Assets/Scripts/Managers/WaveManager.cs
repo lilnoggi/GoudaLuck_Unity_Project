@@ -17,7 +17,9 @@ public class WaveManager : MonoBehaviour
     [Header("Enemy Types")]
     [SerializeField] private GameObject _basicCatPrefab;
     [SerializeField] private GameObject _tankCatPrefab;
+    [SerializeField] private GameObject _kittyTankPrefab;
     [SerializeField] private int _waveToSpawnTanks = 3;  // Tanks won't appear until wave 3
+    [SerializeField] private int _waveToSpawnKittyTanks = 5;
 
     private int _currentWave = 1;
     private int _enemiesAlive = 0;
@@ -85,13 +87,16 @@ public class WaveManager : MonoBehaviour
             // Decide WHICH cat to spawn
             GameObject enemyToSpawn = _basicCatPrefab;  // Default
 
-            // If reached the harder waves, give a 20% chance to spawn a Tank
-            if (_currentWave >= _waveToSpawnTanks)
+            // If reached the harder waves:
+            // Roll for the rarist cat first
+            if (_currentWave >= _waveToSpawnKittyTanks && Random.value <= 0.15f)
             {
-                if (Random.value <= 0.2f)
-                {
+                    enemyToSpawn = _kittyTankPrefab;
+            }
+            // If the Kitty Tank, roll for regular tank
+            else if (_currentWave >= _waveToSpawnTanks && Random.value <= 0.2f)
+            { 
                     enemyToSpawn = _tankCatPrefab;
-                }
             }
 
             // Ask the pool for the specific cat

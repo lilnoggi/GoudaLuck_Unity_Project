@@ -2743,6 +2743,18 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 1669436261455919166, guid: ba4d2e42dd7aec5439811118dbd30536, type: 3}
+      propertyPath: _enemiesToPool.Array.size
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 1669436261455919166, guid: ba4d2e42dd7aec5439811118dbd30536, type: 3}
+      propertyPath: _enemiesToPool.Array.data[2].PoolSize
+      value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: 1669436261455919166, guid: ba4d2e42dd7aec5439811118dbd30536, type: 3}
+      propertyPath: _enemiesToPool.Array.data[2].EnemyPrefab
+      value: 
+      objectReference: {fileID: 4226535881923145499, guid: c858c6e32b4648d4d8d688805e58ba1d, type: 3}
     - target: {fileID: 2601150066529384691, guid: ba4d2e42dd7aec5439811118dbd30536, type: 3}
       propertyPath: _ammoText
       value: 
@@ -2799,6 +2811,10 @@ PrefabInstance:
       propertyPath: _weaponIconDisplay
       value: 
       objectReference: {fileID: 1338396321}
+    - target: {fileID: 3780240324745770233, guid: ba4d2e42dd7aec5439811118dbd30536, type: 3}
+      propertyPath: _kittyTankPrefab
+      value: 
+      objectReference: {fileID: 4226535881923145499, guid: c858c6e32b4648d4d8d688805e58ba1d, type: 3}
     - target: {fileID: 3780240324745770233, guid: ba4d2e42dd7aec5439811118dbd30536, type: 3}
       propertyPath: '_spawnPoints.Array.data[0]'
       value: 
@@ -3332,6 +3348,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: -7511558181221131132, guid: 49a0d799b510fc04db4395f5e9a0fc13, type: 3}
+      propertyPath: 'm_Materials.Array.data[0]'
+      value: 
+      objectReference: {fileID: 2100000, guid: e4791196e9cd33e45a203752a8a63b4f, type: 2}
     - target: {fileID: 919132149155446097, guid: 49a0d799b510fc04db4395f5e9a0fc13, type: 3}
       propertyPath: m_Name
       value: kitchencounter_straight_A_decorated
@@ -3496,67 +3516,6 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: ebab831eec02a3748a0d6d2363ad31b7, type: 3}
---- !u!1001 &1079965281
-PrefabInstance:
-  m_ObjectHideFlags: 0
-  serializedVersion: 2
-  m_Modification:
-    serializedVersion: 3
-    m_TransformParent: {fileID: 0}
-    m_Modifications:
-    - target: {fileID: 401482853060587795, guid: c858c6e32b4648d4d8d688805e58ba1d, type: 3}
-      propertyPath: m_AnchorMax.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 1375285248489180666, guid: c858c6e32b4648d4d8d688805e58ba1d, type: 3}
-      propertyPath: m_LocalPosition.x
-      value: -5.7799826
-      objectReference: {fileID: 0}
-    - target: {fileID: 1375285248489180666, guid: c858c6e32b4648d4d8d688805e58ba1d, type: 3}
-      propertyPath: m_LocalPosition.y
-      value: 0.00000042486
-      objectReference: {fileID: 0}
-    - target: {fileID: 1375285248489180666, guid: c858c6e32b4648d4d8d688805e58ba1d, type: 3}
-      propertyPath: m_LocalPosition.z
-      value: 10.131336
-      objectReference: {fileID: 0}
-    - target: {fileID: 1375285248489180666, guid: c858c6e32b4648d4d8d688805e58ba1d, type: 3}
-      propertyPath: m_LocalRotation.w
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 1375285248489180666, guid: c858c6e32b4648d4d8d688805e58ba1d, type: 3}
-      propertyPath: m_LocalRotation.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 1375285248489180666, guid: c858c6e32b4648d4d8d688805e58ba1d, type: 3}
-      propertyPath: m_LocalRotation.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 1375285248489180666, guid: c858c6e32b4648d4d8d688805e58ba1d, type: 3}
-      propertyPath: m_LocalRotation.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 1375285248489180666, guid: c858c6e32b4648d4d8d688805e58ba1d, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 1375285248489180666, guid: c858c6e32b4648d4d8d688805e58ba1d, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 1375285248489180666, guid: c858c6e32b4648d4d8d688805e58ba1d, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 4226535881923145499, guid: c858c6e32b4648d4d8d688805e58ba1d, type: 3}
-      propertyPath: m_Name
-      value: KitttyTank
-      objectReference: {fileID: 0}
-    m_RemovedComponents: []
-    m_RemovedGameObjects: []
-    m_AddedGameObjects: []
-    m_AddedComponents: []
-  m_SourcePrefab: {fileID: 100100000, guid: c858c6e32b4648d4d8d688805e58ba1d, type: 3}
 --- !u!1 &1094359730 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 919132149155446097, guid: a33773ad8d912ab4bbbe32c076f4ac2c, type: 3}
@@ -4236,7 +4195,7 @@ PrefabInstance:
     - target: {fileID: -7511558181221131132, guid: ebab831eec02a3748a0d6d2363ad31b7, type: 3}
       propertyPath: 'm_Materials.Array.data[0]'
       value: 
-      objectReference: {fileID: 2100000, guid: e4791196e9cd33e45a203752a8a63b4f, type: 2}
+      objectReference: {fileID: -1724080987372072942, guid: a71e450bd74063f439b5dc62135dae4f, type: 3}
     - target: {fileID: 919132149155446097, guid: ebab831eec02a3748a0d6d2363ad31b7, type: 3}
       propertyPath: m_Name
       value: floor_kitchen (11)
@@ -4475,6 +4434,10 @@ PrefabInstance:
     - target: {fileID: 4248093552323344536, guid: 6195754c450f14a4892deee2a0f01ff6, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5247989216471111346, guid: 6195754c450f14a4892deee2a0f01ff6, type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: -1.9702148
       objectReference: {fileID: 0}
     - target: {fileID: 7183781986602708832, guid: 6195754c450f14a4892deee2a0f01ff6, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
@@ -6502,7 +6465,7 @@ PrefabInstance:
     - target: {fileID: -7511558181221131132, guid: ebab831eec02a3748a0d6d2363ad31b7, type: 3}
       propertyPath: 'm_Materials.Array.data[0]'
       value: 
-      objectReference: {fileID: 2100000, guid: e4791196e9cd33e45a203752a8a63b4f, type: 2}
+      objectReference: {fileID: -1724080987372072942, guid: a71e450bd74063f439b5dc62135dae4f, type: 3}
     - target: {fileID: 919132149155446097, guid: ebab831eec02a3748a0d6d2363ad31b7, type: 3}
       propertyPath: m_Name
       value: floor_kitchen (7)
@@ -6752,7 +6715,7 @@ PrefabInstance:
     - target: {fileID: -7511558181221131132, guid: ebab831eec02a3748a0d6d2363ad31b7, type: 3}
       propertyPath: 'm_Materials.Array.data[0]'
       value: 
-      objectReference: {fileID: 2100000, guid: e4791196e9cd33e45a203752a8a63b4f, type: 2}
+      objectReference: {fileID: -1724080987372072942, guid: a71e450bd74063f439b5dc62135dae4f, type: 3}
     - target: {fileID: 919132149155446097, guid: ebab831eec02a3748a0d6d2363ad31b7, type: 3}
       propertyPath: m_Name
       value: floor_kitchen (10)
@@ -6781,4 +6744,3 @@ SceneRoots:
   - {fileID: 696913720}
   - {fileID: 1444287710}
   - {fileID: 891527231}
-  - {fileID: 1079965281}
