@@ -166,9 +166,9 @@ Material:
     - _GlossyReflections: 0
     - _Metallic: 0
     - _OcclusionStrength: 1
-    - _OutlineFar: 100
-    - _OutlineNear: 0.5
-    - _OutlineOffsetZ: 0.75
+    - _OutlineFar: 1
+    - _OutlineNear: 1
+    - _OutlineOffsetZ: 0.01
     - _OutlineWidth: 0.5
     - _Outline_BaseColorBlend: 0.5
     - _Outline_LightColorBlend: 0.5
