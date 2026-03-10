@@ -36,7 +36,7 @@ public class PowerupPickup : MonoBehaviour
         {
             ApplyPowerup(other.gameObject);
 
-            // Play a sound and spawn particle effect here
+            AudioManager.Instance.PlayPowerupPickupSound();
 
             Despawn();
         }

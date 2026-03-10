@@ -2743,22 +2743,6 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
-    - target: {fileID: 1669436261455919166, guid: ba4d2e42dd7aec5439811118dbd30536, type: 3}
-      propertyPath: _enemiesToPool.Array.size
-      value: 3
-      objectReference: {fileID: 0}
-    - target: {fileID: 1669436261455919166, guid: ba4d2e42dd7aec5439811118dbd30536, type: 3}
-      propertyPath: _enemiesToPool.Array.data[2].PoolSize
-      value: 10
-      objectReference: {fileID: 0}
-    - target: {fileID: 1669436261455919166, guid: ba4d2e42dd7aec5439811118dbd30536, type: 3}
-      propertyPath: _enemiesToPool.Array.data[1].EnemyPrefab
-      value: 
-      objectReference: {fileID: 9049435338180138717, guid: 49587ada5f284e248ae5c547c7e642a4, type: 3}
-    - target: {fileID: 1669436261455919166, guid: ba4d2e42dd7aec5439811118dbd30536, type: 3}
-      propertyPath: _enemiesToPool.Array.data[2].EnemyPrefab
-      value: 
-      objectReference: {fileID: 4226535881923145499, guid: c858c6e32b4648d4d8d688805e58ba1d, type: 3}
     - target: {fileID: 2601150066529384691, guid: ba4d2e42dd7aec5439811118dbd30536, type: 3}
       propertyPath: _ammoText
       value: 
@@ -2815,10 +2799,6 @@ PrefabInstance:
       propertyPath: _weaponIconDisplay
       value: 
       objectReference: {fileID: 1338396321}
-    - target: {fileID: 3780240324745770233, guid: ba4d2e42dd7aec5439811118dbd30536, type: 3}
-      propertyPath: _kittyTankPrefab
-      value: 
-      objectReference: {fileID: 4226535881923145499, guid: c858c6e32b4648d4d8d688805e58ba1d, type: 3}
     - target: {fileID: 3780240324745770233, guid: ba4d2e42dd7aec5439811118dbd30536, type: 3}
       propertyPath: '_spawnPoints.Array.data[0]'
       value: 
