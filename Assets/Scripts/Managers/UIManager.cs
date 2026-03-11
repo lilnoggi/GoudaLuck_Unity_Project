@@ -119,14 +119,15 @@ public class UIManager : MonoBehaviour
 
         _isPaused = !_isPaused;  // Flip the true/false switch
 
-        if (_pausePanel != null)
-        {
-            _pausePanel.SetActive(_isPaused);
-        }
-
         if (_isPaused)
         {
             Time.timeScale = 0;  // Freeze the game
+
+            // Turn on the main pause menu
+            if (_pausePanel != null)
+            {
+                _pausePanel.SetActive(true);
+            }
 
             // Controller Support
             Cursor.visible = true;
@@ -141,6 +142,12 @@ public class UIManager : MonoBehaviour
         else
         {
             Time.timeScale = 1f;  // Unfreeze game
+
+            // Sweep all menus off the screen
+            if (_pausePanel != null) _pausePanel.SetActive(false);
+            if (_settingsPanel != null) _settingsPanel.SetActive(false);
+            if (_audioSettingsPanel != null) _audioSettingsPanel.SetActive(false);
+            if (_controlsPanel != null) _controlsPanel.SetActive(false);
 
             PlayerController player = FindFirstObjectByType<PlayerController>();
             if (player != null && !player.IsUsingMouse)
@@ -331,7 +338,7 @@ public class UIManager : MonoBehaviour
             if (player != null && !player.IsUsingMouse)
             {
                 // Force the controller to grab the Resume button again
-                if (_musicSlider != null)
+                if (_audioSettingsButton != null)
                 {
                     EventSystem.current.SetSelectedGameObject(_audioSettingsButton);
                 }
