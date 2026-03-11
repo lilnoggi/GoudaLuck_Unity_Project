@@ -59,6 +59,7 @@ MonoBehaviour:
   _hoverButton: {fileID: 8300000, guid: 72aaf627d023b164dbd62d2f66d78082, type: 3}
   _selectButton: {fileID: 8300000, guid: 4e84e2a80b370894da72a294d26b1233, type: 3}
   _upgradeWeapon: {fileID: 8300000, guid: 639345486031b774f8fa708ecd283f02, type: 3}
+  _audioMixer: {fileID: 24100000, guid: 5e57f2d925305be4b80014c21319f436, type: 2}
 --- !u!82 &7248420075228791891
 AudioSource:
   m_ObjectHideFlags: 0

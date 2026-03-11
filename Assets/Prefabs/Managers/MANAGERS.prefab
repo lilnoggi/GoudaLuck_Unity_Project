@@ -224,6 +224,10 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 8300000, guid: fb08c910b0a1cca4a9f27d65499021eb, type: 3}
     - target: {fileID: 4564900982797389266, guid: cf5e0166640a7ec4f9c07a90492b2c06, type: 3}
+      propertyPath: _audioMixer
+      value: 
+      objectReference: {fileID: 24100000, guid: 5e57f2d925305be4b80014c21319f436, type: 2}
+    - target: {fileID: 4564900982797389266, guid: cf5e0166640a7ec4f9c07a90492b2c06, type: 3}
       propertyPath: _hoverButton
       value: 
       objectReference: {fileID: 8300000, guid: 72aaf627d023b164dbd62d2f66d78082, type: 3}

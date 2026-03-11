@@ -1,4 +1,3 @@
-using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.Audio;
 
@@ -31,6 +30,9 @@ public class AudioManager : MonoBehaviour
     [SerializeField] private AudioClip _selectButton;
     [SerializeField] private AudioClip _upgradeWeapon;
 
+    [Header("Mixer")]
+    [SerializeField] private AudioMixer _audioMixer;
+
     private void Awake()
     {
         // Singleton Pattern
@@ -52,6 +54,14 @@ public class AudioManager : MonoBehaviour
         {
             PlayMusic(BackgroundMusic);
         }
+
+        // --- LOAD SAVED VOLUME ---
+        // Grab the saved values, or default to 0.5f if it's the player's first time playing
+        float savedMusic = PlayerPrefs.GetFloat("MusicVol", 0.5f);
+        float savedSFX = PlayerPrefs.GetFloat("SFXVol", 0.5f);
+
+        SetMusicVolume(savedMusic);
+        SetSFXVolume(savedSFX);
     }
 
     // --- MUSIC ---
@@ -85,4 +95,20 @@ public class AudioManager : MonoBehaviour
     public void PlayHoverButtonSound() => PlaySFX(_hoverButton);
     public void PlaySelectButtonSound() => PlaySFX(_selectButton);
     public void PlayUpgradeWeaponSound() => PlaySFX(_upgradeWeapon);
+
+    // --- SETTINGS ---
+    public void SetMusicVolume(float sliderValue)
+    {
+        // Convert linear UI slider (0.0001 to 1) to logarithmic decibles (-80dB to 0dB)
+        _audioMixer.SetFloat("MusicVol", Mathf.Log10(sliderValue) * 20f);
+
+        // Save the value
+        PlayerPrefs.SetFloat("MusicVol", sliderValue);
+    }
+
+    public void SetSFXVolume(float sliderValue)
+    {
+        _audioMixer.SetFloat("SFXVol", Mathf.Log10(sliderValue) * 20f);
+        PlayerPrefs.SetFloat("SFXVol", sliderValue);
+    }
 }
