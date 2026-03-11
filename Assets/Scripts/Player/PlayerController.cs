@@ -151,8 +151,14 @@ public class PlayerController : MonoBehaviour
     {
         // --- FIRING ---
 
-        // Listen for the Fire button being pressed and released
-        _controls.Player.Fire.performed += ctx => _isFiring = true;
+        // Listen for the Fire button being pressed and released BUT ignore if paused
+        _controls.Player.Fire.performed += ctx =>
+        {
+            if (Time.timeScale > 0)
+            {
+                _isFiring = true;
+            }
+        };
         _controls.Player.Fire.canceled += ctx => _isFiring = false;
 
         // --- RELOADING ---
@@ -362,6 +368,9 @@ public class PlayerController : MonoBehaviour
     // === DASHING ===
     private void PerformDash()
     {
+        // SAFETY CHECK: Ignore input if the game is paused
+        if (Time.timeScale == 0f) return;
+
         // Only dash if the cooldown is ready and not already dashing
         if (Time.time >= _nextDashTime && !_isDashing)
         {
@@ -413,6 +422,9 @@ public class PlayerController : MonoBehaviour
     // --- ULTIMATE ABILITY ---
     private void PerformUltimate()
     {
+        // SAFETY CHECK: Ignore input if the game is paused
+        if (Time.timeScale == 0f) return;
+
         // Only fire if the meter is full
         if (_currentUltCharge >= _maxUltCharge && _bigCheesePrefab != null && _crosshair != null)
         {
