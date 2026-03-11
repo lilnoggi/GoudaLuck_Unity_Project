@@ -200,7 +200,7 @@ public class WeaponSystem : MonoBehaviour
             }
 
             // SFX can go here later
-
+            AudioManager.Instance.PlayShootSound();
         }
     }
 

@@ -1,0 +1,114 @@
+using UnityEngine;
+using UnityEngine.Audio;
+
+/// <summary>
+/// A centralised Singleton to handle all music and sound effects
+/// </summary>
+
+public class AudioManager : MonoBehaviour
+{
+   public static AudioManager Instance { get; private set; }
+
+    [Header("Audio Sources")]
+    [SerializeField] private AudioSource _musicSource;
+    [SerializeField] private AudioSource _sfxSource;
+
+    [Header("Music Tracks")]
+    public AudioClip BackgroundMusic;
+
+    [Header("Sound Effects")]
+    [SerializeField] private AudioClip _playerDamageSound;
+    [SerializeField] private AudioClip _shootSound;
+    [SerializeField] private AudioClip _catMeowSound;
+    [SerializeField] private AudioClip _powerupSound;
+    [SerializeField] private AudioClip _dashSound;
+
+    [Header("UI Sound Effects")]
+    [SerializeField] private AudioClip _purchaseGun;
+    [SerializeField] private AudioClip _purchaseFailed;
+    [SerializeField] private AudioClip _hoverButton;
+    [SerializeField] private AudioClip _selectButton;
+    [SerializeField] private AudioClip _upgradeWeapon;
+
+    [Header("Mixer")]
+    [SerializeField] private AudioMixer _audioMixer;
+
+    private void Awake()
+    {
+        // Singleton Pattern
+        if (Instance == null)
+        {
+            Instance = this;
+            DontDestroyOnLoad(gameObject);  // Transitioning between scenes
+        }
+        else
+        {
+            Destroy(gameObject);
+        }
+    }
+
+    void Start()
+    {
+        // Start the arcade music immediately
+        if (BackgroundMusic != null)
+        {
+            PlayMusic(BackgroundMusic);
+        }
+
+        // --- LOAD SAVED VOLUME ---
+        // Grab the saved values, or default to 0.5f if it's the player's first time playing
+        float savedMusic = PlayerPrefs.GetFloat("MusicVol", 0.5f);
+        float savedSFX = PlayerPrefs.GetFloat("SFXVol", 0.5f);
+
+        SetMusicVolume(savedMusic);
+        SetSFXVolume(savedSFX);
+    }
+
+    // --- MUSIC ---
+    public void PlayMusic(AudioClip clip)
+    {
+        if (_musicSource.clip == clip) return;  // Don't restart the track if already playing
+
+        _musicSource.clip = clip;
+        _musicSource.loop = true;
+        _musicSource.Play();
+    }
+
+    // --- SOUND EFFECTS ---
+    // Core method that plays the sound
+    public void PlaySFX(AudioClip clip, float volume = 1f)
+    {
+        if (clip != null)
+        {
+            _sfxSource.PlayOneShot(clip, volume);
+        }
+    }
+
+    // --- HELPER METHODS FOR OTHER SCRIPTS ---
+    public void PlayShootSound() => PlaySFX(_shootSound);
+    public void PlayMeowSound() => PlaySFX(_catMeowSound);
+    public void PlayPlayerDamageSound() => PlaySFX(_playerDamageSound);
+    public void PlayPowerupPickupSound() => PlaySFX(_powerupSound);
+    public void PlayDashSound() => PlaySFX(_dashSound);
+    public void PlayPurchaseGunSound() => PlaySFX(_purchaseGun);
+    public void PlayPurchaseFailedSound() => PlaySFX(_purchaseFailed);
+    public void PlayHoverButtonSound() => PlaySFX(_hoverButton);
+    public void PlaySelectButtonSound() => PlaySFX(_selectButton);
+    public void PlayUpgradeWeaponSound() => PlaySFX(_upgradeWeapon);
+
+    // --- SETTINGS ---
+    public void SetMusicVolume(float sliderValue)
+    {
+        // Convert linear UI slider (0.0001 to 1) to logarithmic decibles (-80dB to 0dB)
+        _audioMixer.SetFloat("MusicVol", Mathf.Log10(sliderValue) * 20f);
+
+        // Save the value
+        PlayerPrefs.SetFloat("MusicVol", sliderValue);
+    }
+
+    public void SetSFXVolume(float sliderValue)
+    {
+        _audioMixer.SetFloat("SFXVol", Mathf.Log10(sliderValue) * 20f);
+        PlayerPrefs.SetFloat("SFXVol", sliderValue);
+    }
+}

@@ -45,6 +45,17 @@ public class HealthSystem : MonoBehaviour
 
         _currentHealth -= damageAmount;
 
+        // Only play the player damage sound IF the player took damage
+        if (gameObject.CompareTag("Player"))
+        {
+            AudioManager.Instance.PlayPlayerDamageSound();
+        }
+        else if (gameObject.CompareTag("Enemy"))
+        {
+            // Otherwise, play the meow
+            AudioManager.Instance.PlayMeowSound();
+        }
+
         // Clamp health so it doesn't go into negative numbers
         _currentHealth = Mathf.Clamp(_currentHealth, 0, _maxHealth);
 

@@ -38,6 +38,21 @@ public class UIManager : MonoBehaviour
     [SerializeField] private GameObject _resumeButton;  // For controller focus
     private bool _isPaused = false;
 
+    [Header("Settings UI")]
+    [SerializeField] private GameObject _settingsPanel;
+    [SerializeField] private GameObject _audioSettingsButton;
+
+    [Header("Audio Settings")]
+    [SerializeField] private GameObject _audioSettingsPanel;
+    [SerializeField] private Slider _musicSlider;
+    [SerializeField] private Slider _sfxSlider;
+
+    [Header("Input Controls")]
+    [SerializeField] private GameObject _controlsPanel;
+    [SerializeField] private GameObject _gamepadPanel;
+    [SerializeField] private GameObject _keyboardMousePanel;
+    [SerializeField] private GameObject _controlsBackButton;
+
     [Header("Game Over Screen")]
     [SerializeField] private GameObject _gameOverPanel;
     [SerializeField] private GameObject _restartButton;
@@ -46,6 +61,20 @@ public class UIManager : MonoBehaviour
     {
         if (Instance == null) Instance = this;
         else Destroy(gameObject);
+    }
+
+    private void Start()
+    {
+        // Snap the physical sliders to whatever value was saved in PlayerPrefs (AudioManager)
+        if (_musicSlider != null)
+        {
+            _musicSlider.value = PlayerPrefs.GetFloat("MusicVol", 0.5f);
+        }
+
+        if (_sfxSlider != null)
+        {
+            _sfxSlider.value = PlayerPrefs.GetFloat("SFXVol", 0.5f);
+        }
     }
 
     public void Update()
@@ -90,14 +119,15 @@ public class UIManager : MonoBehaviour
 
         _isPaused = !_isPaused;  // Flip the true/false switch
 
-        if (_pausePanel != null)
-        {
-            _pausePanel.SetActive(_isPaused);
-        }
-
         if (_isPaused)
         {
             Time.timeScale = 0;  // Freeze the game
+
+            // Turn on the main pause menu
+            if (_pausePanel != null)
+            {
+                _pausePanel.SetActive(true);
+            }
 
             // Controller Support
             Cursor.visible = true;
@@ -113,10 +143,205 @@ public class UIManager : MonoBehaviour
         {
             Time.timeScale = 1f;  // Unfreeze game
 
+            // Sweep all menus off the screen
+            if (_pausePanel != null) _pausePanel.SetActive(false);
+            if (_settingsPanel != null) _settingsPanel.SetActive(false);
+            if (_audioSettingsPanel != null) _audioSettingsPanel.SetActive(false);
+            if (_controlsPanel != null) _controlsPanel.SetActive(false);
+
             PlayerController player = FindFirstObjectByType<PlayerController>();
             if (player != null && !player.IsUsingMouse)
             {
                 Cursor.visible = false;
+            }
+        }
+    }
+
+    // Called by the settings button in the pause panel
+    public void OpenSettings()
+    {
+        if (_settingsPanel != null)
+        {
+            _pausePanel.SetActive(false);
+            _settingsPanel.SetActive(true);
+
+            // --- CONTROLLER SUPPORT ---
+            EventSystem.current.SetSelectedGameObject(null);
+
+            PlayerController player = FindFirstObjectByType<PlayerController>();
+            if (player != null && !player.IsUsingMouse)
+            {
+                // Force the controller to grab the Audio Button first
+                if (_audioSettingsButton != null)
+                {
+                    EventSystem.current.SetSelectedGameObject(_audioSettingsButton);
+                }
+            }
+        }
+    }
+
+    // Return to pause panel
+    public void CloseSettingsPanel()
+    {
+        if (_settingsPanel != null)
+        {
+            _settingsPanel.SetActive(false);
+            _pausePanel.SetActive(true);
+
+            // --- RE-FOCUS THE CONTROLLER ---
+            EventSystem.current.SetSelectedGameObject(null);
+
+            PlayerController player = FindFirstObjectByType<PlayerController>();
+            if (player != null && !player.IsUsingMouse)
+            {
+                // Force the controller to grab the Resume button again
+                if (_musicSlider != null)
+                {
+                    EventSystem.current.SetSelectedGameObject(_resumeButton);
+                }
+            }
+        }
+    }
+
+    // --- AUDIO SETTINGS PANEL ---
+    // From settings to audio settings
+    public void OpenAudioSettingsPanel()
+    {
+        if (_audioSettingsPanel != null)
+        {
+            _settingsPanel.SetActive(false);
+            _audioSettingsPanel.SetActive(true);
+
+            // --- CONTROLLER SUPPORT ---
+            EventSystem.current.SetSelectedGameObject(null);
+
+            PlayerController player = FindFirstObjectByType<PlayerController>();
+            if (player != null && !player.IsUsingMouse)
+            {
+                // Force the controller to grab the Music slider first
+                if (_musicSlider != null)
+                {
+                    EventSystem.current.SetSelectedGameObject(_musicSlider.gameObject);
+                }
+            }
+        }
+    }
+
+    // Return to settings panel
+    public void CloseAudioSettingsPanel()
+    {
+        if (_audioSettingsPanel != null)
+        {
+            _audioSettingsPanel.SetActive(false);
+            _settingsPanel.SetActive(true);
+
+            // --- RE-FOCUS THE CONTROLLER ---
+            EventSystem.current.SetSelectedGameObject(null);
+
+            PlayerController player = FindFirstObjectByType<PlayerController>();
+            if (player != null && !player.IsUsingMouse)
+            {
+                // Force the controller to grab the Audiobutton again
+                if (_musicSlider != null)
+                {
+                    EventSystem.current.SetSelectedGameObject(_audioSettingsButton);
+                }
+            }
+        }
+    }
+
+    // --- INPUT CONTROLS PANEL ---
+    // From settings to Controls
+    public void OpenControlsPanel()
+    {
+        if (_controlsPanel != null && _gamepadPanel != null)
+        {
+            _settingsPanel.SetActive(false);
+            _controlsPanel.SetActive(true);
+            _gamepadPanel.SetActive(true);  // Default
+
+            // --- CONTROLLER SUPPORT ---
+            EventSystem.current.SetSelectedGameObject(null);
+
+            PlayerController player = FindFirstObjectByType<PlayerController>();
+            if (player != null && !player.IsUsingMouse)
+            {
+                // Force the controller to grab the Music slider first
+                if (_controlsBackButton != null)
+                {
+                    EventSystem.current.SetSelectedGameObject(_controlsBackButton);
+                }
+            }
+        }
+    }
+
+    // --- Called by the keyboard button ---
+    public void SwitchToKeyboardPanel()
+    {
+        if (_controlsPanel != null && _keyboardMousePanel != null)
+        {
+            _gamepadPanel.SetActive(false);
+            _controlsPanel.SetActive(true);
+            _keyboardMousePanel.SetActive(true);  // Switch to keyboard mouse
+
+            // --- CONTROLLER SUPPORT ---
+            EventSystem.current.SetSelectedGameObject(null);
+
+            PlayerController player = FindFirstObjectByType<PlayerController>();
+            if (player != null && !player.IsUsingMouse)
+            {
+                // Force the controller to grab the Music slider first
+                if (_controlsBackButton != null)
+                {
+                    EventSystem.current.SetSelectedGameObject(_controlsBackButton);
+                }
+            }
+        }
+    }
+
+    // --- Called by the gamepad button
+    public void SwitchToGamepadPanel()
+    {
+        if (_controlsPanel != null && _gamepadPanel != null)
+        {
+            _keyboardMousePanel.SetActive(false);
+            _controlsPanel.SetActive(true);
+            _gamepadPanel.SetActive(true);  // Switch back to gamepad
+
+            // --- CONTROLLER SUPPORT ---
+            EventSystem.current.SetSelectedGameObject(null);
+
+            PlayerController player = FindFirstObjectByType<PlayerController>();
+            if (player != null && !player.IsUsingMouse)
+            {
+                // Force the controller to grab the Music slider first
+                if (_controlsBackButton != null)
+                {
+                    EventSystem.current.SetSelectedGameObject(_controlsBackButton);
+                }
+            }
+        }
+    }
+
+    // Return to settings panel
+    public void CloseControlsPanel()
+    {
+        if (_controlsPanel != null)
+        {
+            _controlsPanel.SetActive(false);
+            _settingsPanel.SetActive(true);
+
+            // --- RE-FOCUS THE CONTROLLER ---
+            EventSystem.current.SetSelectedGameObject(null);
+
+            PlayerController player = FindFirstObjectByType<PlayerController>();
+            if (player != null && !player.IsUsingMouse)
+            {
+                // Force the controller to grab the Resume button again
+                if (_audioSettingsButton != null)
+                {
+                    EventSystem.current.SetSelectedGameObject(_audioSettingsButton);
+                }
             }
         }
     }
@@ -126,6 +351,7 @@ public class UIManager : MonoBehaviour
     {
         if (_isPaused)
         {
+            AudioManager.Instance.PlaySelectButtonSound();
             TogglePause();
         }
     }
@@ -251,12 +477,15 @@ public class UIManager : MonoBehaviour
         // Unfreeze the game first
         Time.timeScale = 1f;
 
+        AudioManager.Instance.PlaySelectButtonSound();
+
         // Reload the current scene
         SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
     }
 
     public void QuitGame()
     {
+        AudioManager.Instance.PlaySelectButtonSound();
         Debug.Log("Quitting the game...");
 
         Application.Quit();

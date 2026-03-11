@@ -21,15 +21,17 @@ public class MainMenuManager : MonoBehaviour
     // The Play Button will call this
     public void PlayGame()
     {
+        AudioManager.Instance.PlaySelectButtonSound();
         // Un-pause time just in case the player quit to the menu while the game was paused
         Time.timeScale = 1f;
 
-        SceneManager.LoadScene("SampleScene");
+        SceneManager.LoadScene("Restaurant");
     }
 
     // The Quit Button will call this
     public void QuitGame()
     {
+        AudioManager.Instance.PlaySelectButtonSound();
         Debug.Log("Quitting the game...");
         Application.Quit();
     }
