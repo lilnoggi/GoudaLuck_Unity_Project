@@ -17,4 +17,11 @@ public class PlayerUpgradeData : ScriptableObject
     [Header("Stat Logic")]
     [SerializeField] private UpgradeType _upgradeType;
     [SerializeField] private float _upgradeValue;  // Amount to + or - from the player's stats
+
+    // --- PUBLIC GETTERS ---
+    public string UpgradeName => _upgradeName;
+    public string UpgradeDescription => _upgradeDescription;
+    public Sprite UpgradeIcon => _upgradeIcon;
+    public UpgradeType UpgradeType => _upgradeType;
+    public float UpgradeValue => _upgradeValue;
 }
