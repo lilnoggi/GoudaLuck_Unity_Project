@@ -21,7 +21,7 @@ public class WaveManager : MonoBehaviour
     [SerializeField] private int _waveToSpawnTanks = 3;  // Tanks won't appear until wave 3
     [SerializeField] private int _waveToSpawnKittyTanks = 5;
 
-    private int _currentWave = 1;
+    [SerializeField] private int _currentWave = 1;
     private int _enemiesAlive = 0;
 
     private bool _isSpawning = false;  // Tracks if the coroutine is currently busy

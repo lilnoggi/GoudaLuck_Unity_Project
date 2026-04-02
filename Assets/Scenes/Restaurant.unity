@@ -697,6 +697,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Player
       objectReference: {fileID: 0}
+    - target: {fileID: 5630034146692905366, guid: 9f23a7b19ce483b4f89162f5927fc7fb, type: 3}
+      propertyPath: _currentWeapon
+      value: 
+      objectReference: {fileID: 11400000, guid: eac98092e2cff9449998fd095276b035, type: 2}
     - target: {fileID: 8215339677962157953, guid: 9f23a7b19ce483b4f89162f5927fc7fb, type: 3}
       propertyPath: _crosshair
       value: 
@@ -2568,16 +2572,16 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.HorizontalLayoutGroup
   m_Padding:
-    m_Left: 0
-    m_Right: 0
-    m_Top: 0
-    m_Bottom: 0
+    m_Left: 50
+    m_Right: 50
+    m_Top: 50
+    m_Bottom: 50
   m_ChildAlignment: 4
-  m_Spacing: 0
-  m_ChildForceExpandWidth: 1
+  m_Spacing: 50
+  m_ChildForceExpandWidth: 0
   m_ChildForceExpandHeight: 1
-  m_ChildControlWidth: 0
-  m_ChildControlHeight: 0
+  m_ChildControlWidth: 1
+  m_ChildControlHeight: 1
   m_ChildScaleWidth: 0
   m_ChildScaleHeight: 0
   m_ReverseArrangement: 0
@@ -4612,6 +4616,10 @@ PrefabInstance:
       propertyPath: _playerUpgradesPanel
       value: 
       objectReference: {fileID: 1150044298}
+    - target: {fileID: 3780240324745770233, guid: ba4d2e42dd7aec5439811118dbd30536, type: 3}
+      propertyPath: _currentWave
+      value: 3
+      objectReference: {fileID: 0}
     - target: {fileID: 3780240324745770233, guid: ba4d2e42dd7aec5439811118dbd30536, type: 3}
       propertyPath: _spawnPoints.Array.size
       value: 3
