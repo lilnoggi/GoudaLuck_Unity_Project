@@ -28,6 +28,9 @@ public class UIManager : MonoBehaviour
     [SerializeField] private TextMeshProUGUI _ammoText;
     [SerializeField] private Image _weaponIconDisplay;
 
+    [Header("Player Upgrades Screen")]
+    [SerializeField] private GameObject _playerUpgradesPanel;
+
     [Header("Shop Screen")]
     [SerializeField] private GameObject _shopPanel;
     [SerializeField] private GameObject _upgradeButton;  // For controller focus
@@ -114,8 +117,10 @@ public class UIManager : MonoBehaviour
 
     public void TogglePause()
     {
-        // SAFETY: Don't pause if the Shop or Game Over screens are currently open
-        if ((_shopPanel != null && _shopPanel.activeSelf) || (_gameOverPanel != null && _gameOverPanel.activeSelf)) return;
+        // SAFETY: Don't pause if the Upgrades, Shop or Game Over screens are currently open
+        if ((_playerUpgradesPanel != null && _playerUpgradesPanel.activeSelf) || 
+            (_shopPanel != null && _shopPanel.activeSelf) || 
+            (_gameOverPanel != null && _gameOverPanel.activeSelf)) return;
 
         _isPaused = !_isPaused;  // Flip the true/false switch
 
@@ -148,6 +153,8 @@ public class UIManager : MonoBehaviour
             if (_settingsPanel != null) _settingsPanel.SetActive(false);
             if (_audioSettingsPanel != null) _audioSettingsPanel.SetActive(false);
             if (_controlsPanel != null) _controlsPanel.SetActive(false);
+            if (_shopPanel != null) _shopPanel.SetActive(false);
+            if (_playerUpgradesPanel != null) _playerUpgradesPanel.SetActive(false);
 
             PlayerController player = FindFirstObjectByType<PlayerController>();
             if (player != null && !player.IsUsingMouse)
@@ -412,6 +419,7 @@ public class UIManager : MonoBehaviour
     {
         if (_shopPanel != null)
         {
+            _playerUpgradesPanel.SetActive(false);
             _shopPanel.SetActive(true);
             Time.timeScale = 0f;  // Pause the game
 

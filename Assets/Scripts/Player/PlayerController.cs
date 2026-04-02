@@ -441,6 +441,23 @@ public class PlayerController : MonoBehaviour
         }
     }
 
+    // --- UPGRADE SYSTEM HELPER'S ---
+    public void IncreaseMoveSpeed(float amount)
+    {
+        _moveSpeed += amount;
+    }
+
+    public void DecreaseDashCooldown(float amount)
+    {
+        // Don't go below 0.1s otherwise the game will break -_-
+        _dashCooldown = Mathf.Max(0.1f, _dashCooldown - amount);
+    }
+
+    public void IncreaseUltChargeRate(float amount)
+    {
+        _passiveChargeRate += amount;
+    }
+
     // === DEBUGGING ===
 
     // --- Crosshair Radius --- 

@@ -22,6 +22,8 @@ public class HealthSystem : MonoBehaviour
     // Any other scripts can "listen" to this event
     public event Action OnDeath;
 
+    private float _armourResistance = 0;  // 0 = take full damage, 0.10 = take 10% less damage
+
     // Instead of Start() use OnEnable() to reset health every time it spawns from the pool
     private void OnEnable()
     {
@@ -43,7 +45,8 @@ public class HealthSystem : MonoBehaviour
         // If invisible, ignore the rest of the method
         if (_isInvincible) return;
 
-        _currentHealth -= damageAmount;
+        // Implement armour upgrade logic
+        _currentHealth -= damageAmount * (1f - _armourResistance);
 
         // Only play the player damage sound IF the player took damage
         if (gameObject.CompareTag("Player"))
@@ -95,6 +98,19 @@ public class HealthSystem : MonoBehaviour
             _localHealthSlider.maxValue = _maxHealth;
             _localHealthSlider.value = _currentHealth;
         }
+    }
+
+    // --- UPGRADE HELPER'S ---
+    public void IncreaseMaxHealth(float amount)
+    {
+        _maxHealth += amount;
+        _currentHealth += amount;
+        UpdateHealthUI();
+    }
+
+    public void AddArmour(float amount)
+    {
+        _armourResistance += amount;
     }
 }
 
