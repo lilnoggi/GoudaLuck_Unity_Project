@@ -44,9 +44,27 @@ public class WaveManager : MonoBehaviour
     {
         _enemiesAlive--;
 
-        // Only open the shop if done spawning
+        // Only open the Player Upgrade Panel if done spawning
         if (_enemiesAlive <= 0 && !_isSpawning)
         {
+            EndWaveSequence();
+        }
+    }
+
+    // --- HELPER METHOD ---
+    private void EndWaveSequence()
+    {
+        // Is the current wave a multiple of 3?
+        if (_currentWave % 3 == 0)
+        {
+            if (PlayerUpgradeManager.Instance != null)
+            {
+                PlayerUpgradeManager.Instance.ShowUpgradeScreen();
+            }
+        }
+        else
+        {
+            // Otherwise just open the shop
             if (UIManager.Instance != null)
             {
                 UIManager.Instance.ShowShop();
@@ -119,9 +137,9 @@ public class WaveManager : MonoBehaviour
         // Just in case the player killed the absolute last enemy the exact millisecond it spawned
         if (_enemiesAlive <= 0)
         {
-            if (UIManager.Instance != null)
+            if (PlayerUpgradeManager.Instance != null)
             {
-                UIManager.Instance.ShowShop();
+                PlayerUpgradeManager.Instance.ShowUpgradeScreen();
             }
         }
     }
