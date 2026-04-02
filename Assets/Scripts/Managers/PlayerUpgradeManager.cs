@@ -45,13 +45,13 @@ public class PlayerUpgradeManager : MonoBehaviour
 
         GameObject firstCard = null;  // Save this for Controller Support
 
-        // Spawn the cards and inject the data
+        // Spawn the cards and use the data
         foreach (PlayerUpgradeData data in pickedUpgrades)
         {
             GameObject newCard = Instantiate(_upgradeCardPrefab, _cardContainer);
 
             // Tell the card to set up its text and image
-            newCard.GetComponent<UpgradeCardUI>().SetupCard(data);
+            newCard.GetComponentInChildren<UpgradeCardUI>().SetupCard(data);
 
             if (firstCard == null)
             {
