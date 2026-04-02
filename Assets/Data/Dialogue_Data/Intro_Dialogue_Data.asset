@@ -1,0 +1,40 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 43967a2d4198e224cbff1f4a7c2c50d7, type: 3}
+  m_Name: Intro_Dialogue_Data
+  m_EditorClassIdentifier: Assembly-CSharp::DialogueSequence
+  Lines:
+  - SpeakerName: Chef Brie
+    Text: Oh hello... You've just walked into a right disaster.
+  - SpeakerName: Chef Brie
+    Text: A catastrophe one might say.
+  - SpeakerName: Chef Brie
+    Text: A literal CAT-astrophe!
+  - SpeakerName: You
+    Text: Oh god... I was just coming in for a giant cheese wheel.
+  - SpeakerName: Chef Brie
+    Text: Well no time for that! The felines have breached the kitchen perimeter!
+  - SpeakerName: You
+    Text: Wait... what?
+  - SpeakerName: Chef Brie
+    Text: ACTUAL CATS!
+  - SpeakerName: Chef Brie
+    Text: They're knocking over the brie stand! They're walking on my clean floors
+      with their litterbox paws!
+  - SpeakerName: You
+    Text: Well. what do you expect me to do about it? I weigh four ounces!
+  - SpeakerName: Chef Brie
+    Text: Take these weapons and go exterminate them! Show them who really runs this
+      kitchen!
+  - SpeakerName: Chef Brie
+    Text: I believe in you! Also, if they eat you, I am not paying you for today's
+      shift. Gouda Luck!
