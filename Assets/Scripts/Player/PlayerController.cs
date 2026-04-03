@@ -3,6 +3,7 @@ using UnityEngine;
 using UnityEngine.InputSystem;
 
 /// <summary>
+/// ** REFACTORED SCRIPT **
 /// This script handles the physics-based movement for the player character.
 /// It utilises the event-driven Unity Input System to read twin-stick/WASD inputs
 /// and applies them to a Rigidbody without relying on inefficient per-frame polling.

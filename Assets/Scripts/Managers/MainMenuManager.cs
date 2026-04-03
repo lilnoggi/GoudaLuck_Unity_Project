@@ -25,7 +25,7 @@ public class MainMenuManager : MonoBehaviour
         // Un-pause time just in case the player quit to the menu while the game was paused
         Time.timeScale = 1f;
 
-        SceneManager.LoadScene("Restaurant");
+        SceneManager.LoadScene("IntroCutsceneScene");
     }
 
     // The Quit Button will call this
