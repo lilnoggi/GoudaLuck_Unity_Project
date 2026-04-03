@@ -100,7 +100,7 @@ public class PlayerUpgradeManager : MonoBehaviour
         AudioManager.Instance.PlayPowerupPickupSound();
 
         // Close the upgrade screen
-        _upgradeCardPrefab.SetActive(false);
+        _upgradePanel.SetActive(false);
 
         // Immediately open the Shop
         UIManager.Instance.ShowShop();
