@@ -34,6 +34,8 @@ public class WaveManager : MonoBehaviour
     // Acts as a lock to prevent the wave from ending while enemies are still spawning
     private bool _isSpawning = false; 
 
+    // ==============================================================================================================
+
     private void Awake()
     {
         // Enforce Singleton Pattern
