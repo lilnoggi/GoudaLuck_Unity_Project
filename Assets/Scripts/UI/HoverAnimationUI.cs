@@ -2,22 +2,30 @@ using UnityEngine;
 using UnityEngine.EventSystems;
 
 /// <summary>
-/// Smoothly raises the UI element when selected/hovered and adds a subtle "bobbing" motion.
-/// Implements Unity's Event System interfaces to automatically detect controller focus and mouse hover.
+/// A dynamic presentation component that smoothly elevates and oscillates UI elements upon focus.
+/// Natively implements Unity Event System interfaces to guarantee identical visual feedback
+/// whether the player is navigating via PC Mouse (Pointer) or Steam Deck Gamepad (Select).
 /// </summary>
 
 public class HoverAnimationUI : MonoBehaviour, ISelectHandler, IDeselectHandler, IPointerEnterHandler, IPointerExitHandler
 {
     [Header("Animation Settings")]
+    [Tooltip("The total vertical distance the UI element travels when highlighted.")]
     [SerializeField] private float _hoverHeight = 30f;  // How high the card lifts
+    [Tooltip("The interpolation speed dictating how quickly the element snaps to its hover height.")]
     [SerializeField] private float _liftSpeed = 10f;    // How fast it snaps up
+    [Tooltip("The frequency of the continous sine-wave oscillation.")]
     [SerializeField] private float _bobSpeed = 2f;      // How fast it bobs up and down
+    [Tooltip("The amplitude (vertical stretch) of the sine-wave oscillation.")]
     [SerializeField] private float _bobAmount = 2f;     // How far it bobs
 
+    // --- STATE TRACKING ---
     private RectTransform _rectTransform;
     private float _originalY;
     private float _targetY;
     private bool _isSelected = false;
+
+    // ==============================================================================================================
 
     private void Awake()
     {
@@ -26,7 +34,8 @@ public class HoverAnimationUI : MonoBehaviour, ISelectHandler, IDeselectHandler,
 
     void Start()
     {
-        // Record the exact position the Horizontal Layout Group assigned this card
+        // SPATIAL PARTITIONINGL: Because this script is attatched to a child "Visual Layer"
+        // rather than the parent "Layout Layer", the anchored Y position will safely default to 0.
         _originalY = _rectTransform.anchoredPosition.y;
         _targetY = _originalY;
     }
@@ -35,20 +44,24 @@ public class HoverAnimationUI : MonoBehaviour, ISelectHandler, IDeselectHandler,
     {
         float currentTarget = _targetY;
 
-        // If the card is currently highlighted, add the sine-wave bobbing effect
+        // --- OSCILLATION MATHS ---
         if (_isSelected)
         {
+            // UnscaledTime is strictly required because the global timeScale is set to 0 during the Upgrade Phase.
+            // Mathf.Sin generates a smooth, continous wave between -1 and 1.
             currentTarget += Mathf.Sin(Time.unscaledTime * _bobSpeed) * _bobAmount;
         }
 
-        // Smoothly glide the card towards its target height using Time.unscaledDeltaTime
-        // !!! (Unscaled is critical because the game is paused during the upgrade screen) !!!
+        // --- INTERPOLATION ---
+        // Smoothly glide the UI element towards the dynamically calculating target height.
         float newY = Mathf.Lerp(_rectTransform.anchoredPosition.y, currentTarget, Time.unscaledDeltaTime * _liftSpeed);
 
         _rectTransform.anchoredPosition = new Vector2(_rectTransform.anchoredPosition.x, newY);
     }
 
-    // === EVENT SYSTEM TRIGGERS ===
+    // ============================================================================================
+    // ============================== --- EVENT SYSTEM TRIGGERS ---  ==============================
+    // ============================================================================================
 
     // --- CONTROLLER / KEYBOARD NAVIGATION ---
     public void OnSelect(BaseEventData eventData) => SetHoverState(true);
@@ -58,7 +71,11 @@ public class HoverAnimationUI : MonoBehaviour, ISelectHandler, IDeselectHandler,
     public void OnPointerEnter(PointerEventData eventData) => SetHoverState(true);
     public void OnPointerExit(PointerEventData eventData) => SetHoverState(false);
 
-    // --- HELPER METHOD ---
+    // ============================================================================================
+
+    /// <summary>
+    /// Centralised helper method to handle state transitions and audio feedback.
+    /// </summary>
     private void SetHoverState(bool isHovering)
     {
         _isSelected = isHovering;
