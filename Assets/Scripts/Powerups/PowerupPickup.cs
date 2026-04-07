@@ -24,6 +24,8 @@ public class PowerupPickup : MonoBehaviour
     // --- STATE TRACKING ---
     private Coroutine _despawnCoroutine;
 
+    // ==============================================================================================================
+
     private void OnEnable()
     {
         // ARCHITECTURE FIX: Replaced brittle string-based Invoke with a type-safe Coroutine.

@@ -10,6 +10,8 @@ public class PlayerDeathHandler : MonoBehaviour
     // --- COMPONENT DEPENDENCIES ---
     private HealthSystem _healthSystem;
 
+    // ==============================================================================================================
+
     private void Awake()
     {
         // Cache the dependency during initialisation
