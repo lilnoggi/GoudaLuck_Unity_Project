@@ -45,6 +45,8 @@ public class WeaponSystem : MonoBehaviour
     private List<WeaponData> _unlockedWeapons = new List<WeaponData>();
     private int _currentWeaponIndex = 0;
 
+    // ==============================================================================================================
+
     private void Start()
     {
         // Establish the baseline fire point to prevent NullReferenceExceptions
