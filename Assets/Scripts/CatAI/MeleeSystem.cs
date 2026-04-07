@@ -56,7 +56,7 @@ public class MeleeSystem : MonoBehaviour
     private void SlamAttack()
     {
         // Defensive check just in case the player was destroyed
-        if (_playerTarget != null) return;
+        if (_playerTarget == null) return;
         
         // Decoupled damage execution via the Player's HealthSystem
         HealthSystem playerHealth = _playerTarget.GetComponent<HealthSystem>();    

@@ -1,5 +1,6 @@
 using UnityEngine;
 using UnityEngine.AI;
+using UnityEngine.Events;
 
 // === CAT AI CONTROLLER **REFACTORED** ===
 /// <summary>
@@ -22,16 +23,18 @@ public class CatAI_Controller : MonoBehaviour
     [Tooltip("The maximum distance the AI will track the player before disengaging.")]
     [SerializeField] private float _chaseRange = 15f;
 
+    [Header("Combat Events")]
+    [Tooltip("Triggered when the AI is in Attack Range. Drag WeaponSystem or MeleeSystem here!")]
+    [SerializeField] private UnityEvent _onAttackTriggered;
+
     // --- COMPONENT DEPENDENCIES ---
     private NavMeshAgent _agent;
-    private WeaponSystem _weaponSystem;
     private Transform _playerTarget;
 
     private void Awake()
     {
         // Cache component references during initialisation to avoid expensive GetComponent calls during gameplay
         _agent = GetComponent<NavMeshAgent>();
-        _weaponSystem = GetComponent<WeaponSystem>();
     }
 
     private void OnEnable()
@@ -109,9 +112,9 @@ public class CatAI_Controller : MonoBehaviour
 
         // FIRE! (Demonstrates the Single Responsibility Principle: The AI only commands
         // while the WeaponSystem component autonomously calculates ammo, spread, and cooldowns).
-        if (_weaponSystem != null)
+        if (_onAttackTriggered != null)
         {
-            _weaponSystem.FireWeapon();
+            _onAttackTriggered?.Invoke();
         }
 
         // TRANSITION: If the player successfully creates distance, revert to the Chase state
@@ -124,13 +127,13 @@ public class CatAI_Controller : MonoBehaviour
 
     // === EDITOR DEBUGGING ===
     /// <summary>
-    /// Drawes visual boundary spheres in the Unity Editor to assist with level design and AI balancing.
+    /// Draws visual boundary spheres in the Unity Editor to assist with level design and AI balancing.
     /// </summary>
     private void OnDrawGizmosSelected()
     {
         Gizmos.color = Color.red;
         Gizmos.DrawWireSphere(transform.position, _attackRange);
-        
+
         Gizmos.color = Color.yellow;
         Gizmos.DrawWireSphere(transform.position, _chaseRange);
     }

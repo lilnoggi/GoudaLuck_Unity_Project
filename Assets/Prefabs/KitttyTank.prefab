@@ -372,6 +372,21 @@ MonoBehaviour:
   _currentState: 0
   _attackRange: 8
   _chaseRange: 15
+  _onAttackTriggered:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 1126303044898313812}
+        m_TargetAssemblyTypeName: MeleeSystem, Assembly-CSharp
+        m_MethodName: TriggerAttack
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &1229157362796123179
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -402,9 +417,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: eb1119d58e0d684438bd0f30a3ce8dbe, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::CatAI_Melee
-  _currentState: 0
-  _attackRange: 2.5
-  _chaseRange: 20
   _meleeDamage: 25
   _attackCooldown: 1.5
 --- !u!114 &1041034949137289815
