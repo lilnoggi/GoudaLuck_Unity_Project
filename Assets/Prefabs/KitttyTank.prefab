@@ -200,8 +200,8 @@ GameObject:
   - component: {fileID: 2601707997493050496}
   - component: {fileID: 1224566714941942383}
   - component: {fileID: 7053518872477378025}
-  - component: {fileID: 1229157362796123179}
   - component: {fileID: 1126303044898313812}
+  - component: {fileID: 1229157362796123179}
   - component: {fileID: 1041034949137289815}
   m_Layer: 0
   m_Name: KitttyTank
@@ -387,6 +387,20 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+--- !u!114 &1126303044898313812
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4226535881923145499}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: eb1119d58e0d684438bd0f30a3ce8dbe, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::CatAI_Melee
+  _meleeDamage: 25
+  _attackCooldown: 1.5
 --- !u!114 &1229157362796123179
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -405,20 +419,6 @@ MonoBehaviour:
   - Prefab: {fileID: 6028533566618311584, guid: e887ae9d6cbfc0a4eb40b54f439f940b, type: 3}
     DropChance: 50
   _masterDropChance: 0.75
---- !u!114 &1126303044898313812
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4226535881923145499}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: eb1119d58e0d684438bd0f30a3ce8dbe, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::CatAI_Melee
-  _meleeDamage: 25
-  _attackCooldown: 1.5
 --- !u!114 &1041034949137289815
 MonoBehaviour:
   m_ObjectHideFlags: 0
