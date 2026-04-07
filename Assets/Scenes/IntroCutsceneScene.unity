@@ -384,7 +384,6 @@ GameObject:
   - component: {fileID: 284637970}
   - component: {fileID: 284637973}
   - component: {fileID: 284637974}
-  - component: {fileID: 284637975}
   - component: {fileID: 284637976}
   m_Layer: 0
   m_Name: Main Camera
@@ -534,36 +533,6 @@ PlayableDirector:
     m_References:
     - e97da41d9c843cd40b0940cf7b6b01d0: {fileID: 1008355893}
     - 23b05b6c88b8c5f4fabf2769691202cb: {fileID: 1834851637}
---- !u!114 &284637975
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 284637969}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e52de21a22b6dd44c9cc19f810c65059, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Unity.Timeline::UnityEngine.Timeline.SignalReceiver
-  m_Events:
-    m_Signals:
-    - {fileID: 11400000, guid: 66e70b3c81d22524cb2b0f6fa9083e34, type: 2}
-    m_Events:
-    - m_PersistentCalls:
-        m_Calls:
-        - m_Target: {fileID: 412320142}
-          m_TargetAssemblyTypeName: IntroDialogueManager, Assembly-CSharp
-          m_MethodName: DisplayNextLine
-          m_Mode: 1
-          m_Arguments:
-            m_ObjectArgument: {fileID: 0}
-            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-            m_IntArgument: 0
-            m_FloatArgument: 0
-            m_StringArgument: 
-            m_BoolArgument: 0
-          m_CallState: 2
 --- !u!114 &284637976
 MonoBehaviour:
   m_ObjectHideFlags: 0
