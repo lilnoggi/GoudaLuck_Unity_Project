@@ -10,10 +10,9 @@ using UnityEngine.SceneManagement;
 /// and utilises asynchronous Coroutines and Input System interrupts to give the player
 /// complete control over cutscene pacing.
 /// </summary>
-
 public class IntroDialogueManager : MonoBehaviour
 {
-    // Singleton pattern for easy global access during the intro scene
+    // --- SINGLETON INSTANCE ---
     public static IntroDialogueManager Instance {get; private set; }
 
     [Header("UI References")]
@@ -39,7 +38,7 @@ public class IntroDialogueManager : MonoBehaviour
     [SerializeField] private float _typingSpeed = 0.04f;  // Time between each letter
 
 
-    // Coroutine state tracking variables
+    // --- STATE TRACKING ---
     private int _currentLineIndex = 0;
     private Coroutine _typingCoroutine;
     private bool _isTyping = false;
@@ -61,7 +60,8 @@ public class IntroDialogueManager : MonoBehaviour
     private void Update()
     {
         // --- UX PACING & INPUT INTERRUPTS ---
-        // Use the Input System's quick-check commands for E and Gamepad A
+        // For UI pacing, directly checking the hardware state per-frame is acceptable
+        // to ensure immediate, snappy interrupt response.
         bool pressedE = Keyboard.current != null && Keyboard.current.eKey.wasPressedThisFrame;
         bool pressedAdvance = Gamepad.current != null && Gamepad.current.buttonSouth.wasPressedThisFrame;
 
@@ -76,9 +76,10 @@ public class IntroDialogueManager : MonoBehaviour
                 {
                     StopCoroutine(_typingCoroutine);
                 }
-                    // Hard-set the text to the full string
-                    _dialogueText.text = _introSequence.Lines[_currentLineIndex].Text;
-                    _isTyping = false;
+                    
+                // Hard-set the text to the full string
+                _dialogueText.text = _introSequence.Lines[_currentLineIndex].Text;
+                _isTyping = false;
             }
             else  
             {
