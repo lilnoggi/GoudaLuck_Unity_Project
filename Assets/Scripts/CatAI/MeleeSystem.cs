@@ -1,47 +1,34 @@
 using UnityEngine;
-using UnityEngine.AI;
 using Unity.Cinemachine;
 
 /// <summary>
-/// This script...
+/// A decoupled combat component handling melee damage and visual feedback.
+/// Designed to be triggered by an external controller (CatAI_Controller) 
+/// to adhere to the Single Responsibility Principle.
 /// </summary>
 
 public class MeleeSystem : MonoBehaviour
 {
-    public enum State { Chase, Attack }
-
-    [Header("FSM Settings")]
-    [SerializeField] private State _currentState = State.Chase;
-    [SerializeField] private float _attackRange = 2.5f;
-    [SerializeField] private float _chaseRange = 20f;
-
-    [Header("Melee Combat")]
+    [Header("Melee Combat Settings")]
+    [Tooltip("The amount of damage dealt to the player on a successful melee attack.")]
     [SerializeField] private float _meleeDamage = 25f;
+    [Tooltip("The cooldown time between consecutive melee attacks.")]
     [SerializeField] private float _attackCooldown = 1.5f;
     private float _nextAttackTime;
 
-    private NavMeshAgent _agent;
+    // --- COMPONENT DEPENDENCIES ---
     private Transform _playerTarget;
     private CinemachineImpulseSource _impulseSource;
 
     private void Awake()
     {
-        _agent = GetComponent<NavMeshAgent>();
+        // Cache the impulse source to drive camera shake on impact
         _impulseSource = GetComponent<CinemachineImpulseSource>();
-    }
-
-    private void OnEnable()
-    {
-        _currentState = State.Chase;
-
-        if (_agent != null && _agent.isOnNavMesh)
-        {
-            _agent.isStopped = false;
-        }
     }
 
     private void Start()
     {
+        // Dynamically locate the player at runtime
         GameObject player = GameObject.FindGameObjectWithTag("Player");
         if (player != null)
         {
@@ -49,74 +36,39 @@ public class MeleeSystem : MonoBehaviour
         }
     }
 
-    private void Update()
+    /// <summary>
+    /// The public method to be called by the AI Brain.
+    /// Safely handles its own cooldown mathematics asynchronously.
+    /// </summary>
+    public void TriggerAttack()
     {
-        if (_playerTarget == null) return;
-        
-        switch (_currentState)
-        {
-            case State.Chase:
-                HandleChaseState();
-                break;
-            case State.Attack:
-                HandleAttackState();
-                break;
-        }
-    }
-
-    private void HandleChaseState()
-    {
-        _agent.isStopped = false;
-        _agent.SetDestination(_playerTarget.position);
-
-        if (Vector3.Distance(transform.position, _playerTarget.position) <= _attackRange)
-        {
-            _currentState = State.Attack;
-        }
-    }
-
-    private void HandleAttackState()
-    {
-        _agent.isStopped = true;
-
-        // Rotate to face player
-        Vector3 directionToPlayer = (_playerTarget.position - transform.position).normalized;
-        directionToPlayer.y = 0;
-        transform.rotation = Quaternion.Slerp(transform.rotation, Quaternion.LookRotation(directionToPlayer), Time.deltaTime * 10f);
-
-        // --- MELEE SLAM LOGIC ---
+        // Asynchronous cooldown check by bypassing InvokeRepeating
         if (Time.time >= _nextAttackTime)
         {
             SlamAttack();
             _nextAttackTime = Time.time + _attackCooldown;
         }
-
-        if (Vector3.Distance(transform.position, _playerTarget.position) > _attackRange)
-        {
-            _currentState = State.Chase;
-        }
     }
 
+    /// <summary>
+    /// Executes the damage calculation and triggers UX feedback (Screen Shake).
+    /// </summary>
     private void SlamAttack()
     {
-        // Hurt the player
-        HealthSystem playerHealth = _playerTarget.GetComponent<HealthSystem>();
+        // Defensive check just in case the player was destroyed
+        if (_playerTarget != null) return;
+        
+        // Decoupled damage execution via the Player's HealthSystem
+        HealthSystem playerHealth = _playerTarget.GetComponent<HealthSystem>();    
         if (playerHealth != null)
         {
             playerHealth.TakeDamage(_meleeDamage);
         }
-
-        // Shake the screen
+        
+        // VISUAL FEEDBACK: Trigger Cinemachine screen shake
         if (_impulseSource != null)
         {
             _impulseSource.GenerateImpulse();
         }
-    }
-
-    // === DEBUGGIN ===
-    private void OnDrawGizmosSelected()
-    {
-        Gizmos.color = Color.red;
-        Gizmos.DrawWireSphere(transform.position, _attackRange);
     }
 }
