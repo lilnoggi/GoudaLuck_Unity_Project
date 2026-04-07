@@ -5,12 +5,14 @@ using UnityEngine.EventSystems;  // Required for Controller UI Navigation
 using TMPro;
 
 /// <summary>
-/// Manages the Heads Up Display (HUD) and updates the screen when
-/// the player takes damage or score points.
+/// A centralised Presentation Layer controller managing the Heads Up Display (HUD) and menu states.
+/// Handles dynamic hardware abstraction (mouse vs. gamepad) and utilises smoothed UI interpolation
+/// for high-quality "Game Feel".
 /// </summary>
 
 public class UIManager : MonoBehaviour
 {
+    // --- SINGLETON INSTANCE ---
     public static UIManager Instance { get; private set; }
 
     [Header("UI References")]
@@ -21,6 +23,7 @@ public class UIManager : MonoBehaviour
     [SerializeField] private Image _ultFillImage;
 
     [Header("Smooth UI Fill")]
+    [Tooltip("The interpolation speed for health and ultimate bars to catch up to their target values.")]
     [SerializeField] private float _fillSpeed = 5f;  // How fast the bar catches up
     private float _targetHealth;
 
@@ -60,15 +63,23 @@ public class UIManager : MonoBehaviour
     [SerializeField] private GameObject _gameOverPanel;
     [SerializeField] private GameObject _restartButton;
 
+    // --- COMPONENT CACHING ---
+    // Caching the player reference prevents severe CPU spikes caused by
+    // executing FindObject operations inside the Update loop.
+    private PlayerController _cachedPlayer;
+
+    // ==============================================================================================================
+
     private void Awake()
     {
+        // Enforce the Singleton Pattern
         if (Instance == null) Instance = this;
         else Destroy(gameObject);
     }
 
     private void Start()
     {
-        // Snap the physical sliders to whatever value was saved in PlayerPrefs (AudioManager)
+        // Synchronise visual UI sliders with persistent saved data
         if (_musicSlider != null)
         {
             _musicSlider.value = PlayerPrefs.GetFloat("MusicVol", 0.5f);
@@ -82,42 +93,47 @@ public class UIManager : MonoBehaviour
 
     public void Update()
     {
-        // Find the player once to save performance
-        PlayerController player = null;
-
-        // Only update the wheel if it is actually assigned in the Inspector
-        if(_dashWheelImage != null || _ultFillImage != null)
+        // MEMORY OPTIMISATION: Attempt to cache the player once, bypassing expensive frame-by-frame searches
+        if (_cachedPlayer == null)
         {
-            player = FindFirstObjectByType<PlayerController>();
+            GameObject playerObj = GameObject.FindGameObjectWithTag("Player");
+            if (playerObj != null)
+            {
+                _cachedPlayer = playerObj.GetComponent<PlayerController>();
+            }
         }
 
-        if (player != null)
+        if (_cachedPlayer != null)
         {
-            // Update Dash Wheel
+            // Update Dash Wheel (Direct Ratio
             if (_dashWheelImage != null)
             {
-                _dashWheelImage.fillAmount = player.DashCooldownRatio;
+                _dashWheelImage.fillAmount = _cachedPlayer.DashCooldownRatio;
             }
 
-            // Update Ultimate Slider
+            // Update Ultimate Slider (Smoothed Interpolation)
             if (_ultFillImage != null)
             {
                 // The slider goes from 0 to 1
-                _ultFillImage.fillAmount = Mathf.Lerp(_ultFillImage.fillAmount, player.UltChargeRatio, Time.deltaTime * _fillSpeed);
+                _ultFillImage.fillAmount = Mathf.Lerp(_ultFillImage.fillAmount, _cachedPlayer.UltChargeRatio, Time.deltaTime * _fillSpeed);
             }
         }
 
         // --- SMOOTH HEALTH BAR ---
         if (_healthSlider != null)
         {
-            // Smoothly move the visual slider value towards the target health
+            // Smoothly interpolate the visual slider value towards the absolute target health
             _healthSlider.value = Mathf.Lerp(_healthSlider.value, _targetHealth, Time.deltaTime * _fillSpeed);
         }
     }
 
+    // ==========================================================================================================
+    // ============================== --- MENU TOGGLES & HARDWARE ABSTRACTION ---  ==============================
+    // ==========================================================================================================
+
     public void TogglePause()
     {
-        // SAFETY: Don't pause if the Upgrades, Shop or Game Over screens are currently open
+        // DEFENSIVE PROGRAMMING: Prevent pause overlaps if critical menus are already open
         if ((_playerUpgradesPanel != null && _playerUpgradesPanel.activeSelf) || 
             (_shopPanel != null && _shopPanel.activeSelf) || 
             (_gameOverPanel != null && _gameOverPanel.activeSelf)) return;
@@ -134,19 +150,18 @@ public class UIManager : MonoBehaviour
                 _pausePanel.SetActive(true);
             }
 
-            // Controller Support
+            // --- STEAM DECK / CONTROLLER SUPPORT ---
             Cursor.visible = true;
             EventSystem.current.SetSelectedGameObject(null);
 
-            PlayerController player = FindFirstObjectByType<PlayerController>();
-            if (player != null && !player.IsUsingMouse)
+            if (_cachedPlayer != null && !_cachedPlayer.IsUsingMouse)
             {
                 EventSystem.current.SetSelectedGameObject(_resumeButton);
             } 
         }
         else
         {
-            Time.timeScale = 1f;  // Unfreeze game
+            Time.timeScale = 1f;  // Resume game
 
             // Sweep all menus off the screen
             if (_pausePanel != null) _pausePanel.SetActive(false);
@@ -156,15 +171,14 @@ public class UIManager : MonoBehaviour
             if (_shopPanel != null) _shopPanel.SetActive(false);
             if (_playerUpgradesPanel != null) _playerUpgradesPanel.SetActive(false);
 
-            PlayerController player = FindFirstObjectByType<PlayerController>();
-            if (player != null && !player.IsUsingMouse)
+            if (_cachedPlayer != null && !_cachedPlayer.IsUsingMouse)
             {
                 Cursor.visible = false;
             }
         }
     }
 
-    // Called by the settings button in the pause panel
+    // --- SETTINGS PANEL ---
     public void OpenSettings()
     {
         if (_settingsPanel != null)
@@ -175,14 +189,9 @@ public class UIManager : MonoBehaviour
             // --- CONTROLLER SUPPORT ---
             EventSystem.current.SetSelectedGameObject(null);
 
-            PlayerController player = FindFirstObjectByType<PlayerController>();
-            if (player != null && !player.IsUsingMouse)
+            if (_cachedPlayer != null && !_cachedPlayer.IsUsingMouse && _audioSettingsButton != null)
             {
-                // Force the controller to grab the Audio Button first
-                if (_audioSettingsButton != null)
-                {
-                    EventSystem.current.SetSelectedGameObject(_audioSettingsButton);
-                }
+                EventSystem.current.SetSelectedGameObject(_audioSettingsButton);
             }
         }
     }
@@ -198,14 +207,10 @@ public class UIManager : MonoBehaviour
             // --- RE-FOCUS THE CONTROLLER ---
             EventSystem.current.SetSelectedGameObject(null);
 
-            PlayerController player = FindFirstObjectByType<PlayerController>();
-            if (player != null && !player.IsUsingMouse)
+            if (_cachedPlayer != null && !_cachedPlayer.IsUsingMouse && _resumeButton != null)
             {
                 // Force the controller to grab the Resume button again
-                if (_musicSlider != null)
-                {
-                    EventSystem.current.SetSelectedGameObject(_resumeButton);
-                }
+                EventSystem.current.SetSelectedGameObject(_resumeButton);
             }
         }
     }
@@ -222,14 +227,10 @@ public class UIManager : MonoBehaviour
             // --- CONTROLLER SUPPORT ---
             EventSystem.current.SetSelectedGameObject(null);
 
-            PlayerController player = FindFirstObjectByType<PlayerController>();
-            if (player != null && !player.IsUsingMouse)
+            if (_cachedPlayer != null && !_cachedPlayer.IsUsingMouse && _musicSlider != null)
             {
                 // Force the controller to grab the Music slider first
-                if (_musicSlider != null)
-                {
-                    EventSystem.current.SetSelectedGameObject(_musicSlider.gameObject);
-                }
+                EventSystem.current.SetSelectedGameObject(_musicSlider.gameObject);
             }
         }
     }
@@ -245,14 +246,10 @@ public class UIManager : MonoBehaviour
             // --- RE-FOCUS THE CONTROLLER ---
             EventSystem.current.SetSelectedGameObject(null);
 
-            PlayerController player = FindFirstObjectByType<PlayerController>();
-            if (player != null && !player.IsUsingMouse)
+            if (_cachedPlayer != null && !_cachedPlayer.IsUsingMouse && _audioSettingsButton != null)
             {
                 // Force the controller to grab the Audiobutton again
-                if (_musicSlider != null)
-                {
-                    EventSystem.current.SetSelectedGameObject(_audioSettingsButton);
-                }
+                EventSystem.current.SetSelectedGameObject(_audioSettingsButton);
             }
         }
     }
@@ -270,14 +267,10 @@ public class UIManager : MonoBehaviour
             // --- CONTROLLER SUPPORT ---
             EventSystem.current.SetSelectedGameObject(null);
 
-            PlayerController player = FindFirstObjectByType<PlayerController>();
-            if (player != null && !player.IsUsingMouse)
+            if (_cachedPlayer != null && !_cachedPlayer.IsUsingMouse && _controlsBackButton != null)
             {
-                // Force the controller to grab the Music slider first
-                if (_controlsBackButton != null)
-                {
-                    EventSystem.current.SetSelectedGameObject(_controlsBackButton);
-                }
+                // Force the controller to grab the Back Button first
+                EventSystem.current.SetSelectedGameObject(_controlsBackButton);
             }
         }
     }
@@ -294,14 +287,10 @@ public class UIManager : MonoBehaviour
             // --- CONTROLLER SUPPORT ---
             EventSystem.current.SetSelectedGameObject(null);
 
-            PlayerController player = FindFirstObjectByType<PlayerController>();
-            if (player != null && !player.IsUsingMouse)
+            if (_cachedPlayer != null && !_cachedPlayer.IsUsingMouse && _controlsBackButton != null)
             {
-                // Force the controller to grab the Music slider first
-                if (_controlsBackButton != null)
-                {
-                    EventSystem.current.SetSelectedGameObject(_controlsBackButton);
-                }
+                // Force the controller to grab the Back Button first
+                EventSystem.current.SetSelectedGameObject(_controlsBackButton);
             }
         }
     }
@@ -318,14 +307,10 @@ public class UIManager : MonoBehaviour
             // --- CONTROLLER SUPPORT ---
             EventSystem.current.SetSelectedGameObject(null);
 
-            PlayerController player = FindFirstObjectByType<PlayerController>();
-            if (player != null && !player.IsUsingMouse)
+            if (_cachedPlayer != null && !_cachedPlayer.IsUsingMouse && _controlsBackButton != null)
             {
-                // Force the controller to grab the Music slider first
-                if (_controlsBackButton != null)
-                {
-                    EventSystem.current.SetSelectedGameObject(_controlsBackButton);
-                }
+                // Force the controller to grab the Back Button first
+                EventSystem.current.SetSelectedGameObject(_controlsBackButton);
             }
         }
     }
@@ -341,14 +326,10 @@ public class UIManager : MonoBehaviour
             // --- RE-FOCUS THE CONTROLLER ---
             EventSystem.current.SetSelectedGameObject(null);
 
-            PlayerController player = FindFirstObjectByType<PlayerController>();
-            if (player != null && !player.IsUsingMouse)
+            if (_cachedPlayer != null && !_cachedPlayer.IsUsingMouse && _audioSettingsButton != null)
             {
-                // Force the controller to grab the Resume button again
-                if (_audioSettingsButton != null)
-                {
-                    EventSystem.current.SetSelectedGameObject(_audioSettingsButton);
-                }
+                // Force the controller to grab the Audiobutton again
+                EventSystem.current.SetSelectedGameObject(_audioSettingsButton);
             }
         }
     }
@@ -362,6 +343,10 @@ public class UIManager : MonoBehaviour
             TogglePause();
         }
     }
+
+    // =========================================================================================================
+    // ====================================== --- HUD DATA INJECTION ---  ======================================
+    // =========================================================================================================
 
     public void UpdateAmmo(int currentAmmo, int maxAmmo)
     {
@@ -410,9 +395,14 @@ public class UIManager : MonoBehaviour
         if (_healthSlider != null)
         {
             _healthSlider.maxValue = maxHealth;
-            _targetHealth = currentHealth;  // Tell the UI what number to chase
+            // Record the target state; the Update loop handles the smooth visual interpolation
+            _targetHealth = currentHealth;  
         }
     }
+
+    // =========================================================================================================
+    // ====================================== --- PROGRESSION SCREENS---  ======================================
+    // =========================================================================================================
 
     // === SHOP LOGIC ===
     public void ShowShop()
@@ -427,8 +417,7 @@ public class UIManager : MonoBehaviour
             Cursor.visible = true;
             EventSystem.current.SetSelectedGameObject(null);
 
-            PlayerController player = FindFirstObjectByType<PlayerController>();
-            if (player != null && !player.IsUsingMouse)
+            if (_cachedPlayer != null && !_cachedPlayer.IsUsingMouse && _upgradeButton != null)
             {
                 EventSystem.current.SetSelectedGameObject(_upgradeButton);
             }
@@ -443,16 +432,14 @@ public class UIManager : MonoBehaviour
             Time.timeScale = 1f;  // Unpause the game
 
             // Hide the cursor if using a gamepad
-            PlayerController player = FindFirstObjectByType<PlayerController>();
-            if (player != null && !player.IsUsingMouse)
+            if (_cachedPlayer != null && !_cachedPlayer.IsUsingMouse)
             {
-                Cursor.visible = true;
+                Cursor.visible = false;
             }
         }
     }
 
     // === GAME OVER ===
-
     // Turns on the Game Over screen
     public void ShowGameOver()
     {
@@ -461,19 +448,11 @@ public class UIManager : MonoBehaviour
             _gameOverPanel.SetActive(true);
 
             // --- STEAM DECK / CONTROLLER INPUT ---
-            // Force the cursor to be visible in case they want to use the mouse to click
-            Cursor.visible = true;
-
             // Clear whatever the Event System might have been looking at
             EventSystem.current.SetSelectedGameObject(null);
 
-            // Find the Player in the scene and check what device they are using
-            PlayerController player = FindFirstObjectByType<PlayerController>();
-
-            // If we found the player, AND they are NOT using the mouse
-            if (player != null && !player.IsUsingMouse)
+            if (_cachedPlayer != null && !_cachedPlayer.IsUsingMouse && _restartButton != null)
             {
-                // Force the controller to focus directly onto the Restart Button
                 EventSystem.current.SetSelectedGameObject(_restartButton);
             }
         }
