@@ -1,37 +1,49 @@
+using System.Collections;
 using UnityEngine;
 
 /// <summary>
-/// A modular powerup script. Uses an enum to determine what effect to apply
-/// to the player upon collision.
+/// A modular powerup component utilising an enum-based switch to apply specific buffs.
+/// Integrates with Object Pooling to manage memory efficiently and uses Coroutines
+/// for type-safe despawn timers, strictly adhering to project architecture standards.
 /// </summary>
-
 public class PowerupPickup : MonoBehaviour
 {
     // The dropdown list of possible powerups
     public enum PowerupType { Health, UnlimitedAmmo, MassiveDamage, GoldenGun }
 
     [Header("Powerup Settings")]
+    [Tooltip("Defines the specific type of buff applied to the player upon pickup.")]
     [SerializeField] private PowerupType _type;
 
     [Header("Specific Settings")]
-    [SerializeField] private float _healthAmount = 25f;  // Only used if type is Health
-    [SerializeField] private float _buffDuration = 5f;   // How long timed buffs last
+    [Tooltip("The amount of health restored (Only used if type is Health)")]
+    [SerializeField] private float _healthAmount = 25f;
+    [Tooltip("The duration in seconds the buff remains active (For timed buffs).")]
+    [SerializeField] private float _buffDuration = 5f;
+
+    // --- STATE TRACKING ---
+    private Coroutine _despawnCoroutine;
 
     private void OnEnable()
     {
-        // Powerups disappear if left alone
-        Invoke("Despawn", 15f);
+        // ARCHITECTURE FIX: Replaced brittle string-based Invoke with a type-safe Coroutine.
+        // Powerups will automatically return to the pool if ignored by the player.
+        _despawnCoroutine = StartCoroutine(DespawnRoutine(15f));
     }
 
     private void OnDisable()
     {
-        // Cancel invokes when disabled to prevent memory leaks
-        CancelInvoke("Despawn");
+        // DEFENSIVE PROGRAMMING: Stop the coroutine to prevent memory leaks
+        // when the object is deactivated or returned to the pool early.
+        if (_despawnCoroutine != null)
+        {
+            StopCoroutine(_despawnCoroutine);
+        }
     }
 
     private void OnTriggerEnter(Collider other)
     {
-        // Only the player can pick this up
+        // Physics filtering: Only the player entity can trigger the buff
         if (other.CompareTag("Player"))
         {
             ApplyPowerup(other.gameObject);
@@ -42,6 +54,10 @@ public class PowerupPickup : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// Evaluates the assigned enum and delegates the mathematical modifier
+    /// to the appropriate decoupled system.
+    /// </summary>
     private void ApplyPowerup(GameObject player)
     {
         // Check the dropdown menu to know which one to do
@@ -70,15 +86,28 @@ public class PowerupPickup : MonoBehaviour
                 break;
 
             case PowerupType.MassiveDamage:
-                // Build later
+                // Future Expansion
                 break;
 
             case PowerupType.GoldenGun:
-                // Build later
+                // Future Expansion
                 break;
         }
     }
 
+    /// <summary>
+    /// Asynchronous timer handling the automatic cleanup of ignored powerups.
+    /// </summary>
+    private IEnumerator DespawnRoutine(float delay)
+    {
+        yield return new WaitForSeconds(delay);
+        Despawn();
+    }
+
+    /// <summary>
+    /// Removes the powerup from the active game board, prioritising Object Pooling
+    /// over Garbage Collection to maintain stable framerates.
+    /// </summary>
     private void Despawn()
     {
         if (PowerupPool.Instance != null)
@@ -87,7 +116,7 @@ public class PowerupPickup : MonoBehaviour
         }
         else
         {
-            Destroy(gameObject);  // Fallback
+            Destroy(gameObject);  // Fallback for isolated testing
         }
     }
 }
