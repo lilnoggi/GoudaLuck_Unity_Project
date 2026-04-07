@@ -6,7 +6,7 @@ using Unity.Cinemachine;
 /// This script...
 /// </summary>
 
-public class CatAI_Melee : MonoBehaviour
+public class MeleeSystem : MonoBehaviour
 {
     public enum State { Chase, Attack }
 
