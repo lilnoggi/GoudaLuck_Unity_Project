@@ -1,31 +1,49 @@
+using System.Collections;
+using Unity.VisualScripting;
 using UnityEngine;
 
 /// <summary>
-/// Handles the movement and collision logic for the projectiles.
-/// Fully upgraded to use Object Pooling
+/// Handles the movement, collision logic, and lifecycle of standard projectiles.
+/// Fully integrated with the ProjectilePool to prevent Garbage Collection spikes,
+/// and uses type-safe Coroutines for lifecycle memory management.
 /// </summary>
-
 public class CheeseProjectile : MonoBehaviour
 {
+    [Header("Flight Settings")]
+    [Tooltip("The forward velocity of the projectiles in units per second.")]
     [SerializeField] private float _speed = 20f;
+    [Tooltip("The maximum time in seconds before the projectile is automatically recycled.")]
     [SerializeField] private float _lifeTime = 2f;
 
     [Header("VFX")]
+    [Tooltip("The particle system instantiated upon impact.")]
     [SerializeField] private GameObject _imapctParticles;  // VFX Particle System
     
+    // --- STATE TRACKING ---
     private float _currentDamage;
 
+    // Stores the tag of the entity that fired it to prevent friendly fire
     private string _shooterTag;  // Remember who fired this bullet
+
+    private Coroutine _lifeTimerCoroutine;
+
+    // ==============================================================================================================
 
     private void OnEnable()
     {
-        // Use OnEnable instead of Start() because the pool will turn this object on and off multiple times
-        Invoke("Deactivate", _lifeTime);  // SAFETY NET: recycle after a few seconds
+        // ARCHITECTURE FIX: Use type-safe Coroutines instead of string-based Invokes.
+        // Start the safety net timer so the bullet recycles if it flies off the map.
+        _lifeTimerCoroutine = StartCoroutine(LifeTimerRoutine());
     }
 
     private void OnDisable()
     {
-        CancelInvoke("Deactivate");  // Clean up the timer if it hits a wall early
+        // DEFENSIVE PROGRAMMING: Clean up the timer if the projectile hits a target early
+        // to prevent null reference errors or memory leaks in the pool.
+        if (_lifeTimerCoroutine != null)
+        {
+            StopCoroutine(_lifeTimerCoroutine);
+        }
     }
 
     private void Update()
@@ -34,13 +52,28 @@ public class CheeseProjectile : MonoBehaviour
         transform.Translate(Vector3.forward * _speed * Time.deltaTime);
     }
 
-    // The WeaponSystem calls this the exact moment the bullet is spawned
+    /// <summary>
+    /// Inserts damage data and ownership tags into the projectile immediately
+    /// after it is pulled from the Object Pool
+    /// </summary>
     public void Setup(string tagOfShooter, float damageAmount)
     {
         _shooterTag = tagOfShooter;
-        _currentDamage = damageAmount;  // Store the weapon's damage
+        _currentDamage = damageAmount; 
     }
 
+    /// <summary>
+    /// Asynchronous timer ensuring missed projectiles are safely recycled
+    /// </summary>
+    private IEnumerator LifeTimerRoutine()
+    {
+        yield return new WaitForSeconds(_lifeTime);
+        Deactivate();
+    }
+
+    /// <summary>
+    /// Safely returns the object to the memory pool instead of destroying it.
+    /// </summary>
     private void Deactivate()
     {
         // Send it back to the pool instead of destroying it
@@ -50,31 +83,31 @@ public class CheeseProjectile : MonoBehaviour
         }
         else
         {
-            Destroy(gameObject);  // Fallback just in case
+            Destroy(gameObject);  // Fallback for isolated testing
         }
     }
 
     private void OnTriggerEnter(Collider other)
     {
-        // Ignore collision of whoever fired it (Player ignores Player, Enemy ignores Enemy)
+        // DEFENSIVE PROGRAMMING: Ignore collisions with the entity that fired it (No friendly fire)
         if (other.CompareTag(_shooterTag)) return;
 
-        // If it hits an enemy OR hits the player
+        // Evaluate valid hit states (Player hitting Enemy OR Enemy hitting Player)
         if (other.CompareTag("Enemy") && _shooterTag == "Player" || other.CompareTag("Player") && _shooterTag == "Enemy")
         {
-            // Grab the HealthSystem off the bean just hit
+            // Delegate damage execution strictly to the target's HealthSystem
             HealthSystem targetHealth = other.GetComponent<HealthSystem>();
 
             if (targetHealth != null)
             {
-                // Take damage
                 targetHealth.TakeDamage(_currentDamage);
             }
         }
 
-        // Cheese Particles!
+        // --- VISUAL FEEDBACK ---
         if (_imapctParticles != null)
         {
+            // Pool these later on
             Instantiate(_imapctParticles, transform.position, Quaternion.identity);
         }
 
