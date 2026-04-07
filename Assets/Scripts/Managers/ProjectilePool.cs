@@ -16,6 +16,8 @@ public class ProjectilePool : MonoBehaviour
     // This allows the system to seamlessly support dozens of different ammo types simultaneously.
     private Dictionary<string, Queue<GameObject>> _poolDictionary = new Dictionary<string, Queue<GameObject>>();
 
+    // =================================================================================================================
+
     private void Awake()
     {
         // Enforce the Singleton Pattern

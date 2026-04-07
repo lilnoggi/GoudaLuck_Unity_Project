@@ -31,6 +31,8 @@ public class CatAI_Controller : MonoBehaviour
     private NavMeshAgent _agent;
     private Transform _playerTarget;
 
+    // ===========================================================================================================
+
     private void Awake()
     {
         // Cache component references during initialisation to avoid expensive GetComponent calls during gameplay
@@ -124,6 +126,8 @@ public class CatAI_Controller : MonoBehaviour
             _currentState = State.Chase;
         }
     }
+
+    // ===========================================================================================================
 
     // === EDITOR DEBUGGING ===
     /// <summary>

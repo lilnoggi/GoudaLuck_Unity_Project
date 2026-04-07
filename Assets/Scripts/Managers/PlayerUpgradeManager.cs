@@ -26,6 +26,8 @@ public class PlayerUpgradeManager : MonoBehaviour
     [Tooltip("The UI prefab designed with Spatial Partitioning (separated layout and visual layers).")]
     [SerializeField] private GameObject _upgradeCardPrefab;  
 
+    // =================================================================================================================
+
     private void Awake()
     {
         // Enforce the Singleton pattern

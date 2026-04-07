@@ -18,6 +18,8 @@ public class GameManager : MonoBehaviour
     // Encapsulated public getter prevents external scripts from modifying the score directly without using Add/Spend methods
     public int Score => _score;
 
+    // ==============================================================================================================================
+
     private void Awake()
     {
         // --- SINGLETON PATTERN SETUP ---

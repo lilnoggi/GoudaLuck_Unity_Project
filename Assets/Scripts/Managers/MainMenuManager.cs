@@ -13,6 +13,8 @@ public class MainMenuManager : MonoBehaviour
     [Tooltip("The default UI button to highlight when the scene loads, ensuring gamepad accessibility without a mouse.")]
     [SerializeField] private GameObject _playButton;
 
+    // =========================================================================================================================
+
     private void Start()
     {
         // --- STEAM DECK / GAMEPAD SUPPORT ---

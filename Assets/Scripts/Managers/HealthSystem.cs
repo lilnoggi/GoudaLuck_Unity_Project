@@ -27,6 +27,8 @@ public class HealthSystem : MonoBehaviour
     // A public event that external scripts (Listeners) can subscribe to without hard coupling.
     public event Action OnDeath;
 
+    // =================================================================================================================
+
     /// <summary>
     /// OBJECT POOLING SUPPORT: Use OnEnable instead of Start so health resets
     /// every time the entity is pulled from the inactive queue.
@@ -128,6 +130,8 @@ public class HealthSystem : MonoBehaviour
         _armourResistance = Mathf.Clamp(_armourResistance + amount, 0f, 0.9f);
     }
 }
+
+// ===========================================================================================================
 
 /// <summary>
 /// A custom data structure to hold a powerup prefab and its spawn chance.

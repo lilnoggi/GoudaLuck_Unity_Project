@@ -43,6 +43,8 @@ public class IntroDialogueManager : MonoBehaviour
     private Coroutine _typingCoroutine;
     private bool _isTyping = false;
 
+    // =================================================================================================================
+
     private void Awake()
     {
         // Enforce the Singleton Instance

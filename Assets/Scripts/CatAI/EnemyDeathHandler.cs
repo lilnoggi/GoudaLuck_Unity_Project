@@ -18,6 +18,8 @@ public class EnemyDeathHandler : MonoBehaviour
     // --- COMPONENT DEPENDENCIES ---
     private HealthSystem _healthSystem;
 
+    // ================================================================================================
+
     private void Awake()
     {
         // Cache the depdendency

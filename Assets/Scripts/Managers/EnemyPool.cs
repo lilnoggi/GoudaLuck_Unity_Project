@@ -14,6 +14,8 @@ public struct EnemyPoolType
     public int PoolSize;
 }
 
+// ===========================================================================================================
+
 /// <summary>
 /// A centralised memory management system designed to bypass the C# Garbage Collector.
 /// Utilises a Dictionary of Queues to pre-allocate and recycle multiple enemy variants,
@@ -32,6 +34,8 @@ public class EnemyPool : MonoBehaviour
     // A Dictionary mapping a string key (Prefab Name) to a Queue (The inactive object pool).
     // This allows for 0(1) time complexity lookups when requesting a specific enemy type.
     private Dictionary<string, Queue<GameObject>> _poolDictionary = new Dictionary<string, Queue<GameObject>>();
+
+    // ==============================================================================================================
 
     private void Awake()
     {

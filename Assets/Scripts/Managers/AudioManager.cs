@@ -40,6 +40,8 @@ public class AudioManager : MonoBehaviour
     [Tooltip("The master AudioMixer dicating the project's audio routing.")]
     [SerializeField] private AudioMixer _audioMixer;
 
+    // ================================================================================================
+
     private void Awake()
     {
         // --- SINGLETON PATTERN ---
@@ -100,6 +102,8 @@ public class AudioManager : MonoBehaviour
         }
     }
 
+    // ===========================================================================================================
+
     // --- HELPER METHODS ---
     // These encapsulated lambda methods allow external scripts to trigger audio
     // without needing direct references to the AudioClip data.
@@ -113,6 +117,8 @@ public class AudioManager : MonoBehaviour
     public void PlayHoverButtonSound() => PlaySFX(_hoverButton);
     public void PlaySelectButtonSound() => PlaySFX(_selectButton);
     public void PlayUpgradeWeaponSound() => PlaySFX(_upgradeWeapon);
+
+    // ===========================================================================================================
 
     // --- SETTINGS LOGIC ---
     /// <summary>

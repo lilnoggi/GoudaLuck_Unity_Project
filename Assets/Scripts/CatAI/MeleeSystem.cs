@@ -20,6 +20,8 @@ public class MeleeSystem : MonoBehaviour
     private Transform _playerTarget;
     private CinemachineImpulseSource _impulseSource;
 
+    // ================================================================================================
+
     private void Awake()
     {
         // Cache the impulse source to drive camera shake on impact
