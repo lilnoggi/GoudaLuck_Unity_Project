@@ -637,6 +637,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cd8169157b476d2488c777876703906f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::EnemyDeathHandler
+  _cheddarPointsDropped: 25
   _lootTable:
   - Prefab: {fileID: 6028533566618311584, guid: 7a6eeec51d6361242a80c570576c1799, type: 3}
     DropChance: 65

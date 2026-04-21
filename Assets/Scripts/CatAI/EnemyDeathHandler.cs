@@ -9,6 +9,9 @@ using UnityEngine;
 
 public class EnemyDeathHandler : MonoBehaviour
 {
+    [Header("Cheese Points Drop")]
+    [Tooltip("The amount of cheese the player gets from killing this enemy (Default of 10).")]
+    [SerializeField] private int _cheddarPointsDropped = 10;
     [Header("Loot Drops")]
     [Tooltip("Array of possible item drops, each with a specific weight/chance.")]
     [SerializeField] private LootDrop[] _lootTable;
@@ -55,7 +58,7 @@ public class EnemyDeathHandler : MonoBehaviour
         // Safely interact with Singletons to update game progression
         if (GameManager.Instance != null)
         {
-            GameManager.Instance.AddScore(10);
+            GameManager.Instance.AddScore(_cheddarPointsDropped);
         }
         
         if (WaveManager.Instance != null)

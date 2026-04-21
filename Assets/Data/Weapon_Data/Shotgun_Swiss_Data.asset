@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::WeaponData
   _weaponName: Shotgun Swiss
   _weaponIcon: {fileID: 21300000, guid: 893e73c55e8d94b4fabfc37e6402d0cd, type: 3}
-  _cheddarCost: 250
+  _cheddarCost: 350
   _fireRate: 1.2
   _damage: 4
   _magSize: 6
