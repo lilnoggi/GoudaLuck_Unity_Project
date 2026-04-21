@@ -2,15 +2,18 @@ using System.Collections;
 using UnityEngine;
 
 /// <summary>
-/// Handles spawning waves of enemies using the EnemyPool.
+/// A centralised controller managing the core gameplay loop and progression pacing.
+/// Utilises asynchronous Coroutines to handle staggered enemy spawning and integrates
+/// with the EnemyPool to strictly enforce memory limits during runtime.
 /// </summary>
-
 public class WaveManager : MonoBehaviour
 {
+    // --- SINGLETON INSTANCE ---
     public static WaveManager Instance { get; private set; }
 
     [Header("Wave Settings")]
-    [SerializeField] private Transform[] _spawnPoints;  // Drag empty GameObject here as spawn locations
+    [Tooltip("Array of empty GameObjects dictating valid NavMesh spawn locations.")]
+    [SerializeField] private Transform[] _spawnPoints; 
     [SerializeField] private float _timeBetweenSpawns = 1.5f;
     [SerializeField] private int _enemiesPerWave = 5;
 
@@ -18,43 +21,55 @@ public class WaveManager : MonoBehaviour
     [SerializeField] private GameObject _basicCatPrefab;
     [SerializeField] private GameObject _tankCatPrefab;
     [SerializeField] private GameObject _kittyTankPrefab;
-    [SerializeField] private int _waveToSpawnTanks = 3;  // Tanks won't appear until wave 3
+    [Tooltip("The wave number where Tank cats are put into the spawn pool. The default is 3.")]
+    [SerializeField] private int _waveToSpawnTanks = 3;
+    [Tooltip("The wave number where Kitt Tanks are put into the spawn pool. Default is 5.")]
     [SerializeField] private int _waveToSpawnKittyTanks = 5;
 
+    // --- PROGRESSION STATE ---
     [SerializeField] private int _currentWave = 1;
     private int _enemiesAlive = 0;
 
-    private bool _isSpawning = false;  // Tracks if the coroutine is currently busy
+    // --- ASYNCHRONOUS TRACKING ---
+    // Acts as a lock to prevent the wave from ending while enemies are still spawning
+    private bool _isSpawning = false; 
+
+    // ==============================================================================================================
 
     private void Awake()
     {
-        // Set up the Singleton
+        // Enforce Singleton Pattern
         if (Instance == null) Instance = this;
         else Destroy(gameObject);
     }
 
     void Start()
     {
-        // Start the first wave
+        // Initiate the primary game loop
         StartCoroutine(SpawnWave());
     }
 
-    // The HealthSystem will call this method every time a cat is defeated
+    /// <summary>
+    /// A decoupled listener method triggered by the EnemyDeathHandler.
+    /// Evaluates wave completion logic every time an entity is removed from the board.
+    /// </summary>
     public void EnemyDefeated()
     {
         _enemiesAlive--;
 
-        // Only open the Player Upgrade Panel if done spawning
+        // Only transition to the UI phase if all enemies are dead AND the spawner has finished its queue
         if (_enemiesAlive <= 0 && !_isSpawning)
         {
             EndWaveSequence();
         }
     }
 
-    // --- HELPER METHOD ---
+    /// <summary>
+    /// Determines which presentation layer (Shop vs Upgrades) to display based on the current wave number.
+    /// </summary>
     private void EndWaveSequence()
     {
-        // Is the current wave a multiple of 3?
+        // PROGRESSION MATHS: Trigger the roguelite upgrade screen every 3rd wave
         if (_currentWave % 3 == 0)
         {
             if (PlayerUpgradeManager.Instance != null)
@@ -64,7 +79,7 @@ public class WaveManager : MonoBehaviour
         }
         else
         {
-            // Otherwise just open the shop
+            // Otherwise, go to the standard Shop
             if (UIManager.Instance != null)
             {
                 UIManager.Instance.ShowShop();
@@ -72,20 +87,24 @@ public class WaveManager : MonoBehaviour
         }
     }
 
-    // The "Next Wave" button in the shop will call this
+    /// <summary>
+    /// Increments difficulty modifiers and restarts the asynchronous spawn loop.
+    /// </summary>
     public void StartNextWave()
     {
         _currentWave++;
-        _enemiesPerWave += 2;  // Increase difficulty
+        _enemiesPerWave += 2;  // Apply linear difficulty scaling
 
         StartCoroutine(SpawnWave());
     }
 
+    /// <summary>
+    /// An asynchronous loop that staggers enemy instantiation to prevent CPU spikes
+    /// and manages probabilistic enemy selection.
+    /// </summary>
     private IEnumerator SpawnWave()
     {
-       // Debug.Log("--- WAVE " + _currentWave + " STARTING! ---");
-
-        // Lock the shop from opening
+        // Lock the progression state
         _isSpawning = true;
 
         // Tell UIManager Wave has changed
@@ -94,53 +113,52 @@ public class WaveManager : MonoBehaviour
             UIManager.Instance.UpdateWave(_currentWave);
         }
 
-        // Wait a few seconds before spawning so the player can breath
+        // PACING: Provide the player a brief grace period before combat resumes
         yield return new WaitForSeconds(2f);
 
         for (int i = 0; i < _enemiesPerWave; i++)
         {
-            // Pick a random spawn point from the array
+            // Select a random spatial node
             Transform randomSpawnPoint = _spawnPoints[Random.Range(0, _spawnPoints.Length)];
 
             // Decide WHICH cat to spawn
-            GameObject enemyToSpawn = _basicCatPrefab;  // Default
+            GameObject enemyToSpawn = _basicCatPrefab;  // Default fallback
 
-            // If reached the harder waves:
-            // Roll for the rarist cat first
+            // --- PROBABILISTIC SPAWNING LOGIC ---
+            // Evaluates the rarest/hardest enemies first
             if (_currentWave >= _waveToSpawnKittyTanks && Random.value <= 0.15f)
             {
-                    enemyToSpawn = _kittyTankPrefab;
+                enemyToSpawn = _kittyTankPrefab;
             }
             // If the Kitty Tank, roll for regular tank
             else if (_currentWave >= _waveToSpawnTanks && Random.value <= 0.2f)
             { 
-                    enemyToSpawn = _tankCatPrefab;
+                enemyToSpawn = _tankCatPrefab;
             }
 
-            // Ask the pool for the specific cat
+            // --- OBJECT POOLING INJECTION ---
+            // Request the specific entity from memory rather than instantiating it dynamically
             GameObject spawnedCat = EnemyPool.Instance.GetEnemy(enemyToSpawn, randomSpawnPoint.position, randomSpawnPoint.rotation);
 
-            // SAFETY CHECK: Only count the enemy if the pool wasn't empty
+            // SAFETY CHECK: Only increment the tracking variable if the Object Pool successfully provided an entity
             if (spawnedCat != null)
             {
                 _enemiesAlive++;
             }
 
-            // Wait a moment before spawning the next one
+            // Yield execution to stagger spawns
             yield return new WaitForSeconds(_timeBetweenSpawns);
         }
 
-        // Unlock the shop now that all enemies have been spawned
+        // Release the progression lock
         _isSpawning = false;
 
-        // --- SAFETY CHECK ---
-        // Just in case the player killed the absolute last enemy the exact millisecond it spawned
+        // --- EDGE CASE SAFETY NET ---
+        // If the player defeated the final enemy during the exact frame it spawned,
+        // the EnemyDefeated() lock check might have failed. Re-evaluate here.
         if (_enemiesAlive <= 0)
         {
-            if (PlayerUpgradeManager.Instance != null)
-            {
-                PlayerUpgradeManager.Instance.ShowUpgradeScreen();
-            }
+            EndWaveSequence();
         }
     }
 }

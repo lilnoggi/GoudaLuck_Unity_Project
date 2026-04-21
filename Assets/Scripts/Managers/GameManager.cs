@@ -1,27 +1,31 @@
 using UnityEngine;
 
 /// <summary>
-/// Manages global game states such as the player's 'Cheddar Points' score and win/loss conditions.
-/// Uses a Singleton design pattern to provide a globally accessible point of reference.
+/// Manages global game states such as the player's 'Cheddar Points' economy and win/loss conditions.
+/// Implements the Singleton design pattern to provide a globally accessible point of reference
+/// without requiring tangled, hardcoded inspector references across the codebase.
 /// </summary>
 
 public class GameManager : MonoBehaviour
 {
-    // The static Singleton instance
+    // --- SINGLETON INSTANCE ---
     public static GameManager Instance { get; private set; }
 
     [Header("Game State")]
+    [Tooltip("The player's current currency (Cheddar Points), used for purchasing weapon upgrades.")]
     [SerializeField] private int _score = 0;
 
-    // A public getter so the shop can check the score
+    // Encapsulated public getter prevents external scripts from modifying the score directly without using Add/Spend methods
     public int Score => _score;
+
+    // ==============================================================================================================================
 
     private void Awake()
     {
         // --- SINGLETON PATTERN SETUP ---
+        // Enforce strict global access and prevent duplicate managers during scene loads
         if (Instance != null && Instance != this)
         {
-            // If another GameManager already exists, destroy this duplicate.
             Destroy(gameObject);
             return;
         }
@@ -29,41 +33,54 @@ public class GameManager : MonoBehaviour
         Instance = this;
     }
 
-    // Called by the HealthSystem when a cat dies
+    /// <summary>
+    /// Increases the player's currency. Designed to be triggered by decoupled event listeners
+    /// (e.g., when an enemy is defeated) to maintain separation of concerns and avoid tight coupling between game systems.
+    /// </summary>
     public void AddScore(int amount)
     {
         _score += amount;
-        // Debug.Log("Cat defeated! Cheddar Points: " + _score);
 
-        // Tell the UI manager score has changed
+        // Decoupled UI Update: The GameManager pushes data to the UIManager rather than the UI polling for it
         if (UIManager.Instance != null)
         {
             UIManager.Instance.UpdateScore(_score);
         }
     }
 
-    // The shop will call this when you click "Upgrade"
+    /// <summary>
+    /// Evaluates transaction logic for the Shop.
+    /// Returns true if the player has enough points to make the purchase, deducts the amount from the score,
+    /// and updates the UI. Returns false if the player cannot afford the purchase, leaving the score unchanged.
+    /// </summary>
     public bool SpendPoints(int amount)
     {
         if (_score >= amount)
         {
+            // Execute the transaction
             _score -= amount;
 
-            // Update the UI
+            // Update the UI safely
             if (UIManager.Instance != null)
             {
                 UIManager.Instance.UpdateScore(_score);
-                return true;  // Purchase successful
             }
+            
+            // Purchase successful
+            // Return true regardless of UI state so the transaction succeeds logically
+            return true; 
         }
-        return false;  // Not enough points
+
+        // Transaction failed due to insufficient funds
+        return false;
     }
 
-    // Called by the HealthSystem when the player dies
+    /// <summary>
+    /// Stops the gameplay loop and triggers the loss state presentation layer.
+    /// </summary>
     public void TriggerGameOver()
     {
-        // Debug.Log("=== GAME OVER === The felines have taken over.");
-
+        // Prompt the UI Manager to display the Game Over screen
         if (UIManager.Instance != null)
         {
             UIManager.Instance.ShowGameOver();
@@ -71,7 +88,5 @@ public class GameManager : MonoBehaviour
 
         // Pause the game physics so nothing else can move or shoot
         Time.timeScale = 0f;
-
-        // UI comes here later
     }
 }

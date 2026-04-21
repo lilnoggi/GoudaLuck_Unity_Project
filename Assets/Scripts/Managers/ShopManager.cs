@@ -3,16 +3,20 @@ using UnityEngine.UI;
 using TMPro;
 
 /// <summary>
-/// Handles the shop transactions, tracking ownership of weapons,
-/// and updating the shop UI to reflect what the player has unlocked.
+/// A dedicated Controller script for the Shop presentaiton layer.
+/// Manages transaction logic, tracks weapon ownership state, and dynamically updates
+/// the UI to reflect the player's current progression.
 /// </summary>
 
 public class ShopManager : MonoBehaviour
 {
     [Header("Weapon Data")]
-    [SerializeField] private WeaponData _cheddarData;  // To swap back to starter gun
-    [SerializeField] private WeaponData _mozzaData;    // Drop the Mozza-MP5 card here
-    [SerializeField] private WeaponData _shotgunData;  // Drop the Shotgun data card here
+    [Tooltip("The ScriptableObject for the default starting weapon, the Cheddar-19.")]
+    [SerializeField] private WeaponData _cheddarData; 
+    [Tooltip("The ScriptableObject for the SMG weapon variant, the Mozza-MP5.")]
+    [SerializeField] private WeaponData _mozzaData;  
+    [Tooltip("The ScriptableObject for the Shotgun weapon variant, the Shotgun Swiss.")]
+    [SerializeField] private WeaponData _shotgunData; 
 
     [Header("UI References")]
     [SerializeField] private TextMeshProUGUI _mozzaUnlockText;  // The amount the mozza-mp5 costs
@@ -21,6 +25,7 @@ public class ShopManager : MonoBehaviour
     [SerializeField] private GameObject _shotgunLockOverlay;
 
     [Header("Upgrade Dots")]
+    [Tooltip("Array of Image components representing the upgrade pip UI for each weapon.")]
     [SerializeField] private Image[] _cheddarDots;
     [SerializeField] private Image[] _mozzaDots;
     [SerializeField] private Image[] _shotgunDots;
@@ -28,112 +33,118 @@ public class ShopManager : MonoBehaviour
     [SerializeField] private Color _emptyColour = Color.black;
 
     // --- STATE TRACKING ---
-    // The player always starts with the Cheddar-19, so they don't need to buy it
+    // The player inherently owns the Cheddar-19, so it does not require an unlock flag
     private bool _ownsMozza = false;
     private bool _ownsShotgun = false;
 
-    // ========================================================================
+    // --- COMPONENT CACHING ---
+    // Cached to avoid expensive FindFirstObjectByType calls every time a button is clicked
+    private WeaponSystem _cachedPlayerWeapon;
 
-    // --- UI Refresh ---
-    // This runs automatically every single time the Shop Panel is turned on
+    // =================================================================================================================
+
+    // --- UI LIFECYCLE ---
     private void OnEnable()
     {
-        PlayerController player = FindFirstObjectByType<PlayerController>();
-        if (player == null) return;
-        WeaponSystem weapon = player.GetComponent<WeaponSystem>();
-        if (weapon == null) return;
+        // Cache the player reference once when the UI panel is activated
+        if (_cachedPlayerWeapon == null)
+        {
+            PlayerController player = GameObject.FindGameObjectWithTag("Player")?.GetComponent<PlayerController>();
+            if (player != null)
+            {
+                _cachedPlayerWeapon = player.GetComponent<WeaponSystem>();
+            }
+        }
 
-        // Peek at the filing cabinet and colour the dots
-        UpdateDotsUI(_cheddarDots, weapon.GetSpecificWeaponLevel(_cheddarData.WeaponName));
-        UpdateDotsUI(_mozzaDots, weapon.GetSpecificWeaponLevel(_mozzaData.WeaponName));
-        UpdateDotsUI(_shotgunDots, weapon.GetSpecificWeaponLevel(_shotgunData.WeaponName));
+        // Defensive check
+        if (_cachedPlayerWeapon == null) return;
+
+        // Synchronise the visual UI dots with the mathematical upgrade levels stored in the WeaponSystem
+        UpdateDotsUI(_cheddarDots, _cachedPlayerWeapon.GetSpecificWeaponLevel(_cheddarData.WeaponName));
+        UpdateDotsUI(_mozzaDots, _cachedPlayerWeapon.GetSpecificWeaponLevel(_mozzaData.WeaponName));
+        UpdateDotsUI(_shotgunDots, _cachedPlayerWeapon.GetSpecificWeaponLevel(_shotgunData.WeaponName));
     }
 
+    /// <summary>
+    /// Dynamically colours an array of UI images based on the current mathematical upgrade level.
+    /// </summary>
     private void UpdateDotsUI(Image[] dotsArray, int currentLevel)
     {
         for (int i = 0; i < dotsArray.Length; i++)
         {
-            // If the dot's slot number is lower than the level, make it yellow
+            // If the array index is lower than the player's level, mark it as purchased
             if (i < currentLevel) dotsArray[i].color = _filledColour;
             else dotsArray[i].color = _emptyColour;
         }
     }
 
-    // ========================================================================
+    // ==============================================================================================================
 
     // --- CHEDDAR-19 LOGIC ---
-
     // The Cheddar-19 Button calls this
     public void OnCheddarButtonClicked()
     {
-        PlayerController player = FindFirstObjectByType<PlayerController>();
-        if (player == null) return;
-        WeaponSystem weapon = player.GetComponent<WeaponSystem>();
-        if (weapon == null) return;
+        if (_cachedPlayerWeapon == null) return;
 
         AudioManager.Instance.PlaySelectButtonSound();
 
-        // Always own the starter gun
-        weapon.EquipWeapon(_cheddarData);
+        // The starter weapon is always available to equip
+        _cachedPlayerWeapon.EquipWeapon(_cheddarData);
     }
 
-    // The Upgrade Button calls this
+    // The Cheddar-19 Upgrade Button calls this
     public void OnUpgradeCheddarClicked()
     {
-        // Force the player to equip the Cheddar-19 first so the maths apply to the right gun
+        if (_cachedPlayerWeapon == null) return;
+
+        // Force the player to equip the Cheddar-19 first so the modifiers apply to the correct instance
         OnCheddarButtonClicked();
 
-        WeaponSystem weapon = FindFirstObjectByType<PlayerController>().GetComponent<WeaponSystem>();
-        if (weapon.GetUpgradeLevel() >= _cheddarData.MaxUpgradeLevel) return;
+        // Validate max level bounds
+        if (_cachedPlayerWeapon.GetUpgradeLevel() >= _cheddarData.MaxUpgradeLevel) return;
 
-        // Try to spend points using the cost on the data card
+        // Transaction logic
         if (GameManager.Instance != null && GameManager.Instance.SpendPoints(_cheddarData.UpgradeCost))
         {
             AudioManager.Instance.PlayUpgradeWeaponSound();
-            weapon.BuyUpgrade();
-            UpdateDotsUI(_cheddarDots, weapon.GetUpgradeLevel());
+            _cachedPlayerWeapon.BuyUpgrade();
+            UpdateDotsUI(_cheddarDots, _cachedPlayerWeapon.GetUpgradeLevel());
         }
         else
         {
             AudioManager.Instance.PlayPurchaseFailedSound();
-            // Debug.Log("Not enough cheddar points!");
         }
     }
 
-    // ========================================================================
+    // ==============================================================================================================
 
     // --- MOZZA-MP5 LOGIC ---
-
     // The "Buy Mozza-MP5" Button calls this
     public void OnBuyMozzaClicked()
     {
-        PlayerController player = FindFirstObjectByType<PlayerController>();
-        if (player == null) return;
+        if (_cachedPlayerWeapon == null) return;
 
-        WeaponSystem weapon = player.GetComponent<WeaponSystem>();
-        if (weapon == null) return;
-
-        // SCENARIO 1: Already owns it - equip it
+        // SCENARIO 1: Weapon already unlocked. Equip it.
         if (_ownsMozza)
         {
             AudioManager.Instance.PlaySelectButtonSound();
-            weapon.EquipWeapon(_mozzaData);
+            _cachedPlayerWeapon.EquipWeapon(_mozzaData);
         }
-        // SCENARIO 2: Doesn't own it yet
+        // SCENARIO 2: Initial Purchase
         else
         {
             // Try to spend the cost listed right on the data card
             if (GameManager.Instance != null && GameManager.Instance.SpendPoints(_mozzaData.CheddarCost))
             {
                 AudioManager.Instance.PlayPurchaseGunSound();
-                // Mark it as owned
+                
+                // Set unlock flag
                 _ownsMozza = true;
 
-                // Equip the new gun
-                weapon.EquipWeapon(_mozzaData);
-               // Debug.Log("Successfully purchased the Mozza-MP5!");
+                // Equip immediately upon purhcase
+                _cachedPlayerWeapon.EquipWeapon(_mozzaData);
 
-                // Change the button text from "Buy (250) to "Equip"
+                // Update Presentation Layer (Change price tag to "Equip" and remove dark overlay)
                 if (_mozzaUnlockText != null)
                 {
                     _mozzaUnlockText.text = "Equip";
@@ -144,33 +155,31 @@ public class ShopManager : MonoBehaviour
                 {
                     _mozzaLockOverlay.SetActive(false);
                 }
-
-                // Debug.Log("Successfully purchased and equipped the Mozza-MP5");
             }
             else
             {
+                // Purchase failed - not enough Cheddar Points
                 AudioManager.Instance.PlayPurchaseFailedSound();
-                // Debug.Log("Not enough Cheddar Points!");
             }
         }
     }
 
+    // Mozza Upgrade Button calls this
     public void OnUpgradeMozzaClicked()
     {
-        // Don't allow upgrades if the gun is not bought yet
-        if (!_ownsMozza) return;
+        // Guard Clause: Prevent upgrading a weapon the player does not own
+        if (!_ownsMozza || _cachedPlayerWeapon == null) return;
 
-        // Force equip the Mozza first
+        // Force equip to ensure the correct modifier application
         OnBuyMozzaClicked();
 
-        WeaponSystem weapon = FindFirstObjectByType<PlayerController>().GetComponent<WeaponSystem>();
-        if (weapon.GetUpgradeLevel() >= _mozzaData.MaxUpgradeLevel) return;
+        if (_cachedPlayerWeapon.GetUpgradeLevel() >= _mozzaData.MaxUpgradeLevel) return;
 
         if (GameManager.Instance != null && GameManager.Instance.SpendPoints(_mozzaData.UpgradeCost))
         {
             AudioManager.Instance.PlayUpgradeWeaponSound();
-            weapon.BuyUpgrade();
-            UpdateDotsUI(_mozzaDots, weapon.GetUpgradeLevel());
+            _cachedPlayerWeapon.BuyUpgrade();
+            UpdateDotsUI(_mozzaDots, _cachedPlayerWeapon.GetUpgradeLevel());
         }
         else
         {
@@ -178,28 +187,30 @@ public class ShopManager : MonoBehaviour
         }
     }
 
-    // ========================================================================
+    // ==============================================================================================================
 
     // --- SHOTGUN LOGIC ---
-
     public void OnBuyShotgunClicked()
     {
-        PlayerController player = FindFirstObjectByType<PlayerController>();
-        if (player == null) return;
-        WeaponSystem weapon = player.GetComponent<WeaponSystem>();
+        if (_cachedPlayerWeapon == null) return;
 
+        // Weapon already unlocked
         if (_ownsShotgun)
         {
             AudioManager.Instance.PlaySelectButtonSound();
-            weapon.EquipWeapon(_shotgunData);
+            _cachedPlayerWeapon.EquipWeapon(_shotgunData);
         }
+        // Initial Purchase
         else
         {
             if (GameManager.Instance != null && GameManager.Instance.SpendPoints(_shotgunData.CheddarCost))
             {
                 AudioManager.Instance.PlayPurchaseGunSound();
+
                 _ownsShotgun = true;
-                weapon.EquipWeapon(_shotgunData);
+                _cachedPlayerWeapon.EquipWeapon(_shotgunData);
+
+                // Update Presentation Layer
                 if (_shotgunUnlockText != null)
                 {
                     _shotgunUnlockText.text = "Equip";
@@ -219,19 +230,17 @@ public class ShopManager : MonoBehaviour
 
     public void OnUpgradeShotgunClicked()
     {
-        if (!_ownsShotgun) return;
+        if (!_ownsShotgun || _cachedPlayerWeapon == null) return;
 
         OnBuyShotgunClicked();  // Force equip
 
-        WeaponSystem weapon = FindFirstObjectByType<PlayerController>().GetComponent<WeaponSystem>();
-
-        if (weapon.GetUpgradeLevel() >= _shotgunData.MaxUpgradeLevel) return;
+        if (_cachedPlayerWeapon.GetUpgradeLevel() >= _shotgunData.MaxUpgradeLevel) return;
 
         if (GameManager.Instance != null && GameManager.Instance.SpendPoints(_shotgunData.UpgradeCost))
         {
             AudioManager.Instance.PlayUpgradeWeaponSound();
-            weapon.BuyUpgrade();
-            UpdateDotsUI(_shotgunDots, weapon.GetUpgradeLevel());
+            _cachedPlayerWeapon.BuyUpgrade();
+            UpdateDotsUI(_shotgunDots, _cachedPlayerWeapon.GetUpgradeLevel());
         }
         else
         {
@@ -239,20 +248,21 @@ public class ShopManager : MonoBehaviour
         }
     }
 
-    // ========================================================================
+    // ==============================================================================================================
 
     // --- WAVE LOGIC ---
-
     // The Next Wave Button calls this
     public void OnNextWaveClicked()
     {
         AudioManager.Instance.PlaySelectButtonSound();
 
+        // Dismiss the Shop UI
         if (UIManager.Instance != null)
         {
             UIManager.Instance.HideShop();
         }
 
+        // Trigger the core gameplay loop to resume
         if (WaveManager.Instance != null)
         {
             WaveManager.Instance.StartNextWave();
